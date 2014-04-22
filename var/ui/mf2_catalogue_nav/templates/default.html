@@ -1,0 +1,12 @@
+	<section>
+		<ul>
+			{__(apply(/records)__}
+			{__(if($level == 2)__}
+			<li class="{__(if(PAGE_ID == $id)__}active{__if)__}">
+				<a href="/{__uri__}">{__title__}</a>
+			</li>
+			{__if)__}
+			{__apply)__}
+		</ul>
+	</section>
+

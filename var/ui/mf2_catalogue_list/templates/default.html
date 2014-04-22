@@ -1,0 +1,31 @@
+		<ul>
+			{__(apply(/records)__}
+			<li>
+				Артикул:{__article__}<br>
+				{__set(#prices = json_decode($prices_list))__}
+				{__set(#files = json_decode($files_list))__}
+				{__set(#texts = json_decode($text_list))__}
+				{__set(#chars = json_decode($chars_list))__}
+				{__(apply(#files)__}
+					{__(if(@position == 1)__}
+					<img src="/filestorage/mark2/m2_item_files/thomb-{__real_name__}" alt=""/>
+					{__if)__}
+				{__apply)__}
+				{__(apply(#texts)__}
+					{__(if($type == 5)__}
+						{__content__}<br>
+					{__if)__}
+				{__apply)__}
+				{__(apply(#chars)__}
+					{__(if($type_id == 94)__}
+						{__type_value_str__}<br>
+					{__if)__}
+				{__apply)__}
+				{__(apply(#prices)__}
+					{__price_value__}<br>
+				{__apply)__}
+				<a href="/{__name__}/">{__title__}</a>
+			</li>
+			{__apply)__}
+		</ul>
+

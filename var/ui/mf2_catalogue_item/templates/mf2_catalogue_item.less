@@ -1,0 +1,97 @@
+@font_2: "Trebuchet MS", Arial;
+.m2_item_int{
+	font-family: @font_2;
+	.shadow_s(){
+//	-webkit-box-shadow: 0px 3px 9px 0px rgba(50, 50, 50, 0.53);
+//	-moz-box-shadow:    0px 3px 9px 0px rgba(50, 50, 50, 0.53);
+//	box-shadow:         0px 3px 9px 0px rgba(50, 50, 50, 0.53);
+		border: 1px solid #ccc;
+	}
+	.preview{
+		float: left;
+	//	overflow: hidden;
+		width: 320px;
+		padding: 10px;
+		img{
+			.shadow_s;
+		}
+	}
+	.images{
+		overflow: hidden;
+		padding-top: 10px;
+		margin-right: 10px;
+		img{
+			margin: 0px 10px 15px 0px;
+			.shadow_s;
+		}
+	}
+	.info{
+		float: left;
+		padding-top: 10px;
+		overflow: hidden;
+		width: 370px;
+		color: #444444;
+		h1{
+			padding: 0px;
+			margin: 0px;
+			font-size: 25px;
+			text-transform: uppercase;
+			color: #5657b3;
+		}
+		h4{
+			padding: 0px;
+			margin: 0px;
+			font-weight: normal;
+		}
+		.descr_header{
+			color: #5657b3;
+			font-size: 14px;
+			text-transform: uppercase;
+			font-weight: bold;
+			margin-top: 38px;
+			margin-bottom: 25px;
+		}
+		.price{
+			color: #3f43ca;
+			font-size: 18px;
+			font-style: italic;
+		}
+		.zak{
+			color: #000;
+			font-size: 14px;
+			a{
+				color: #000;
+				display: block;
+			}
+			overflow: hidden;
+			img{
+				margin-bottom: -4px;
+				margin-right: 10px;
+			}
+			&.nofirst{
+				margin-top: 10px;
+			}
+
+		}
+		.item_descr{
+			font-size: 14px;
+		}
+		.note{
+			font-size: 12px;
+			color: #000000;
+		}
+		.vnal{
+			border: 1px solid #ccc;
+			background-color: #f4f4f4;
+			color: #5657b3;
+			font-weight: bold;
+			font-style: italic;
+			padding: 5px 31px;
+			display: block;
+			overflow: hidden;
+			float: left;
+			margin: 7px 0px;
+			text-transform: lowercase;
+		}
+	}
+}

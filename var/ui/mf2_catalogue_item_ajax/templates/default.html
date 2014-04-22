@@ -1,0 +1,69 @@
+	<div class="m2_item_int">
+				{__set(#prices = json_decode($prices_list))__}
+				{__set(#files = json_decode($files_list))__}
+				{__set(#texts = json_decode($text_list))__}
+				{__set(#chars = json_decode($chars_list))__}
+				<div class="preview">
+				{__(apply(#files)__}
+					{__(if(@position == 1)__}
+					{__set(#fn = substr($real_name,0,-4))__}
+					<img id="zoom1" src="/filestorage/mark2/m2_item_files/m-{__#fn__}.png" alt="" class = "cloudzoom" src = "images/small/image1.jpg" data-cloudzoom = "zoomImage: '/filestorage/mark2/m2_item_files/{__real_name__}'"/>
+					{__if)__}
+				{__apply)__}
+				<div class="images">
+				{__(apply(#files)__}
+					{__set(#fn = substr($real_name,0,-4))__}
+					<a  href="#" class="cloudzoom-gallery" data-cloudzoom = "useZoom: '#zoom1', image: '/filestorage/mark2/m2_item_files/m-{__#fn__}.png', zoomImage: '/filestorage/mark2/m2_item_files/{__real_name__}'">
+						<img src="/filestorage/mark2/m2_item_files/s-{__#fn__}.png" alt=""/>
+					</a>
+				{__apply)__}
+				</div>
+
+				</div>
+				<div class="info">
+					<h1>{__title__}</h1>
+					<div class="divid"></div>
+					<h4><strong>Артикул:</strong> {__article__}</h4>
+					{__(apply(#chars)__}
+						{__(if($type_id == 94)__}
+							<div class="vnal">
+							{__type_value_str__}
+							</div>
+							<div style="clear:both"></div>
+						{__if)__}
+					{__apply)__}
+					{__(apply(#chars)__}
+						{__(if($type_id == 110)__}
+							<div class="sizes">
+							<strong>Размеры:</strong> {__variable_value__}
+							</div>
+						{__if)__}
+					{__apply)__}
+
+					<p class="descr_header">Описание изделия:</p>
+					{__(apply(#texts)__}
+						{__(if($type == 3)__}
+						<div class="item_descr">
+							{__content__}
+						</div>
+						{__if)__}
+					{__apply)__}
+					{__(apply(#prices)__}
+						<div class="price">
+						Цена: {__price_value__} руб. {__content__}
+						</div>
+					{__apply)__}
+					<div class="divid"></div>
+					<div class="zak"><a href="">положить в карзину</a></div>
+					<div class="divid" style="margin-top: 25px;"></div>
+					{__(apply(#chars)__}
+						{__(if($type_id == 106)__}
+							<div class="note">
+							{__type_value_str__}
+							</div>
+						{__if)__}
+					{__apply)__}
+
+				</div>
+	</div>
+

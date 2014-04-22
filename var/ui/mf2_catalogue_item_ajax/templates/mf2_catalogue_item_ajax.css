@@ -1,0 +1,78 @@
+.m2_item_int .preview {
+  float: left;
+  width: 320px;
+  padding: 10px;
+}
+.m2_item_int .preview img {
+  border: 1px solid #ccc;
+}
+.m2_item_int .images {
+  overflow: hidden;
+  padding-top: 10px;
+  margin-right: 10px;
+}
+.m2_item_int .images img {
+  margin: 0px 10px 15px 0px;
+  border: 1px solid #ccc;
+}
+.m2_item_int .info {
+  float: left;
+  padding-top: 10px;
+  overflow: hidden;
+  width: 370px;
+  color: #444444;
+}
+.m2_item_int .info h1 {
+  padding: 0px;
+  margin: 0px;
+  font-size: 25px;
+  text-transform: uppercase;
+  color: #5657b3;
+}
+.m2_item_int .info h4 {
+  padding: 0px;
+  margin: 0px;
+  font-weight: normal;
+}
+.m2_item_int .info .descr_header {
+  color: #5657b3;
+  font-size: 14px;
+  text-transform: uppercase;
+  font-weight: bold;
+  margin-top: 38px;
+  margin-bottom: 25px;
+}
+.m2_item_int .info .price {
+  color: #3f43ca;
+  font-size: 18px;
+  font-style: italic;
+}
+.m2_item_int .info .zak {
+  color: #000;
+  font-size: 14px;
+  overflow: hidden;
+}
+.m2_item_int .info .zak a {
+  color: #000;
+  display: block;
+}
+.m2_item_int .info .item_descr {
+  font-size: 14px;
+}
+.m2_item_int .info .note {
+  font-size: 12px;
+  color: #000000;
+}
+.m2_item_int .info .vnal {
+  border: 1px solid #ccc;
+  background-color: #f4f4f4;
+  color: #5657b3;
+  font-weight: bold;
+  font-style: italic;
+  padding: 5px 31px;
+  display: block;
+  overflow: hidden;
+  float: left;
+  margin: 7px 0px;
+  text-transform: lowercase;
+}

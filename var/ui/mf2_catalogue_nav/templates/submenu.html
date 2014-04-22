@@ -1,0 +1,11 @@
+	<div class="cat_sub">
+		<h3>>{__/root_node/title__}</h3>
+		<ul>
+			{__(apply(/records)__}
+			<li class="{__(if(PAGE_ID == $id)__}active{__if)__}">
+				<a href="/catalog{__uri__}">{__title__}</a>
+			</li>
+			{__apply)__}
+		</ul>
+	</div>
+
