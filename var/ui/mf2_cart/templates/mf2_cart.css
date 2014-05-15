@@ -1,0 +1,82 @@
+.cart_table {
+  margin-bottom: 60px;
+  margin-top: 60px;
+  padding: 0px;
+  border-collapse: collapse;
+  font-family: 'Trebuchet MS';
+}
+.cart_table td {
+  border: 1px  dashed #918f90;
+  margin: 0px;
+  padding: 9px;
+}
+.cart_table .header {
+  font-szie: 14px;
+  text-transform: uppercase;
+  color: #343434;
+  font-weight: bold;
+  text-align: center;
+}
+.cart_table .cart_total {
+  font-size: 12px;
+  color: #000;
+  font-weight: bold;
+}
+.cart_table .cart_total div {
+  float: left;
+}
+.cart_table .cart_record td {
+  text-align: center;
+}
+.cart_table .remove_item {
+  margin-right: 10px;
+  cursor: pointer;
+}
+.wizard {
+  position: relative;
+}
+.wizard.avik {
+  margin-left: 211px;
+  font-size: 14px;
+  font-family: 'Trebuchet MS';
+}
+.wizard.avik .make_order_ico {
+  margin-left: 203px;
+  margin-bottom: 30px;
+}
+.wizard.avik .btn_submit {
+  margin-left: 330px;
+  margin-top: 25px;
+}
+.wizard.avik .first_column {
+  width: 165px;
+  padding-right: 20px;
+  font-weight: bold;
+}
+.wizard.avik input[type=text] {
+  width: 305px;
+  border: 1px solid #818285;
+  height: 23px;
+}
+.wizard.avik .wizard_step {
+  display: none;
+}
+.wizard.avik .error_block {
+  border: 0px dotted red !important;
+}
+.wizard.avik .error_label {
+  color: red !important;
+  border-bottom: 1px dotted red;
+}
+.wizard.avik .fwizard_overlay {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0px;
+  background: #ccc;
+  zoom: 1;
+  opacity: 0.5;
+  -moz-opacity: 0.5;
+  -ms-filter: progid:DXImageTransform.Microsoft.Alpha(opacity=(0.5 * 100));
+  filter: alpha(opacity= 0.5 * 100);
+}

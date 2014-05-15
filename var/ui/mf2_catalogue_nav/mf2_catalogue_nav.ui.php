@@ -10,6 +10,7 @@ class ui_mf2_catalogue_nav extends user_interface
 	public $location = false;
 	public $location_data = false;
 	public $catalogue_scope = array();// тут все ид разделов  каталога по которым  мы  работаем в текущем запросе
+	public $trunc = array();// путь от  корня каталога
 	
 	public function __construct ()
 	{
@@ -63,11 +64,16 @@ class ui_mf2_catalogue_nav extends user_interface
 		}
 		return $this->catalogue_scope;
 	}
+
 	public function  pub_collect_scope_data()
 	{
 		$from_level = $this->get_args('from_level', '1');// По дефолту выключено в случаях фиксировванного список подразделов начиная с определенного левлеа. Что бы список не менялся при перехде  в низлежаший.
 		$di = data_interface::get_instance('m2_category');
-		$trunc = $di->get_trunc_menu($this->category_id);
+		if(count($this->trunc)<1)
+		{
+			$this->trunc = $di->get_trunc_menu($this->category_id);
+		}
+		$trunc = $this->trunc; 
 		foreach($trunc as $key=>$value)
 		{
 			$trunc_assoc[$value['id']] = $value;
@@ -141,6 +147,41 @@ class ui_mf2_catalogue_nav extends user_interface
 			$this->location = 'category';
 			$this->category_id = $res['category_id'];
 		}
+		$di = data_interface::get_instance('m2_category');
+		$this->trunc = $di->get_trunc_menu($this->category_id);
+	}
+
+	public function pub_trunc_menu()
+	{
+		$st = data_interface::get_instance('structure');
+		$data = $st->get_trunc_menu();
+		//9* $this->trunc  заполняется раньше при запуске  метода  локатор в начале страницы
+		$catalog_root = $data[count($data)-1]['uri'];
+		foreach($this->trunc as $key=>$value)
+		{
+			if($value['id'] >1)
+			{
+				$value['uri'] = substr($catalog_root,0,-1).$value['uri'];
+				$data[] = $value;
+			}
+		}
+		if($this->item_id>0)
+		{
+			$di = data_interface::get_instance('m2_item_indexer');
+			$di->_flush();
+			$di->set_args(array('_sitem_id'=>$this->item_id));
+			$di->what = array('title','name'=>'uri');
+			$res = $di->_get()->get_results();
+			//9*  для товара так как  парент нода будет прототипстраницы товара  убираем ее
+			unset($data[count($data)-1]);
+			$data[] = array('title'=>$res[0]->title,'uri'=>'/'.$res[0]->uri.'/','hidden'=>0,'id'=>'1200');
+		}
+		return $this->parse_tmpl('trunc_menu.html', $data);
+	}
+
+	public function get_trunc()
+	{
+		return $this->trunc;
 	}
 }
 ?>

@@ -22,8 +22,6 @@
 				</div>
 				<div class="info">
 					<h1>{__title__}</h1>
-					<div class="divid"></div>
-					<h4><strong>Артикул:</strong> {__article__}</h4>
 					{__(apply(#chars)__}
 						{__(if($type_id == 94)__}
 							<div class="vnal">
@@ -32,6 +30,29 @@
 							<div style="clear:both"></div>
 						{__if)__}
 					{__apply)__}
+
+					<div class="divid"></div>
+					<div class="preisc">
+						<div class="annot">Цена зависит от количества изделий в заказе и категории ткани</div>
+						<table>
+							<tr>
+								<th>от 10 шт.</th>
+								<th>от 50 шт.</th>
+								<th>от 100 шт.</th>
+								<th>от 2500 шт.</th>
+							</tr>
+							<tr>
+								<td>100 руб.</td>
+								<td>800 руб.</td>
+								<td>600 руб.</td>
+								<td>уточните у нашего менеджера</td>
+							</tr>
+						</table>
+						<p>
+							Цена указана на <a href="" id="p_anno_tip" original-title="1 гр. ткани - габардин-стейч,-прайс ,наценка 0<br>2 гр. ткани - п/вискоза ,наценка 40%<br>3 гр.ткани - п/шерсть - наценка 50%<br> согласно каталога тканей." >1 категорию тканей</a>
+						</p>
+					</div>
+					<h4><strong>Артикул:</strong> {__article__}</h4>
 					{__(apply(#chars)__}
 						{__(if($type_id == 110)__}
 							<div class="sizes">
@@ -54,10 +75,12 @@
 						</div>
 					{__apply)__}
 					<div class="divid"></div>
-					<div class="zak"><a href=""><img src="/themes/avik/img/basket_blue.png"/> Положить в карзину</a></div>
+					<div class="zak"><a style="{__(if(/basket[$item_id])__}display: none; {__else__} display: block{__if)__}" class="basket_btn" data-id="{__item_id__}" href=""><img src="/themes/avik/img/basket_blue.png"/> Предварительный заказ </a></div>
+					<div class="zak"><a  style="{__(if(/basket[$item_id])__}display: block; {__else__} display:none{__if)__}" class="basket_btn_remove" data-id="{__item_id__}" href=""><img src="/themes/avik/img/basket_blue.png"/> Убрать из карзины</a></div>
 					{__(if($show_link == 1)__}
 						<div class="zak nofirst"><a href="/catalog/items/{__name__}/"><img src="/themes/avik/img/book.png"/> Подробное описание</a></div>
 					{__if)__}
+					<div class="zak nofirst"><a  onCLick="return false;" href="#"><img src="/themes/avik/img/folder.png"/>Предварительный рассчет</a></div>
 					<div class="divid" style="margin-top: 25px;"></div>
 					{__(apply(#chars)__}
 						{__(if($type_id == 106)__}

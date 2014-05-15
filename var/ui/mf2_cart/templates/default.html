@@ -1,0 +1,182 @@
+{__(if(!empty(/records))__}
+<form autocomplete="off">
+<table width="100%" class="cart_table">
+{__set(#cost_total = 0)__}
+	<tr class="header">
+		<td>ИЗОБРАЖЕНИЕ</td>
+		<td>НАИМЕНОВАНИЕ</td>
+		<td>НАЛИЧИЕ</td>
+		<td>АРТИКУЛ</td>
+		<td>КОЛ-ВО</td>
+		<td>ЦЕНА</td>
+		<td>КОММЕНТАРИИ</td>
+	</tr>
+{__(apply(/records)__}
+				{__set(#prices = json_decode($prices_list))__}
+				{__set(#files = json_decode($files_list))__}
+				{__set(#texts = json_decode($text_list))__}
+				{__set(#chars = json_decode($chars_list))__}
+				{__set(#id = $id)__}
+	<tr class="cart_record" data-id="{__id__}">
+		<td width="36">
+				{__(apply(#files)__}
+					{__(if(@position == 1)__}
+					{__set(#fn = substr($real_name,0,-4))__}
+					<img id="zoom1" src="/filestorage/mark2/m2_item_files/s-{__#fn__}.png" alt="" />
+					{__if)__}
+				{__apply)__}
+
+		</td>
+		<td><img class="remove_item" data-id="{__id__}" src="/themes/avik/img/red_cross.png" alt=""/>{__title__}</td>
+		<td>
+					{__(apply(#chars)__}
+						{__(if($type_id == 94)__}
+							{__type_value_str__}
+						{__if)__}
+					{__apply)__}
+
+		</td>
+		<td>{__article__}</td>
+		<td width="120">
+			{__set(#count = $count)__}
+			{__(if(!$count)__}
+				{__set(#count = 1)__}
+			{__if)__}
+			<input type="text" class="count" name="count" value="{__#count__}" data-id="{__#id__}" size="2" style="text-align: center"> 
+		</td>
+		<td width="90">
+				{__(apply(#prices)__}
+						{__(if($type == 7)__}
+						<span class="item_price">{__price_value__}</span> руб.
+							{__set(#cost_total = #cost_total + ($price_value * #count))__}
+							<input type="hidden" name="price" data-id="{__#id__}" value="{__price_value__}"/>
+						{__if)__}
+				{__apply)__}
+		</td>
+		<td width="24">
+			<textarea name="comment"></textarea>
+		</td>
+	</tr>
+	{__set(#cost_total = #cost_total + $summ)__}
+{__apply)__}
+	<tr>
+		<td colspan="6" style="border: 0px;">&nbsp;</td>
+		<td><div class="cart_total">ИТОГО: <span class="cart_total_val">{__#cost_total__}</span> руб.</div></td>
+	</tr>
+</table>
+</form>
+<div class="wizard avik" id="unique_container_id">
+	<div class="global_values">
+		<input type="hidden" name="hidden_one" value="1">
+		<input type="hidden" name="cart_json" value="">
+	</div>
+		<img class="make_order_ico" src="/themes/avik/img/make_order.png" alt=""/>
+	<div id="step1" class="wizard_step" data-nextstep="">
+		<table class="field_block">
+			<tr>
+				<td class="first_column">
+					<span class="field_label">Ваш E-mail</span>
+				</td>
+				<td>	
+					<input class="req" type="text" data-type="email" name="mail" value="">
+				</td>
+
+			</tr>
+		</table>
+		<table class="field_block">
+			<tr>
+				<td class="first_column">
+					<span class="field_label">ФИО</span>
+				</td>
+				<td>	
+					<input class="req" type="text" name="fio" value="">
+				</td>
+
+			</tr>
+		</table>
+		<table class="field_block">
+			<tr>
+				<td class="first_column">
+					<span class="field_label">Город</span>
+				</td>
+				<td>	
+					<input class="req" type="text" name="location" value="">
+				</td>
+
+			</tr>
+		</table>
+		<table class="field_block">
+			<tr>
+				<td class="first_column">
+					<span class="field_label">Организация/ сфера деятельности</span>
+				</td>
+				<td>	
+					<input class="req" type="text" name="organization" value="">
+				</td>
+
+			</tr>
+		</table>
+		<table class="field_block">
+			<tr>
+				<td class="first_column">
+					<span class="field_label">Телефон/факс</span>
+				</td>
+				<td>	
+					<input class="req" type="text" name="phone" value="">
+				</td>
+
+			</tr>
+		</table>
+
+		<table class="field_block">
+			<tr>
+				<td class="first_column">
+					<span class="field_label">Индекс</span>
+				</td>
+				<td>	
+					<input type="text" name="postal_index" value="">
+				</td>
+
+			</tr>
+		</table>
+
+		<table class="field_block">
+			<tr>
+				<td class="first_column">
+					<span class="field_label">Почтовый адрес</span>
+				</td>
+				<td>	
+					<input type="text" name="post_address" value="">
+				</td>
+
+			</tr>
+		</table>
+
+		<table class="field_block">
+			<tr>
+				<td class="first_column">
+					<span class="field_label">Комментарии к заказу</span>
+				</td>
+				<td>	
+					<input type="text" name="comments" value="">
+				</td>
+
+			</tr>
+		</table>
+
+
+		<table class="btn_bar">
+			<tr>
+				<td>
+					<img src="/themes/avik/img/order_btn.png" class="btn_submit" alt=""/>
+				</td>
+			</tr>
+		</table>
+	</div>
+</div>
+
+
+
+{__else__}
+<center>Корзина пуста</center>
+{__if)__}

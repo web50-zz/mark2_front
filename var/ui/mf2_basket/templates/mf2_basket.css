@@ -1,0 +1,60 @@
+.market_basket{
+border:1px dotted;
+padding:5px;
+margin-bottom:10px;
+font-family:Verdana;
+font-size:10px;
+}
+
+#market_basket h1{
+font-size:10px;
+margin:0px;
+padding:0px;
+
+}
+#market_basket #basket_body .bitem{
+font-size:9px;
+}
+
+#market_basket #basket_body #bitem .icount{
+width:7px;
+text-align:right;
+vertical-align:top;
+}
+ 
+#market_basket #basket_body #bitem .ix{
+width:5px;
+vertical-align:top;
+}
+
+#market_basket #basket_body #bitem .ititle a{
+border-bottom:1px dashed #CCC;
+font-color:#000;
+color:#000;
+}
+#market_basket #basket_body .ctotal{
+font-weight:bold;
+font-size:9px;
+text-align:right;
+}
+
+.iremove{
+background:url("/ico/list_remove_btn.gif") no-repeat scroll left;
+cursor:pointer;
+margin-top:3px;
+padding-right:10px;
+}
+.irem{
+text-align:left;
+vertical-align:top;
+width:10px;
+}
+
+.olinks{
+text-align:center;
+}
+#olinks a{
+border-bottom:1px dashed #CCC;
+font-color:#000;
+color:#000;
+}

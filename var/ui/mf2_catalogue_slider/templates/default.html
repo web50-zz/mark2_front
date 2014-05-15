@@ -1,0 +1,17 @@
+{__(if(/slides)__}
+<div class="slider_cont short_top">
+		<ul id="slider">
+		{__(apply(/slides)__}
+			<li>
+				{__(if($real_name)__}
+				<img src="/filestorage/www_slide/{__real_name__}" alt=""/>
+				{__if)__}
+				<div class="slide_s">
+					<h3>{__title__}</h3>
+					{__comment__}
+				</div>
+			</li>
+		{__apply)__}
+		</ul>
+</div>
+{__if)__}

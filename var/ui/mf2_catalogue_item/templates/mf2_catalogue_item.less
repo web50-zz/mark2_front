@@ -31,16 +31,48 @@
 		overflow: hidden;
 		width: 370px;
 		color: #444444;
+		.preisc{
+			table{
+				border-collapse: collapse;
+				th{
+					font-weight: bold;
+					border: 1px solid black;
+					white-space: nowrap;
+					padding: 12px 5px;
+				}
+				td{
+					border: 1px solid black;
+					padding: 12px 5px;
+				}
+			}
+			.annot{
+				color: #3f43ca;
+				font-size: 14px;
+				font-style: italic;
+				margin: 0px 0px 10px 0px;
+			}
+			p{
+				color: black;
+				a{
+					color: black;
+					text-decoration: none;
+					border-bottom: 1px dashed black;
+					font-weight: bold;
+				}
+			}
+		}
 		h1{
 			padding: 0px;
-			margin: 0px;
-			font-size: 25px;
+			margin: 10px 46px 0px 0px;
+			font-size: 18px;
 			text-transform: uppercase;
 			color: #5657b3;
+			float: left;
 		}
 		h4{
 			padding: 0px;
 			margin: 0px;
+			font-size: 14px;
 			font-weight: normal;
 		}
 		.descr_header{
@@ -95,3 +127,32 @@
 		}
 	}
 }
+
+	.arrows_a(){
+		position: absolute;
+		width: 30px;
+		height: 60px;
+		margin-top: -30px;
+		cursor: pointer;
+		position: absolute;
+		text-decoration: none;
+		z-index: 8040;
+		background: #fff;
+		background-repeat: no-repeat;
+	}
+	.item-prev{
+		.arrows_a;
+		background-image: url("/themes/avik/img/arrow_left.png");
+		left: -30px;
+		top: 50%;
+		background-position: 8px 12px;
+	}
+
+	.item-next{
+		.arrows_a;
+		background-image: url("/themes/avik/img/arrow_right.png");
+		right: -30px;
+		top: 50%;
+		background-position: 2px 12px;
+	}
+

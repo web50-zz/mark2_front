@@ -1,0 +1,317 @@
+.slider_cont {
+  font-family: 'Trebuchet MS';
+  /* Overall Wrapper */
+
+}
+.slider_cont #slider {
+  width: 999px;
+  height: 385px;
+  list-style: none;
+  /* Prevent FOUC (see FAQ page) and keep things readable if javascript is disabled */
+
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+.slider_cont .slide_s {
+  height: 100px;
+  width: 290px;
+  top: 200px;
+  left: 100px;
+  position: absolute;
+  color: white;
+}
+.slider_cont .slide_s a {
+  color: white;
+}
+.slider_cont .slide_s h3 {
+  font-size: 24px;
+}
+.slider_cont .anythingSlider {
+  display: block;
+  overflow: visible !important;
+  position: relative;
+  margin: 0 auto;
+  /* 30px right & left padding for the navigation arrows */
+
+  padding: 0 0px;
+  /* slider window - top & bottom borders, default state */
+
+  /* disabled arrows, hide or reduce opacity: opacity: .5; filter: alpha(opacity=50); */
+
+  /* all panels inside the slider; horizontal mode */
+
+  /* vertical mode */
+
+  /* fade mode */
+
+  /* fade mode active page - visible & on top */
+
+  /************************
+		  NAVIGATION POSITIONING
+		 ************************/
+
+  /* Navigation Arrows */
+
+  /* back arrow */
+
+  /* forward arrow */
+
+}
+.slider_cont .anythingSlider:hover .arrow {
+  opacity: 0.90;
+}
+.slider_cont .anythingSlider .anythingWindow {
+  border-top: 0px solid #333;
+  border-bottom: 0px solid #333;
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+.slider_cont .anythingSlider .anythingBase {
+  background: transparent;
+  list-style: none;
+  position: absolute;
+  overflow: visible !important;
+  top: 0;
+  left: 0;
+  margin: 0;
+  padding: 0;
+}
+.slider_cont .anythingSlider .arrow span {
+  display: block;
+  visibility: hidden;
+}
+.slider_cont .anythingSlider .arrow.disabled {
+  display: none;
+}
+.slider_cont .anythingSlider .panel {
+  background: transparent;
+  display: block;
+  overflow: hidden;
+  float: left;
+  padding: 0;
+  margin: 0;
+}
+.slider_cont .anythingSlider .vertical .panel {
+  float: none;
+}
+.slider_cont .anythingSlider .fade .panel {
+  float: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 0;
+}
+.slider_cont .anythingSlider .fade .activePage {
+  z-index: 1;
+}
+.slider_cont .anythingSlider .arrow {
+  top: 45%;
+  position: absolute;
+  display: block;
+  opacity: 0.10;
+}
+.slider_cont .anythingSlider .arrow a {
+  display: block;
+  width: 30px;
+  height: 30px;
+  text-align: center;
+  outline: 0;
+  background: url("/instances/js_widgets/var/ui/nivo_13012012/res/arrows.png") no-repeat;
+}
+.slider_cont .anythingSlider .back {
+  left: 0;
+  margin-left: 10px;
+}
+.slider_cont .anythingSlider .back a {
+  background-position: left bottom;
+}
+.slider_cont .anythingSlider .back a:hover,
+.slider_cont .anythingSlider .back a.hover {
+  background-position: left top;
+}
+.slider_cont .anythingSlider .forward {
+  right: 0;
+  margin-right: 10px;
+}
+.slider_cont .anythingSlider .forward a {
+  background-position: right bottom;
+}
+.slider_cont .anythingSlider .forward a:hover,
+.slider_cont .anythingSlider .forward a.hover {
+  background-position: right top;
+}
+.slider_cont .anythingSlider .anythingControls {
+  height: 15px;
+  /* limit height, needed for IE9 of all things */
+
+  outline: 0;
+  display: none;
+  position: absolute;
+  bottom: 5px;
+  z-index: 100;
+  opacity: 0.90;
+  filter: alpha(opacity=90);
+  /* Navigation buttons + start/stop button, default state */
+
+  /* Navigation current button, default state */
+
+  /* start-stop button, stopped, default state */
+
+  /* start-stop button, playing, default state */
+
+  /* start-stop button, default hovered text color (when visible) */
+
+  /* hide nav/start-stop background image shadow on hover - makes the button appear to come forward */
+
+  /* navigationSize window */
+
+  /* navigationSize nav arrow positioning */
+
+  /* Autoplay Start/Stop button */
+
+}
+.slider_cont .anythingSlider .anythingControls a.cur,
+.slider_cont .anythingSlider .anythingControls a:hover {
+  background-image: url('/themes/vlnt/img/slider_sprite.png');
+  background-position: 0px 0px;
+}
+.slider_cont .anythingSlider .anythingControls a.start-stop {
+  background: #040;
+  color: #ddd;
+  /* top shadow */
+
+  -moz-box-shadow: inset 1px 2px 5px rgba(0, 0, 0, 0.5);
+  -webkit-box-shadow: inset 1px 2px 5px rgba(0, 0, 0, 0.5);
+  box-shadow: inset 1px 2px 5px rgba(0, 0, 0, 0.5);
+}
+.slider_cont .anythingSlider .anythingControls a.start-stop.playing {
+  background-color: #800;
+}
+.slider_cont .anythingSlider .anythingControls a.start-stop:hover,
+.slider_cont .anythingSlider .anythingControls a.start-stop.hover,
+.slider_cont .anythingSlider .anythingControls a.start-stop {
+  color: #fff;
+  /* clear top shadow */
+
+  -moz-box-shadow: inset 0 0 0 #000000;
+  -webkit-box-shadow: inset 0 0 0 #000000;
+  box-shadow: inset 0 0 0 #000000;
+}
+.slider_cont .anythingSlider .anythingControls ul {
+  margin: 0;
+  padding: 0;
+  float: left;
+}
+.slider_cont .anythingSlider .anythingControls ul li {
+  list-style: none;
+  float: left;
+  margin: 0;
+  padding: 0;
+  position: relative;
+}
+.slider_cont .anythingSlider .anythingControls ul a {
+  display: inline-block;
+  width: 11px;
+  height: 11px;
+  margin: 3px;
+  padding: 0;
+  text-decoration: none;
+  text-align: center;
+  outline: 0;
+  background-image: url('/themes/vlnt/img/slider_sprite.png');
+  background-position: -20px 0px;
+}
+.slider_cont .anythingSlider .anythingControls ul a:hover {
+  /* clear top shadow */
+
+  -moz-box-shadow: inset 0 0 0 #000000;
+  -webkit-box-shadow: inset 0 0 0 #000000;
+  box-shadow: inset 0 0 0 #000000;
+}
+.slider_cont .anythingSlider .anythingControls span {
+  display: block;
+  visibility: hidden;
+}
+.slider_cont .anythingSlider .anythingControls .anythingNavWindow {
+  overflow: hidden;
+  float: left;
+}
+.slider_cont .anythingSlider .anythingControls li.prev span,
+.slider_cont .anythingSlider .anythingControls li.next span {
+  visibility: none;
+  position: relative;
+  top: -6px;
+  /* bring navigationSize text arrows into view */
+
+}
+.slider_cont .anythingSlider .anythingControls .start-stop {
+  margin: 3px;
+  padding: 0;
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  text-align: center;
+  text-decoration: none;
+  z-index: 100;
+  outline: 0;
+}
+.slider_cont .anythingSlider.activeSlider {
+  /*
+				 =================================
+				 Active State (has keyboard focus)
+				 =================================
+				*/
+
+  /* slider window - top & bottom borders, active state */
+
+  /* Navigation buttons, active state */
+
+}
+.slider_cont .anythingSlider.activeSlider .anythingWindow {
+  border-color: #164054;
+}
+.slider_cont .anythingSlider.activeSlider .anythingControls {
+  /* Navigation current button, active state */
+
+  /* start-stop button, stopped, active state */
+
+}
+.slider_cont .anythingSlider.activeSlider .anythingControls a {
+  color: #fff;
+}
+.slider_cont .anythingSlider.activeSlider .anythingControls a.cur,
+.slider_cont .anythingSlider.activeSlider .anythingControls a:hover {
+  color: #000;
+}
+.slider_cont .anythingSlider.activeSlider .anythingControls a.start-stop {
+  color: #fff;
+}
+.slider_cont .anythingSlider.activeSlider .anythingControls a.start-stop.playing {
+  color: #fff;
+}
+.slider_cont .anythingSlider.activeSlider .anythingControls .start-stop:hover,
+.slider_cont .anythingSlider.activeSlider .anythingControls .start-stop.hover {
+  color: #fff;
+}
+.slider_cont.short_top #slider {
+  height: 181px;
+}
+.slider_cont.short_top .slide_s {
+  height: 100px;
+  width: 600px;
+  top: 0px;
+  left: 290px;
+  position: absolute;
+  color: #b6b5b5;
+  font-size: 14px;
+}
+.slider_cont.short_top .slide_s a {
+  color: white;
+}
+.slider_cont.short_top .slide_s h3 {
+  font-size: 24px;
+  font-weight: normal;
+  color: #ffffff;
+}

@@ -1,0 +1,19 @@
+<div class="cart_ui">
+<table width="100%" border="1">
+{__(apply(/records)__}
+	<tr id="cart_record_{__id__}">
+		<td width="36">{__str_type__}</td>
+		<td>{__title__}</td>
+		<td width="24" align="right"> {__count__} </td>
+		<td width="72"> x {__price2__} </td>
+		<td width="72"> = {__summ__}</td>
+	</tr>
+{__apply)__}
+	<tr>
+		<td colspan="2">&nbsp;</td>
+		<td align="right">{__/total_items__}</td>
+		<td align="right">ИТОГО: </td>
+		<td><div id="cart_form_total"> = {__/total_summ__}</div></td>
+	</tr>
+</table>
+</div>

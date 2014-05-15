@@ -17,17 +17,33 @@ class di_mf2_catalogue_list extends di_m2_item_indexer
 
 
 
-	public function get_list()
+	public function get_list($search_mode = false)
 	{
 		$args = array();
+		$sw = '';
 		$scope = $this->get_args('scope');
 		$this->_flush();
 //		$this->where = " MATCH (`category_list`) AGAINST ('".'"(:135)"'."' IN BOOLEAN MODE)>0 ";
-		foreach($scope as $key=>$value)
+		if($search_mode == true)
 		{
-			$scope_where[] = " `category_list` like '%\"category_id\":\"".$key."\",%' ";
+			$search = $this->get_args('search');
+			if($search == '')
+			{
+				return array();
+			}
+			$where[] = " `title` like '%$search%' ";
+			$where[] = " `article` like '%$search%' ";
+			$where[] = " `text_list` like '%$search%' ";
+			$sw = implode('OR',$where);
 		}
-		$sw = implode('OR',$scope_where);
+		else
+		{
+			foreach($scope as $key=>$value)
+			{
+				$scope_where[] = " `category_list` like '%\"category_id\":\"".$key."\",%' ";
+			}
+			$sw = implode('OR',$scope_where);
+		}
 		$this->where = $sw;
 		$this->push_args($args);
 		$res = $this->extjs_grid_json(false,false);
@@ -48,10 +64,28 @@ class di_mf2_catalogue_list extends di_m2_item_indexer
 
 	}
 
-//9* оверлоадим метод чтобы от парентов листенореов не  приходило
+	public function collect_data($eObj, $ids)
+	{
+		if (count($ids) > 0)
+		{
+			$this->_flush();
+			$this->what = array('*');
+			$this->push_args(array('_sitem_id' => $ids));
+			$this->connector->fetchMethod = PDO::FETCH_ASSOC;
+			$this->_get();
+			$this->pop_args();
+			$data= $this->get_results();
+			$eObj->add_data($data);
+		}
+	}
+
+
 	public function _listeners()
 	{
-		return array();
+		return array(
+			array('di' => 'mf2_cart', 'event' => 'collect_data', 'handler' => 'collect_data'),
+		);
 	}
+
 }
 ?>
