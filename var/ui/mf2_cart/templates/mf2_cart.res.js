@@ -47,6 +47,7 @@ var cart = function(){
 }
 
 $(document).ready(function(){
+	cart = new cart();
 	var options = {
 		firstStep:'step1',
 		error_messages:[],
@@ -71,13 +72,13 @@ $(document).ready(function(){
 				init:function(o){
 				},
 				check:function(o,obj){
+					cart.recalc();
 					return true;
 				}
 			}
 		}
 	}
 	a = new fwizard(options);
-	cart = new cart();
 	$('.count').each(function(){
 		$(this).on('keyup',function(){
 			cart.recalc();
