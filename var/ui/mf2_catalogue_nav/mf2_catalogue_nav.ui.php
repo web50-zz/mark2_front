@@ -55,7 +55,34 @@ class ui_mf2_catalogue_nav extends user_interface
 		return $this->parse_tmpl($template,$data);
 
 	}
-	
+
+	public	function pub_submenu_parametric()
+	{
+		$template = $this->get_args('template', 'submenu.html');
+		$parent = $this->get_args('parent',1);
+		$di = data_interface::get_instance('m2_category');
+		$data = $di->get_level_down($parent);
+		$ids =  array();
+		foreach($data['childs'] as $key=>$value)
+		{	
+			if($value['link_id']>0)
+			{
+				$ids[] = $value['link_id'];	
+			}
+			else
+			{
+				$ids[] = $value['id'];
+			}
+		}
+		$di2 = data_interface::get_instance('m2_category_file');
+		$di2->_flush();
+		$di2->push_args(array('_sm2_category_id'=>$ids));
+		$fls = $di2->extjs_grid_json(false,false);
+		$data['files'] = $fls['records'];
+		return $this->parse_tmpl($template,$data);
+	}
+
+
 	public function get_scope()
 	{
 		if($this->location_data == false)
