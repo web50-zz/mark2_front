@@ -27,14 +27,35 @@ class di_mf2_catalogue_list extends di_m2_item_indexer
 		if($search_mode == true)
 		{
 			$search = $this->get_args('search');
+			$cat = $this->get_args('cat');
+			
 			if($search == '')
 			{
 				return array();
 			}
+			
 			$where[] = " `title` like '%$search%' ";
 			$where[] = " `article` like '%$search%' ";
 			$where[] = " `text_list` like '%$search%' ";
 			$sw = implode('OR',$where);
+			if($cat >0)
+			{
+				$di = data_interface::get_instance('m2_category');
+				$childs = $di->get_descendants($cat);
+				$ids = array();
+				$ids[] = $cat;
+				foreach($childs as $key=>$value)
+				{
+					$ids[] = $value['id'];
+				}
+				$sw2 = array();
+				foreach($ids as $key=>$value)
+				{
+					$sw2[] = " `category_list` like '%\"category_id\":\"".$value."\",%' ";
+				}
+				$sw3 = implode('OR',$sw2);
+				$sw = "($sw) AND ($sw3)";
+			}
 		}
 		else
 		{

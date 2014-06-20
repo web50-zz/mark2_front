@@ -89,13 +89,20 @@ class ui_mf2_catalogue_nav extends user_interface
 		$di = data_interface::get_instance('m2_category');
 		$parent = $this->get_args('parent','1');
 		$hidden = $this->get_args('hidden',0);
+		$template = $this->get_args('template','all.html');
 		$di->set_args(array(
 				'parent'=>$parent,
 				'hidden'=>$hidden,
 				));
 		$data_r = $di->get_all();
 		$data['records'] = $data_r['childs'];
-		return $this->parse_tmpl('all.html',$data);
+		$path = array();
+		foreach($this->trunc as $key=>$value)
+		{
+			$path[$value['id']] = 1;
+		}
+		$data['trunc'] = $path;
+		return $this->parse_tmpl($template,$data);
 	}
 
 

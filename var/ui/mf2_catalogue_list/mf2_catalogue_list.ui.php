@@ -39,7 +39,8 @@ class ui_mf2_catalogue_list extends user_interface
 		$template = $this->get_args('template', 'default.html');
 		$di = data_interface::get_instance('mf2_catalogue_list');
 		$search = request::get('search');
-		$di->push_args(array('search'=>$search));
+		$cat = request::get('cat');
+		$di->push_args(array('search'=>$search,'cat'=>$cat));
 		$data['records'] = $di->get_list(true);
 		$data['basket'] = $_SESSION['mf2_cart'];
 		$di->pop_args();
