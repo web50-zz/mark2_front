@@ -1,0 +1,34 @@
+				<ul id="ma-mobilemenu" class="mobilemenu nav-collapse collapse">
+				{__(apply(records)__}
+					{__set(#pos1 = @position)__}
+                                    <li class="level0 nav-{__#pos1__} level-top {__(if(@position == 1)__}first{__if)__} {__(if(@position == @last)__}last{__if)__} {__(if(count($childs)>0)__}parent{__if)__}">
+                                        <a href="{__uri__}" class="level-top">
+                                            <span>{__title__}</span>
+                                        </a>
+				    {__(if(count($childs)>0)__}
+                                         <ul class="level0">
+					{__(apply($childs)__}
+							{__set(#pos2 = @position)__}
+                                                    <li class="level1 nav-{__#pos1__}-{__@position__} {__(if(@position == 1)__}first{__if)__}  {__(if(@position == @last)__}last{__if)__} {__(if(count($childs)>0)__}parent{__if)__}">
+                                                        <a href="{__uri__}">
+                                                            <span>{__title__}</span>
+                                                        </a>
+							    {__(if(count($childs)>0)__}
+								 <ul class="level1">
+								{__(apply($childs)__}
+									    <li class="level2 nav-{__#pos1__}-{__#pos2__}-{__@position__} {__(if(@position == 1)__}first{__if)__}  {__(if(@position == @last)__}last{__if)__} {__(if(count($childs)>0)__}parent{__if)__}">
+										<a href="{__uri__}">
+										    <span>{__title__}</span>
+										</a>
+									    </li>
+								{__apply)__}
+								</ul>
+							{__if)__}
+                                                    </li>
+					{__apply)__}
+					</ul>
+				    {__if)__}
+				    </li>
+				{__apply)__}
+                                </ul>
+
