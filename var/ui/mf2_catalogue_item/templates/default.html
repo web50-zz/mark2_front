@@ -3,6 +3,16 @@
 				{__set(#files = json_decode($files_list))__}
 				{__set(#texts = json_decode($text_list))__}
 				{__set(#chars = json_decode($chars_list))__}
+					{__(apply(#chars)__} 
+						{__(if($type_id == 94)__}
+							{__(if($type_value == 104)__}
+								{__set(#avail = 'none')__}
+							{__else__}
+								{__set(#avail = 'yes')__}
+							{__if)__}
+						{__if)__} 
+					{__apply)__}
+
 				<div class="preview">
 				{__(apply(#files)__}
 					{__(if(@position == 1)__}
@@ -32,26 +42,57 @@
 					{__apply)__}
 
 					<div class="divid"></div>
+							{__set(#parts = 0)__}
+					{__(apply(#prices)__}
+						{__(if($type == 8 || $type == 6|| $type == 5)__}
+							{__set(#parts = 1)__}
+						{__if)__}
+					{__apply)__}
+					{__(if(#parts == 1)__}
 					<div class="preisc">
 						<div class="annot">Цена зависит от количества изделий в заказе и категории ткани</div>
+							{__content__}
 						<table>
 							<tr>
-								<th>от 10 шт.</th>
-								<th>от 50 шт.</th>
-								<th>от 100 шт.</th>
-								<th>от 2500 шт.</th>
+								<th>10 - 50 шт.</th>
+								<th>50 - 200 шт.</th>
+								<th>201-500 шт.</th>
 							</tr>
 							<tr>
-								<td>100 руб.</td>
-								<td>800 руб.</td>
-								<td>600 руб.</td>
-								<td>уточните у нашего менеджера</td>
+								<td>
+									
+					{__(apply(#prices)__}
+						{__(if($type == 5)__}
+							{__price_value__} руб.
+						{__if)__}
+						{__apply)__}
+								
+								
+								</td>
+								<td>
+													{__(apply(#prices)__}
+						{__(if($type == 6)__}
+							{__price_value__} руб.
+						{__if)__}
+						{__apply)__}
+
+								</td>
+								<td>
+								
+													{__(apply(#prices)__}
+						{__(if($type == 8)__}
+							{__price_value__} руб.
+						{__if)__}
+						{__apply)__}
+								</td>
 							</tr>
 						</table>
 						<p>
 							Цена указана на <a href="" id="p_anno_tip" original-title="1 гр. ткани - габардин-стейч,-прайс ,наценка 0<br>2 гр. ткани - п/вискоза ,наценка 40%<br>3 гр.ткани - п/шерсть - наценка 50%<br> согласно каталога тканей." >1 категорию тканей</a>
 						</p>
+						<p>При заказе партии более 500 шт. цена рассчитывается индивидуально.</p>
 					</div>
+					{__if)__}
 					<h4><strong>Артикул:</strong> {__article__}</h4>
 					{__(apply(#chars)__}
 						{__(if($type_id == 110)__}
@@ -66,13 +107,23 @@
 						{__(if($type == 3)__}
 						<div class="item_descr">
 							{__content__}
+							<p>возможен пошив в любой цветовой гамме</p>
 						</div>
 						{__if)__}
 					{__apply)__}
 					{__(apply(#prices)__}
+						{__(if($type == 6 && #avail == 'none')__}
 						<div class="price">
 						Цена: {__price_value__} руб. {__content__}
 						</div>
+						{__if)__}
+						{__(if($type == 7 && #avail == 'yes')__}
+							{REM}
+							<div class="price">
+							Цена: {__price_value__} руб. {__content__}
+							</div>
+							{MER}
+						{__if)__}
 					{__apply)__}
 					<div class="divid"></div>
 					<div class="zak"><a style="{__(if(/basket[$item_id])__}display: none; {__else__} display: block{__if)__}" class="basket_btn" data-id="{__item_id__}" href=""><img src="/themes/avik/img/basket_blue.png"/> Предварительный заказ </a></div>
@@ -80,7 +131,7 @@
 					{__(if($show_link == 1)__}
 						<div class="zak nofirst"><a href="/catalog/items/{__name__}/"><img src="/themes/avik/img/book.png"/> Подробное описание</a></div>
 					{__if)__}
-					<div class="zak nofirst"><a  onCLick="return false;" href="#"><img src="/themes/avik/img/folder.png"/>Предварительный рассчет</a></div>
+					<div class="zak nofirst"><a  onClick='$("a[rel=tipsy]").tipsy("show"); return false;' title='<form id="snp"><div class="hider" style="float:right">[x]</div>Изделие: articul {__article__}<br><br>Укажите количество: &nbsp<input style="width: 30px;" type="text" name="count" value=""/><br><br>Ваше имя: &nbsp;<input type="text" name="name" value=""/><br><br> Ваш e-mail: &nbsp;<input type="email" name="email" value=""><br><br><div class="sp">Рассчитать стоимость</div><input type="hidden" name="art" value="{__article__}"></form>'  rel="tipsy" href="#"><img src="/themes/avik/img/folder.png"/>Предварительный рассчет</a></div>
 					<div class="divid" style="margin-top: 25px;"></div>
 					{__(apply(#chars)__}
 						{__(if($type_id == 106)__}
