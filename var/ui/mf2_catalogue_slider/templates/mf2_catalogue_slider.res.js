@@ -21,6 +21,7 @@ $('#slider').anythingSlider({
 //	'.textSlide h3'         : [ 'top fade', '200px', '500', 'easeOutBounce' ], 
 //	'.textSlide img,.fade'  : [ 'fade' ], 
 //	'.textSlide li'         : [ 'listLR' ] 
-      }); 
+      });
+      $('.slide_s').show();
 });
 

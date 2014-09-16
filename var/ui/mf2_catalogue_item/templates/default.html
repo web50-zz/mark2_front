@@ -54,7 +54,7 @@
 							{__content__}
 						<table>
 							<tr>
-								<th>10 - 50 шт.</th>
+								<th>20 - 50 шт.</th>
 								<th>50 - 200 шт.</th>
 								<th>201-500 шт.</th>
 							</tr>
@@ -107,22 +107,24 @@
 						{__(if($type == 3)__}
 						<div class="item_descr">
 							{__content__}
+							{__(if(#avail == 'none')__}
 							<p>возможен пошив в любой цветовой гамме</p>
+							{__if)__}
 						</div>
 						{__if)__}
 					{__apply)__}
 					{__(apply(#prices)__}
+						{REM}
 						{__(if($type == 6 && #avail == 'none')__}
 						<div class="price">
 						Цена: {__price_value__} руб. {__content__}
 						</div>
 						{__if)__}
-						{__(if($type == 7 && #avail == 'yes')__}
-							{REM}
+						{MER}
+						{__(if($type == 7 && $price_value > 0)__}
 							<div class="price">
 							Цена: {__price_value__} руб. {__content__}
 							</div>
-							{MER}
 						{__if)__}
 					{__apply)__}
 					<div class="divid"></div>

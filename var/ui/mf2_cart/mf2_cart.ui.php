@@ -85,6 +85,7 @@ class ui_mf2_cart extends user_interface
 		$numSent = $mailer->batchSend($message);
 
 
+		$this->fire_event('onSent', array(request::get()));
 
 
 		//Send the message
@@ -267,6 +268,7 @@ class ui_mf2_cart extends user_interface
 			}
 			$data['cart'] = $cart;
 			$this->send_order($data);
+			$_SESSION['mf2_cart'] = array();//корзину опустошаем
 			response::send(array('success'=>true,'data'=>'ee'),'json');
 		
 		}catch(Exception $e)

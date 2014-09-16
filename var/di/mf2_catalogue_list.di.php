@@ -46,6 +46,7 @@ class di_mf2_catalogue_list extends di_m2_item_indexer
 		}
 		$this->where = $sw;
 		$this->push_args($args);
+		$this->set_order('article','ASC');
 		$res = $this->extjs_grid_json(false,false);
 		$this->pop_args();
 		return $res['records'];

@@ -52,7 +52,8 @@ $(document).ready(function(){
 		firstStep:'step1',
 		error_messages:[],
 		defaults:{
-			onSuccessSubmit:function(data){},
+			onSuccessSubmit:function(data){
+			},
 			message:function(type,str,title){
 					var opts = {
 					 title: title,
