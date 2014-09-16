@@ -61,7 +61,8 @@ class ui_mf2_catalogue_nav extends user_interface
 		$template = $this->get_args('template', 'submenu.html');
 		$parent = $this->get_args('parent',1);
 		$di = data_interface::get_instance('m2_category');
-		$data = $di->get_level_down($parent);
+		$level = $this->get_args('level',0);
+		$data = $di->get_level_down($parent,$level);
 		$ids =  array();
 		foreach($data['childs'] as $key=>$value)
 		{	
@@ -79,6 +80,28 @@ class ui_mf2_catalogue_nav extends user_interface
 		$di2->push_args(array('_sm2_category_id'=>$ids));
 		$fls = $di2->extjs_grid_json(false,false);
 		$data['files'] = $fls['records'];
+		return $this->parse_tmpl($template,$data);
+	}
+
+	public function pub_all()
+	{
+		$data =  array();
+		$di = data_interface::get_instance('m2_category');
+		$parent = $this->get_args('parent','1');
+		$hidden = $this->get_args('hidden',0);
+		$template = $this->get_args('template','all.html');
+		$di->set_args(array(
+				'parent'=>$parent,
+				'hidden'=>$hidden,
+				));
+		$data_r = $di->get_all();
+		$data['records'] = $data_r['childs'];
+		$path = array();
+		foreach($this->trunc as $key=>$value)
+		{
+			$path[$value['id']] = 1;
+		}
+		$data['trunc'] = $path;
 		return $this->parse_tmpl($template,$data);
 	}
 
