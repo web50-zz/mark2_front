@@ -30,6 +30,7 @@ class ui_mf2_catalogue_list extends user_interface
 		$di->push_args(array('scope'=>$scope));
 		$data['records'] = $di->get_list();
 		$data['basket'] = $_SESSION['mf2_cart'];
+		$data['current_node'] = $ui->location_data['current_node'];
 		$di->pop_args();
 		return $this->parse_tmpl($template,$data);
 	}
