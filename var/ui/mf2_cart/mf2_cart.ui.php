@@ -24,10 +24,9 @@ class ui_mf2_cart extends user_interface
         */
         protected function pub_content()
         {
-		if (request::get('z') == 1 && ($check = $this->check()) === FALSE)
+		if (SRCH_URI == 'save/')
 		{
-			$this->send_order();
-			return '<br><br><br><br><center>Спасибо, ваш заказ отправлен. Наши менеджеры свяжутся с вами.</center>';
+			$this->pub_accept_order();
 		}
 		else
 		{
@@ -65,19 +64,29 @@ class ui_mf2_cart extends user_interface
 		return (!empty($check)) ? $check : FALSE;
 	}
 
-	private function send_order()
+	private function send_order($data = array())
 	{
-		//Create the Transport: Mail
+		$body =  $this->parse_tmpl('order_mail.html', $data);
+		$rcpt = registry::get('ORDER_MAIL_TO');
+		$title = 'Заказ на сайте';
+		$core_domain = $_SERVER['HTTP_HOST'];
+		if(!$core_domain)
+		{
+			$core_domain = 'localhost';
+		}
+		require_once LIB_PATH.'Swift/swift_required.php';
 		$transport = Swift_MailTransport::newInstance();
-
-		//Create the Mailer using your created Transport
 		$mailer = Swift_Mailer::newInstance($transport);
+		$message = Swift_Message::newInstance($title)
+			->setFrom(array('no-reply@'.$core_domain => 'no-reply'))
+			->setTo($rcpt)
+			->setBody($body);
+		$message->setContentType("text/html");	
+		$numSent = $mailer->batchSend($message);
 
-		//Create a message
-		$message = Swift_Message::newInstance(registry::get('ORDER_MAIL_TITLE'));
-		$message->setFrom(array("noreply@web50.ru" => "Site Order Form"));
-		$message->setTo(array(registry::get('ORDER_MAIL')));
-		$message->setBody($this->parse_tmpl('order_mail.html', $this->get_data()), 'text/html');
+
+		$this->fire_event('onSent', array(request::get()));
+
 
 		//Send the message
 		$result = $mailer->send($message);
@@ -218,6 +227,55 @@ class ui_mf2_cart extends user_interface
 				'count' => $count,
 				'summ' => $summ,
 		), 'json');
+	}
+
+
+	protected function pub_accept_order()
+	{
+		try{
+			$data = request::get();
+			$check =  array();
+			if (empty($data['phone']))
+			{
+				$check['phone'] = 'Необходимо указать ваш Телефон';
+			}
+			if (empty($data['mail']))
+			{
+				$check['email'] = 'Необходимо указать ваш E-Mail';
+			}
+			if(count($check)>0)
+			{
+				throw new Exception(implode('',$check));
+			}
+			$cart = json_decode($data['cart_json']);
+			foreach($cart->records as $key=>$value)
+			{
+				$ids[] = $value->id;
+			}
+			$di = data_interface::get_instance('m2_item_indexer');
+			$di->_flush();
+			$di->set_args(array('_sitem_id'=>$ids));
+			$res = $di->_get()->get_results();
+			foreach($cart->records as $key=>$value)
+			{
+				foreach($res as $key2=>$value2)
+				{
+					if($value2->item_id == $value->id)
+					{
+						$cart->records[$key]->index = $value2;
+					}
+				}
+			}
+			$data['cart'] = $cart;
+			$this->send_order($data);
+			$_SESSION['mf2_cart'] = array();//корзину опустошаем
+			response::send(array('success'=>true,'data'=>'ee'),'json');
+		
+		}catch(Exception $e)
+		{
+			response::send(array('success'=>false,'message'=>$e->getMessage()),'json');
+		}
+
 	}
 }
 ?>

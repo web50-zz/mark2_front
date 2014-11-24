@@ -1,0 +1,15 @@
+Прнят заказ товара<br>
+От:{__fio__} {__mail__}<br>
+организация: {__organization__}<br>
+Город: {__location__}<br>
+Телефон: {__phone__}<br>
+Комментарии:{__comments__}<br><br>
+Товары<br>
+{__(apply(/cart/records)__}
+	{__set(#ind = $index)__}
+{__#ind/title__}<br>
+в количестве {__count__}<br>
+по цене {__price__} руб.<br>
+<br>
+{__apply)__}
+Итого: {__/cart/total__} руб.

@@ -26,6 +26,7 @@ $(document).ready(function(){
 					$('.fancybox-outer .item-prev').on('click',function(){
 							var p_el = el.prev();
 							var url =  p_el.attr('data-url');
+						$('a[rel=tipsy]').tipsy('hide');
 							if(url)
 							{
 								open_item(url,p_el);
@@ -34,6 +35,7 @@ $(document).ready(function(){
 					$('.fancybox-outer .item-next').on('click',function(){
 							var n_el = el.next();
 							var url =  n_el.attr('data-url');
+						$('a[rel=tipsy]').tipsy('hide');
 							if(url)
 							{
 								open_item(url,n_el);
