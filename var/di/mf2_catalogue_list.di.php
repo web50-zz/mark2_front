@@ -19,10 +19,11 @@ class di_mf2_catalogue_list extends di_m2_item_indexer
 
 	public function get_list($search_mode = false)
 	{
-		$args = array();
+		$args = $this->get_args();
 		$sw = '';
 		$scope = $this->get_args('scope');
 		$this->_flush();
+		$this->push_args($args);
 //		$this->where = " MATCH (`category_list`) AGAINST ('".'"(:135)"'."' IN BOOLEAN MODE)>0 ";
 		if($search_mode == true)
 		{
@@ -66,8 +67,7 @@ class di_mf2_catalogue_list extends di_m2_item_indexer
 			$sw = implode('OR',$scope_where);
 		}
 		$this->where = $sw;
-		$this->push_args($args);
-		$this->set_order('article','ASC');
+		$this->set_order($this->get_alias().'.'.$args['sort'],$args['dir']);
 		$res = $this->extjs_grid_json(false,false);
 		$this->pop_args();
 		return $res['records'];

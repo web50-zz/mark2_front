@@ -24,13 +24,25 @@ class ui_mf2_catalogue_nav extends user_interface
 		// Шаблон
 		$template = $this->get_args('template', 'default.html');
 
-		// Родитель (по умолчанию родителем является корневая нода - Home)
-	//	$parent = $this->get_args('parent', 1);
-		// Глубина вложенности (если передаётся NULL, то до бесконечности)
-	//	$deep = $this->get_args('deep', null);
+		$parent = $this->get_args('parent',0);
+		if($parent >0)
+		{
+			$data = $this->get_childs();
+		}
+		else
+		{
+			$data = $this->get_level(2);
+		}
 
-		$data = $this->get_level(2);
 		return $this->parse_tmpl($template,$data);
+	}
+
+	public function get_childs()
+	{
+		$parent = $this->get_args('parent',0);
+		$di =  data_interface::get_instance('m2_category');
+		$data['records'] = $di->get_descendants($parent);
+		return $data;
 	}
 
 	public function get_level($level = 2)
