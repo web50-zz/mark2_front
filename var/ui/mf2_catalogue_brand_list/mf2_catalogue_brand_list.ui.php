@@ -27,6 +27,8 @@ class ui_mf2_catalogue_brand_list extends user_interface
 		$di->push_args(array('scope'=>$scope,'sort'=>$sort,'dir'=>$dir,'not_available'=>0));
 		$data = $di->extjs_grid_json(false,false);
 		$di->pop_args();
+		$data['PAGE_ID'] = PAGE_ID;
+		$data['req'] = request::get();
 		return $this->parse_tmpl($template,$data);
 	}
 }
