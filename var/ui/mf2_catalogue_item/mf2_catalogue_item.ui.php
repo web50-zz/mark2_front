@@ -30,7 +30,7 @@ class ui_mf2_catalogue_item extends user_interface
 			$data->show_link = 1;
 		}
 		$ret = $this->parse_tmpl($template,$data);
-		$title =  $data->title.' | '.$data->meta_title;
+		$title =  $data->title.'  '.$data->meta_title;
 		$st = user_interface::get_instance('structure');
 		$st->add_title($title);
 		if($args['mode'] == 'ajax')
