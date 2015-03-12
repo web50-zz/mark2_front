@@ -64,6 +64,8 @@ class ui_mf2_catalogue_nav extends user_interface
 			$this->pub_collect_scope_data();
 		}
 		$data = $this->location_data;
+
+		$data['req'] = request::get();
 		return $this->parse_tmpl($template,$data);
 
 	}
