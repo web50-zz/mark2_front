@@ -86,10 +86,6 @@ class ui_mf2_cart extends user_interface
 
 
 		$this->fire_event('onSent', array(request::get()));
-
-
-		//Send the message
-		$result = $mailer->send($message);
 	}
         
         /**
