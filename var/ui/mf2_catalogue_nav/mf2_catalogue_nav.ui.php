@@ -74,6 +74,8 @@ class ui_mf2_catalogue_nav extends user_interface
 	{
 		$template = $this->get_args('template', 'submenu.html');
 		$parent = $this->get_args('parent',1);
+		$get_txts = $this->get_args('get_texts',false);
+		$get_chars = $this->get_args('get_chars',false);
 		$di = data_interface::get_instance('m2_category');
 		$level = $this->get_args('level',0);
 		$data = $di->get_level_down($parent,$level);
@@ -94,6 +96,22 @@ class ui_mf2_catalogue_nav extends user_interface
 		$di2->push_args(array('_sm2_category_id'=>$ids));
 		$fls = $di2->extjs_grid_json(false,false);
 		$data['files'] = $fls['records'];
+		if($get_txts)
+		{
+			$di2 = data_interface::get_instance('m2_category_tabs');
+			$di2->_flush();
+			$di2->push_args(array('_sm2_category_id'=>$ids));
+			$data2 = $di2->_get()->get_results();
+			$data['texts'] = $data2;
+		}
+		if($get_chars)
+		{
+			$di2 = data_interface::get_instance('m2_category_chars');
+			$di2->_flush();
+			$di2->push_args(array('_sm2_id'=>$ids));
+			$data2 = $di2->_get()->get_results();
+			$data['chars'] = $data2;
+		}
 		return $this->parse_tmpl($template,$data);
 	}
 
