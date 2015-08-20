@@ -134,6 +134,7 @@ class ui_mf2_catalogue_nav extends user_interface
 			$path[$value['id']] = 1;
 		}
 		$data['trunc'] = $path;
+		$data['current_node'] = $this->trunc[count($this->trunc)-1]['id'];
 		return $this->parse_tmpl($template,$data);
 	}
 
