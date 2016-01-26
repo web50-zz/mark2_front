@@ -32,6 +32,12 @@ class ui_mf2_catalogue_list extends user_interface
 		$di->set_args(array('scope'=>$scope,'sort'=>$sort,'dir'=>$dir));
 		$data['records'] = $di->get_list();
 		$data['basket'] = $_SESSION['mf2_cart'];
+		$di->pop_args();
+		$ui = user_interface::get_instance('mf2_catalogue_nav');
+		$trunc = $ui->trunc;
+		$title =  $trunc[1]['title'].'  '.$trunc[1]['meta_title'];
+		$st = user_interface::get_instance('structure');
+		$st->add_title($title);
 		$data['current_node'] = $ui->location_data['current_node'];
 		return $this->parse_tmpl($template,$data);
 	}

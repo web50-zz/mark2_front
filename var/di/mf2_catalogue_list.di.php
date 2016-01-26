@@ -64,7 +64,11 @@ class di_mf2_catalogue_list extends di_m2_item_indexer
 			{
 				$scope_where[] = " `category_list` like '%\"category_id\":\"".$key."\",%' ";
 			}
-			$sw = implode('OR',$scope_where);
+			$sw = '('.implode('OR',$scope_where).')';
+			if($args['conditions'] != '')
+			{
+				$sw .= " AND ".$args['conditions'];
+			}
 		}
 		$this->where = $sw;
 		$this->set_order($this->get_alias().'.'.$args['sort'],$args['dir']);
