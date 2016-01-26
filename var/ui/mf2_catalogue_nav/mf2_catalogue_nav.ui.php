@@ -196,6 +196,7 @@ class ui_mf2_catalogue_nav extends user_interface
 	public function pub_locator()
 	{
 		$di = data_interface::get_instance('m2_url_indexer');
+		$parts = explode('?',SRCH_URI); //режем куски потому что иногда на некоторых хостингах SRCH_URI содержит GET 
 		$res = $di->search_by_uri('/'.SRCH_URI);
 		if($res['item_id']>0)
 		{
