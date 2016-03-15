@@ -25,6 +25,7 @@ class di_mf2_catalogue_list extends di_m2_item_indexer
 		$this->_flush();
 		$this->push_args($args);
 //		$this->where = " MATCH (`category_list`) AGAINST ('".'"(:135)"'."' IN BOOLEAN MODE)>0 ";
+		$dj = $this->join_with_di('m2_item',array('item_id'=>'id'),array('order'=>'order'));
 		if($search_mode == true)
 		{
 			$search = $this->get_args('search');
@@ -71,8 +72,25 @@ class di_mf2_catalogue_list extends di_m2_item_indexer
 			}
 		}
 		$this->where = $sw;
-		$this->set_order($this->get_alias().'.'.$args['sort'],$args['dir']);
-		$res = $this->extjs_grid_json(false,false);
+		$this->set_order($dj->get_alias().'.'.$args['sort'],$args['dir']);
+		$flds = array(
+			'id',
+			'title',
+			'name',
+			'article',
+			'not_available',
+			'files_list',
+			'text_list',
+			'prices_list',
+			'manufacturers_list',
+			'chars_list',
+			'category_list',
+			'last_changed',
+			'meta_title',
+			array('di'=>$dj,'name'=>'order')
+
+		);
+		$res = $this->extjs_grid_json($flds,false);
 		$this->pop_args();
 		return $res['records'];
 	}
