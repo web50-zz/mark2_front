@@ -36,9 +36,9 @@ class di_mf2_catalogue_list extends di_m2_item_indexer
 				return array();
 			}
 			
-			$where[] = " `title` like '%$search%' ";
-			$where[] = " `article` like '%$search%' ";
-			$where[] = " `text_list` like '%$search%' ";
+			$where[] = ' '.$this->get_alias().".`title` like '%$search%' ";
+			$where[] = ' '.$this->get_alias().".`article` like '%$search%' ";
+			$where[] = ' '.$this->get_alias().".`text_list` like '%$search%' ";
 			$sw = implode('OR',$where);
 			if($cat >0)
 			{
