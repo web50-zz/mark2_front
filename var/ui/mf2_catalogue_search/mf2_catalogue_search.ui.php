@@ -24,12 +24,18 @@ class ui_mf2_catalogue_search extends user_interface
 	}
 
 
-	//9* метод пока не алё
 	public function pub_content()
 	{
-		$data = array();
-		// Шаблон
 		$template = $this->get_args('template', 'default.html');
+		$di = data_interface::get_instance('mf2_catalogue_list');
+		$sort = $this->get_args('sort','id');
+		$dir = $this->get_args('dir','asc');
+		$search = request::get('search');
+		$cat = request::get('cat');
+		$di->push_args(array('search'=>$search,'cat'=>$cat,'sort'=>$sort,'dir'=>$dir));
+		$data['records'] = $di->get_list(true);
+		$data['basket'] = $_SESSION['mf2_cart'];
+		$di->pop_args();
 		return $this->parse_tmpl($template,$data);
 	}
 
