@@ -39,6 +39,7 @@ class di_mf2_catalogue_list extends di_m2_item_indexer
 			$where[] = ' '.$this->get_alias().".`title` like '%$search%' ";
 			$where[] = ' '.$this->get_alias().".`article` like '%$search%' ";
 			$where[] = ' '.$this->get_alias().".`text_list` like '%$search%' ";
+			$where[] = ' '.$this->get_alias().".`not_available` = '0' ";
 			$sw = implode('OR',$where);
 			if($cat >0)
 			{
@@ -70,6 +71,7 @@ class di_mf2_catalogue_list extends di_m2_item_indexer
 			{
 				$sw .= " AND ".$args['conditions'];
 			}
+			$sw .= ' AND '.$this->get_alias().'.`not_available` = 0 ';
 		}
 		$this->where = $sw;
 		$this->set_order($dj->get_alias().'.'.$args['sort'],$args['dir']);
