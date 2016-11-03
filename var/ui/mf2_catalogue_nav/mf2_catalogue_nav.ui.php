@@ -135,6 +135,7 @@ class ui_mf2_catalogue_nav extends user_interface
 		}
 		$data['trunc'] = $path;
 		$data['current_node'] = $this->trunc[count($this->trunc)-1]['id'];
+		$data['args'] = $this->get_args();
 		return $this->parse_tmpl($template,$data);
 	}
 
