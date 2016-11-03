@@ -239,15 +239,16 @@ class ui_mf2_catalogue_nav extends user_interface
 	public function pub_trunc_menu()
 	{
 		$st = data_interface::get_instance('structure');
-		$data = $st->get_trunc_menu();
+		$template = $this->get_args('template', 'trunc_menu.html');
+		$data['records'] = $st->get_trunc_menu();
 		//9* $this->trunc  заполняется раньше при запуске  метода  локатор в начале страницы
-		$catalog_root = $data[count($data)-1]['uri'];
+		$catalog_root = $data['records'][count($data['records'])-1]['uri'];
 		foreach($this->trunc as $key=>$value)
 		{
 			if($value['id'] >1)
 			{
 				$value['uri'] = substr($catalog_root,0,-1).$value['uri'];
-				$data[] = $value;
+				$data['records'][] = $value;
 			}
 		}
 		if($this->item_id>0)
@@ -259,8 +260,9 @@ class ui_mf2_catalogue_nav extends user_interface
 			$res = $di->_get()->get_results();
 			//9*  для товара так как  парент нода будет прототипстраницы товара  убираем ее
 			unset($data[count($data)-1]);
-			$data[] = array('title'=>$res[0]->title,'uri'=>'/'.$res[0]->uri.'/','hidden'=>0,'id'=>'1200');
+			$data['records'][] = array('title'=>$res[0]->title,'uri'=>'/'.$res[0]->uri.'/','hidden'=>0,'id'=>'1200');
 		}
+		$data['args'] = $this->get_args();
 		return $this->parse_tmpl('trunc_menu.html', $data);
 	}
 
