@@ -232,6 +232,12 @@ class ui_mf2_catalogue_nav extends user_interface
 			$this->location = 'category';
 			$this->category_id = $res['category_id'];
 		}
+
+		if(!($this->item_id > 0) && !($this->category_id > 0))
+		{
+			$st = user_interface::get_instance('structure');
+			$st->do_404();
+		}
 		$di = data_interface::get_instance('m2_category');
 		$this->trunc = $di->get_trunc_menu($this->category_id);
 	}
@@ -243,6 +249,8 @@ class ui_mf2_catalogue_nav extends user_interface
 		$data['records'] = $st->get_trunc_menu();
 		//9* $this->trunc  заполняется раньше при запуске  метода  локатор в начале страницы
 		$catalog_root = $data['records'][count($data['records'])-1]['uri'];
+		//убираем корень каталога там будет 404 так как  раздел не определен и  товар тоже, выводить весь каталог в кучу смысла нет
+		unset($data['records'][count($data['records'])-1]);
 		foreach($this->trunc as $key=>$value)
 		{
 			if($value['id'] >1)
