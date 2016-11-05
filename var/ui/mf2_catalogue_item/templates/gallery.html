@@ -1,0 +1,62 @@
+				{__set(#article = $article)__}
+				{__set(#files = json_decode($files_list))__}
+				{__set(#title = $title)__}
+				{__(apply(#files)__}
+					{__(if($file_type == 3)__}
+						{__set(#cnt = #cnt + 1)__}
+					{__if)__}
+				{__apply)__}
+
+
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-label="Закрыть">
+        <i class="fa fa-times"></i>
+    </button>
+    <h4 class="modal-title"><small>Фотографии товара</small><br />{__title__}</h4>
+</div>
+
+<div class="modal-body">
+    <div class="product-page gallery original-gallery">
+        <div id="product-page-gallery" class="carousel slide product-page-img" data-interval="false">
+            <div class="carousel-inner" role="listbox">
+					{__(apply(#files)__}
+						{__(if($file_type == 3)__}
+						{__set(#tmb = yes)__}
+						{__set(#fn = substr($real_name,0,-4))__}
+						<div class="item {__(if(@position == 1)__} active {__if)__}">
+						    <img class="img-responsive" src="/filestorage/mark2/m2_item_files/{__real_name__}" alt="{__#article__}" title="{__#article__}" data-holder-rendered="true">
+						</div>
+						{__if)__}
+					{__apply)__}
+            </div>
+	    {__(if(#cnt > 1)__}
+            <div class="images-slider">
+                <ol class="carousel-indicators">
+					{__(apply(#files)__}
+						{__(if($file_type == 3)__}
+						{__set(#tmb = yes)__}
+						{__set(#fn = substr($real_name,0,-4))__}
+			                    <li data-target="#product-page-gallery" data-slide-to="{__echo(@position -1)__}" class="active">
+					            <img class="img-responsive" src="/filestorage/mark2/m2_item_files/mini-{__real_name__}" alt="{__#article__}" title="{__#article__}" data-holder-rendered="true">
+			                  </li>
+						{__if)__}
+					{__apply)__}
+                </ol>
+            </div>
+            <a class="left carousel-control" href="#product-page-gallery" role="button" data-slide="prev">
+                <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+            </a>
+            <a class="right carousel-control" href="#product-page-gallery" role="button" data-slide="next">
+                <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+            </a>
+		{__if)__}
+        </div>
+    </div>
+</div>
+
+<div class="modal-footer">
+    <button type="button" class="btn btn-default" data-dismiss="modal" aria-label="Закрыть">
+        Закрыть </button>
+</div>

@@ -132,8 +132,10 @@ class ui_mf2_catalogue_nav extends user_interface
 		foreach($this->trunc as $key=>$value)
 		{
 			$path[$value['id']] = 1;
+			$path_seq[] = $value['id'];
 		}
 		$data['trunc'] = $path;
+		$data['trunc_seq'] = $path_seq;
 		$data['current_node'] = $this->trunc[count($this->trunc)-1]['id'];
 		$data['args'] = $this->get_args();
 		return $this->parse_tmpl($template,$data);
