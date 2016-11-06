@@ -79,6 +79,7 @@ class di_mf2_catalogue_list extends di_m2_item_indexer
 			'id',
 			'title',
 			'name',
+			'item_id',
 			'article',
 			'not_available',
 			'files_list',
