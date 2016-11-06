@@ -196,6 +196,7 @@ class ui_mf2_cart extends user_interface
 			$di->_set($record['id'], $record);
 			list($count, $summ) = $this->calculate();
 			response::send(array(
+				'upsale' => $this->upsale($record),
 				'success' => true,
 				'count' => $count,
 				'summ' => $summ,
@@ -209,6 +210,14 @@ class ui_mf2_cart extends user_interface
 		}
 	}
 
+	protected function upsale($record = array())
+	{
+		$di = data_interface::get_instance('mf2_catalogue_list');
+		$di->_flush();
+		$di->set_args(array('_sitem_id'=>$record['id']));
+		$data = $di-> _get()->get_results(0);
+		return $this->parse_tmpl('upsale.html', $data);
+	}
 	/**
 	*	Добавить элемент в корзину
 	*/

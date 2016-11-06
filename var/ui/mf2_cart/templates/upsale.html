@@ -1,0 +1,77 @@
+<table class="table">
+	{__set(#total_price = 0)__}
+	{__set(#cnt = 0)__}
+				{__set(#cnt = #cnt +1)__}
+				{__set(#prices = json_decode($prices_list))__}
+				{__set(#files = json_decode($files_list))__}
+				{__set(#texts = json_decode($text_list))__}
+				{__set(#chars = json_decode($chars_list))__}
+				{__set(#cnt2 = 0)__}
+				{__set(#article = $article)__}
+				{__set(#title = $title)__}
+				{__(apply(#files)__}
+					{__(if($file_type == 3)__}
+						{__set(#cnt = #cnt + 1)__}
+					{__if)__}
+				{__apply)__}
+
+				{__(apply(#prices)__}
+					{__(if($type == 7)__}
+						{__set(#price = $price_value)__}
+						{__set(#total_price = #total_price + $price_value)__}
+					{__if)__}
+				{__apply)__}
+
+<div class="upsale-added-items">
+	<div class="row">
+		<div class="col col-xs-12 col-sm-12 col-md-2 col-lg-2">
+			<a href="#" class="upsale-added-img">
+								{__(apply(#files)__}
+									{__(if(@position == 1 && $file_type == 3)__}
+									{__set(#tmb = yes)__}
+									{__set(#fn = substr($real_name,0,-4))__}
+									    <img title="{__#article__}" alt="{__#article__}" src="/filestorage/mark2/m2_item_files/thomb-{__real_name__}" class="img-responsive"/>
+									{__if)__}
+								{__apply)__}
+								{__(if(#tmb != 'yes')__}
+								<img src="/themes/termt/img/nophoto.png" alt=""/>
+								{__if)__}
+
+			</a>
+		</div>
+
+		<div class="col col-xs-12 col-sm-12 col-md-10 col-lg-10">
+			<div class="row">
+				<div class="col col-xs-12 col-sm-12 col-md-12 col-lg-12">
+					<h3>{__title__}</h3>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col col-xs-12 col-sm-12 col-md-4 col-lg-4 upsale-price-block">
+					<div class="product-page-price normal-price">
+						<ul class="list-unstyled list-product-page-price">
+							<li class="product-price">
+								<p class="price-value origin">{__#price__}<i class="fa fa-rub"></i></p>
+							</li>
+
+						</ul>
+					</div>
+				</div>
+
+				<div class="col col-xs-12 col-sm-12 col-md-3 col-lg-3 upsale-stock-block">
+					<div class="row">
+						<div class="col col-xs-12 col-sm-12 col-md-12 col-lg-12 small">
+							<div class="in-stock text-uppercase">
+								<span data-toggle="tooltip" data-placement="right" title="Товар есть в вашем регионе или на центральном складе" >В наличии <i class="fa fa-question-circle"></i></span>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col col-xs-12 col-sm-12 col-md-5 col-lg-5">
+					<a class="btn btn-block btn-orange" href="/cart/">Оформить заказ</a>
+					<a class="btn btn-block btn-transparent modal-close" href="#" data-dismiss="modal" aria-label="Закрыть и продолжить покупки"><i class="fa fa-times"></i>&nbsp;Закрыть и продолжить покупки</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
