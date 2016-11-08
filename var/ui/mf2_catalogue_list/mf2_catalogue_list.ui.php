@@ -21,6 +21,12 @@ class ui_mf2_catalogue_list extends user_interface
 	{
 		$data = array();
 		// Шаблон
+		$grid_mode_changed = request::get('gridMode',false);	
+		if($grid_mode_changed)
+		{
+			session::set('grid_mode',$grid_mode_changed);
+			response::send(array('code'=>'200'),'json');
+		}
 		$args = $this->get_args();
 		$sort = $this->get_args('sort','id');
 		$dir = $this->get_args('dir','asc');
@@ -44,6 +50,7 @@ class ui_mf2_catalogue_list extends user_interface
 		$di->set_args(array('_sm2_category_id'=>$data['current_node']['id']));
 		$res = $di->_get()->get_results();
 		$data['current_node_texts'] = $res;
+		$data['grid_mode'] = session::get('grid_mode');
 		return $this->parse_tmpl($template,$data);
 	}
 
