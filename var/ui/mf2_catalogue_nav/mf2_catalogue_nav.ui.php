@@ -132,9 +132,12 @@ class ui_mf2_catalogue_nav extends user_interface
 		foreach($this->trunc as $key=>$value)
 		{
 			$path[$value['id']] = 1;
+			$path_seq[] = $value['id'];
 		}
 		$data['trunc'] = $path;
+		$data['trunc_seq'] = $path_seq;
 		$data['current_node'] = $this->trunc[count($this->trunc)-1]['id'];
+		$data['args'] = $this->get_args();
 		return $this->parse_tmpl($template,$data);
 	}
 
@@ -217,6 +220,7 @@ class ui_mf2_catalogue_nav extends user_interface
 	public function pub_locator()
 	{
 		$di = data_interface::get_instance('m2_url_indexer');
+		$parts = explode('?',SRCH_URI); //режем куски потому что иногда на некоторых хостингах SRCH_URI содержит GET 
 		$res = $di->search_by_uri('/'.SRCH_URI);
 		if($res['item_id']>0)
 		{
@@ -230,6 +234,12 @@ class ui_mf2_catalogue_nav extends user_interface
 			$this->location = 'category';
 			$this->category_id = $res['category_id'];
 		}
+
+		if(!($this->item_id > 0) && !($this->category_id > 0))
+		{
+			$st = user_interface::get_instance('structure');
+			$st->do_404();
+		}
 		$di = data_interface::get_instance('m2_category');
 		$this->trunc = $di->get_trunc_menu($this->category_id);
 	}
@@ -237,15 +247,19 @@ class ui_mf2_catalogue_nav extends user_interface
 	public function pub_trunc_menu()
 	{
 		$st = data_interface::get_instance('structure');
-		$data = $st->get_trunc_menu();
+		$template = $this->get_args('template', 'trunc_menu.html');
+		$data['records'] = $st->get_trunc_menu();
 		//9* $this->trunc  заполняется раньше при запуске  метода  локатор в начале страницы
-		$catalog_root = $data[count($data)-1]['uri'];
+//		$catalog_root = $data['records'][count($data['records'])-1]['uri'];
+		$catalog_root = '/catalog/';
+		//убираем корень каталога там будет 404 так как  раздел не определен и  товар тоже, выводить весь каталог в кучу смысла нет
+		unset($data['records'][count($data['records'])-1]);
 		foreach($this->trunc as $key=>$value)
 		{
 			if($value['id'] >1)
 			{
 				$value['uri'] = substr($catalog_root,0,-1).$value['uri'];
-				$data[] = $value;
+				$data['records'][] = $value;
 			}
 		}
 		if($this->item_id>0)
@@ -253,12 +267,34 @@ class ui_mf2_catalogue_nav extends user_interface
 			$di = data_interface::get_instance('m2_item_indexer');
 			$di->_flush();
 			$di->set_args(array('_sitem_id'=>$this->item_id));
-			$di->what = array('title','name'=>'uri');
+			$di->what = array('title','name'=>'uri','category_list');
 			$res = $di->_get()->get_results();
+			if($res[0]->category_list != '')
+			{
+				$category_list = json_decode($res[0]->category_list);
+				if(count($category_list)>0)
+				{
+					$di = data_interface::get_instance('m2_category');
+					if($category_list[0]->category_id > 0)
+					{
+						$trunc = $di->get_trunc_menu($category_list[0]->category_id);
+						foreach($trunc as $key=>$value)
+						{
+							if($value['id'] >1)
+							{
+								$value['uri'] = substr($catalog_root,0,-1).$value['uri'];
+								$data['records'][] = $value;
+							}
+						}
+
+					}
+				}
+			}
 			//9*  для товара так как  парент нода будет прототипстраницы товара  убираем ее
-			unset($data[count($data)-1]);
-			$data[] = array('title'=>$res[0]->title,'uri'=>'/'.$res[0]->uri.'/','hidden'=>0,'id'=>'1200');
+				unset($data[count($data)-1]);
+				$data['records'][] = array('title'=>$res[0]->title,'uri'=>'/item/'.$res[0]->uri.'/','hidden'=>0,'id'=>'1200');
 		}
+		$data['args'] = $this->get_args();
 		return $this->parse_tmpl('trunc_menu.html', $data);
 	}
 

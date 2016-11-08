@@ -7,7 +7,8 @@
 class ui_mf2_catalogue_item extends user_interface
 {
 	public $title = 'mf2: Маркет 2  Фронт -  карточка товара';
-	
+	public $item_data = array();
+
 	public function __construct ()
 	{
 		parent::__construct(__CLASS__);
@@ -24,6 +25,10 @@ class ui_mf2_catalogue_item extends user_interface
 		$item_id = $ui->item_id;
 		$di = data_interface::get_instance('mf2_catalogue_list');
 		$data = $di->get_item($item_id);
+		if(request::get('gallery') == 'true')
+		{
+			$this->gallery($data);
+		}
 		$data->basket = $_SESSION['mf2_cart'];
 		if($args['mode'] == 'ajax')
 		{
@@ -43,5 +48,11 @@ class ui_mf2_catalogue_item extends user_interface
 		return 	$ret;
 	}
 
+	public function gallery($data)
+	{
+			$template_gal = $this->get_args('template', 'gallery.html');
+			$ret = $this->parse_tmpl($template_gal,$data);
+			response::send($ret,'html');
+	}
 }
 ?>

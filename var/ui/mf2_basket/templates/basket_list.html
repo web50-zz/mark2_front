@@ -1,0 +1,52 @@
+<table class="table">
+	{__set(#total_price = 0)__}
+	{__set(#cnt = 0)__}
+	{__(apply(/records)__}
+				{__set(#cnt = #cnt +1)__}
+				{__set(#prices = json_decode($prices_list))__}
+				{__set(#files = json_decode($files_list))__}
+				{__set(#texts = json_decode($text_list))__}
+				{__set(#chars = json_decode($chars_list))__}
+				{__set(#cnt2 = 0)__}
+				{__set(#article = $article)__}
+				{__set(#title = $title)__}
+				{__(apply(#files)__}
+					{__(if($file_type == 3)__}
+						{__set(#cnt = #cnt + 1)__}
+					{__if)__}
+				{__apply)__}
+
+				{__(apply(#prices)__}
+					{__(if($type == 7)__}
+						{__set(#price = $price_value)__}
+						{__set(#total_price = #total_price + $price_value)__}
+					{__if)__}
+				{__apply)__}
+
+           <tr>
+                <th>
+					{__(apply(#files)__}
+						{__(if(@position == 1 && $file_type == 3)__}
+						{__set(#tmb = yes)__}
+						{__set(#fn = substr($real_name,0,-4))__}
+	                                            <img title="{__#article__}" alt="{__#article__}" src="/filestorage/mark2/m2_item_files/mini-{__real_name__}" class="img-responsive"/>
+						{__if)__}
+					{__apply)__}
+					{__(if(#tmb != 'yes')__}
+					<img src="/themes/termt/img/nophoto.png" alt=""/>
+					{__if)__}
+                  </th>
+                <td class="th-cart-product-name">
+                    <h5 class="media-heading"><a href="/item/{__name__}/">{__title__}</a></h5>
+                </td>
+                <td class="th-cart-product-price text-center">{__#price__} <i class="fa fa-rub"></i></td>
+                <td class="th-cart-product-quantity text-center">1<span>шт.</span></td>
+                <td class="th-cart-product-remove"><a data-id="{__item_id__}" class="remove_from_cart" href="#"><i class="fa fa-times"></i></a></td>
+            </tr>
+	    {__apply)__}
+    </table>
+	<div class="clearfix th-cart-ordering-unit">
+		<div class="th-cart-ordering-unit-value">{__(if(#cnt >0)__}{__#total_price__} <i class="fa fa-rub"></i>{__else__}Корзина пуста{__if)__}</div>
+		<a class="btn btn-orange pull-right disabled" href="/cart/index" data-event-category="Funnel" data-event-action="goToCart">Оформить заказ</a> 
+	</div>
+

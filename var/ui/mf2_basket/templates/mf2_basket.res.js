@@ -19,6 +19,7 @@ var basket = function(){
 			self.remove_from_cart($(this));
 			return false;
 		});
+	        upSaleModal = $('#ModalUpsale');
 
 	},
 	this.init_target = function(css_name){
@@ -48,6 +49,8 @@ var basket = function(){
 		.done(function( msg ) {
 			if(msg.success == true){
 				self.refreshBasket();
+		                upSaleModal.find('.modal-body').html(msg.upsale);
+		                upSaleModal.modal();
 				$('.add_to_cart[data-id='+id+']').hide();
 				$('.remove_from_cart[data-id='+id+']').show();
 				$('.'+self.exp+'[data-id='+id+']').hide();
@@ -77,6 +80,7 @@ var basket = function(){
 	},
 
 	this.refreshBasket = function(){
+		var self = this;
 		$.ajax({
 			type: "POST",
 			url: this.defaults.basket_url,
@@ -84,11 +88,19 @@ var basket = function(){
 		})
 		.done(function( msg ) {
 			$('.payload').html(msg.payload);
+			$('.basket_drop').html(msg.basket_list);
+			$('.basket_drop .remove_from_cart').on('click',function(e){
+				e.preventDefault();
+				self.remove_from_cart($(this));
+				return false;
+			});
+
 		})
 	}
 
 }
-basket = new basket();
+
 $(document).ready(function(){
+	basket = new basket();
 	basket.init();
 });
