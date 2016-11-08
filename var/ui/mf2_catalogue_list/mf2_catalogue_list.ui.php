@@ -21,6 +21,12 @@ class ui_mf2_catalogue_list extends user_interface
 	{
 		$data = array();
 		// Шаблон
+		$grid_mode_changed = request::get('gridMode',false);	
+		if($grid_mode_changed)
+		{
+			session::set('grid_mode',$grid_mode_changed);
+			response::send(array('code'=>'200'),'json');
+		}
 		$args = $this->get_args();
 		$sort = $this->get_args('sort','id');
 		$dir = $this->get_args('dir','asc');
@@ -39,6 +45,7 @@ class ui_mf2_catalogue_list extends user_interface
 		$st = user_interface::get_instance('structure');
 		$st->add_title($title);
 		$data['current_node'] = $ui->location_data['current_node'];
+		$data['grid_mode'] = session::get('grid_mode');
 		return $this->parse_tmpl($template,$data);
 	}
 //9*  списко реагирующий на ходяий параметр search  для поиска по каталогу
