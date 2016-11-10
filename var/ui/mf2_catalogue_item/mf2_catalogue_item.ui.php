@@ -23,6 +23,12 @@ class ui_mf2_catalogue_item extends user_interface
 		$template = $this->get_args('template', 'default.html');
 		$ui = user_interface::get_instance('mf2_catalogue_nav');
 		$item_id = $ui->item_id;
+		if(!($item_id > 0))
+		{
+			$st = user_interface::get_instance('structure');
+			$st->do_404();
+		}
+
 		$di = data_interface::get_instance('mf2_catalogue_list');
 		$data = $di->get_item($item_id);
 		if(request::get('gallery') == 'true')

@@ -235,11 +235,6 @@ class ui_mf2_catalogue_nav extends user_interface
 			$this->category_id = $res['category_id'];
 		}
 
-		if(!($this->item_id > 0) && !($this->category_id > 0))
-		{
-			$st = user_interface::get_instance('structure');
-			$st->do_404();
-		}
 		$di = data_interface::get_instance('m2_category');
 		$this->trunc = $di->get_trunc_menu($this->category_id);
 	}
@@ -252,14 +247,18 @@ class ui_mf2_catalogue_nav extends user_interface
 		//9* $this->trunc  заполняется раньше при запуске  метода  локатор в начале страницы
 //		$catalog_root = $data['records'][count($data['records'])-1]['uri'];
 		$catalog_root = '/catalog/';
-		//убираем корень каталога там будет 404 так как  раздел не определен и  товар тоже, выводить весь каталог в кучу смысла нет
-		unset($data['records'][count($data['records'])-1]);
-		foreach($this->trunc as $key=>$value)
+		$site_root = $data['records'][0];
+		if($this->category_id > 0 || $this->item_id > 0)
 		{
-			if($value['id'] >1)
+			$data['records'] = array();
+			$data['records'][0] = $site_root;
+			foreach($this->trunc as $key=>$value)
 			{
-				$value['uri'] = substr($catalog_root,0,-1).$value['uri'];
-				$data['records'][] = $value;
+				if($value['id'] >1)
+				{
+					$value['uri'] = substr($catalog_root,0,-1).$value['uri'];
+					$data['records'][] = $value;
+				}
 			}
 		}
 		if($this->item_id>0)
@@ -290,9 +289,7 @@ class ui_mf2_catalogue_nav extends user_interface
 					}
 				}
 			}
-			//9*  для товара так как  парент нода будет прототипстраницы товара  убираем ее
-				unset($data[count($data)-1]);
-				$data['records'][] = array('title'=>$res[0]->title,'uri'=>'/item/'.$res[0]->uri.'/','hidden'=>0,'id'=>'1200');
+				$data['records'][] = array('title'=>$res[0]->title,'uri'=>'/item/'.$res[0]->uri.'/','hidden'=>0,'id'=>$res[0]->item_id);
 		}
 		$data['args'] = $this->get_args();
 		return $this->parse_tmpl('trunc_menu.html', $data);

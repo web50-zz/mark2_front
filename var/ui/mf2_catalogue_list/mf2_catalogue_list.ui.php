@@ -32,8 +32,13 @@ class ui_mf2_catalogue_list extends user_interface
 		$dir = $this->get_args('dir','asc');
 		$template = $this->get_args('template', 'default.html');
 		$ui = user_interface::get_instance('mf2_catalogue_nav');
+		$category_id = $ui->category_id;
+		if(SRCH_URI != '' && !($category_id >0))
+		{
+			$st = user_interface::get_instance('structure');
+			$st->do_404();
+		}
 		$scope = $ui->get_scope();
-		$item_id = $ui->item_id;
 		$di = data_interface::get_instance('mf2_catalogue_list');
 		$di->set_args(array('scope'=>$scope,'sort'=>$sort,'dir'=>$dir));
 		$data['records'] = $di->get_list();
