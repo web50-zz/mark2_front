@@ -28,9 +28,15 @@ class ui_mf2_catalogue_item extends user_interface
 			$st = user_interface::get_instance('structure');
 			$st->do_404();
 		}
-
-		$di = data_interface::get_instance('mf2_catalogue_list');
-		$data = $di->get_item($item_id);
+		if($ui->item_data->item_id >0)
+		{
+			$data = $ui->item_data;
+		}
+		else
+		{
+			$di = data_interface::get_instance('mf2_catalogue_list');
+			$data = $di->get_item($item_id);
+		}
 		if(request::get('gallery') == 'true')
 		{
 			$this->gallery($data);

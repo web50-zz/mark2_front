@@ -11,6 +11,8 @@ class ui_mf2_catalogue_nav extends user_interface
 	public $location_data = false;
 	public $catalogue_scope = array();// тут все ид разделов  каталога по которым  мы  работаем в текущем запросе
 	public $trunc = array();// путь от  корня каталога
+	public $item_data = array();//данные по  найденному предмету каталога промежуточные
+	public $category_data = array();//данные по найденной категории каталога промежуточные
 	
 	public function __construct ()
 	{
@@ -227,16 +229,35 @@ class ui_mf2_catalogue_nav extends user_interface
 			$this->location = 'item';
 			$this->item_id = $res['item_id'];
 			$this->category_id = $res['category_id'];
+			$di_i = data_interface::get_instance('mf2_catalogue_list');
+			$item = $di_i ->get_item($this->item_id);
+			if($item->item_id >0)
+			{
+				$this->item_data = $item;
+			}
 		}
 
 		if($res['item_id']==0 && $res['category_id'] >0)
 		{
 			$this->location = 'category';
 			$this->category_id = $res['category_id'];
+			$di = data_interface::get_instance('m2_category');
+			$this->trunc = $di->get_trunc_menu($this->category_id);
+			$this->category_data = $this->trunc[count($this->trunc) - 1];
 		}
 
-		$di = data_interface::get_instance('m2_category');
-		$this->trunc = $di->get_trunc_menu($this->category_id);
+	}
+
+	public function pub_current_category()
+	{
+		$template = $this->get_args('template', 'current_category.html');
+		return $this->parse_tmpl($template, $this->category_data);
+	}
+
+	public function pub_current_item()
+	{
+		$template = $this->get_args('template', 'current_item.html');
+		return $this->parse_tmpl($template, $this->item_data);
 	}
 
 	public function pub_trunc_menu()
