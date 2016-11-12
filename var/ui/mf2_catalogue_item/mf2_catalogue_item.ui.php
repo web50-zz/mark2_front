@@ -60,6 +60,46 @@ class ui_mf2_catalogue_item extends user_interface
 		return 	$ret;
 	}
 
+	public function pub_linked_items()
+	{
+		$data = array();
+		$data['records'] = array();
+		$link_type = $this->get_args('type','0');
+		if($link_type > 0)
+		{
+			$ui = user_interface::get_instance('mf2_catalogue_nav');
+			if($ui->item_data->item_id > 0)
+			{
+				$l = json_decode($ui->item_data->linked_items_list);
+				if(count($l)>0)
+				{
+					$ids = array();
+					foreach($l as $key=>$value)
+					{
+						$ids[] = $value->linked_item_id;
+					}
+					$di = data_interface::get_instance('mf2_catalogue_list');
+					$di->_flush();
+					$di->push_args(array('_sitem_id'=>$ids));
+					$res = $di->_get()->get_results();
+					$di->pop_args();
+					foreach($ids as $key=>$value)
+					{
+						foreach($res as $key2=>$value2)
+						{
+							if($value2->item_id == $value)
+							{
+								$data['records'][] = $value2;
+							}
+						}
+					}
+				}
+			}
+		}
+		$template = $this->get_args('template', 'linked.html');
+		return $this->parse_tmpl($template,$data);
+	}
+
 	public function gallery($data)
 	{
 			$template_gal = $this->get_args('template', 'gallery.html');

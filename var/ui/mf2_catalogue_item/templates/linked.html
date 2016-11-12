@@ -1,0 +1,40 @@
+<h3> Комплектные товары </h3>
+{__(if(/records)__}
+<ul class="c-service-list m-type-2 m-3-per-row">
+			{__(apply(/records)__}
+			<li class="c-service m-type-2">
+				<div class="it" style="border:1px solid #ccc;margin: 2px;">
+				<div class="" style="margin-left: 5px;height:30px;overflow:hidden;" ><a class="ttli" href="/catalog/item/{__name__}/">{__title__}</a></div>
+					<div class="service-inner">
+						{__set(#prices = json_decode($prices_list))__}
+						{__set(#files = json_decode($files_list))__}
+						{__set(#texts = json_decode($text_list))__}
+						{__set(#chars = json_decode($chars_list))__}
+						{__set(#name = $name)__}
+
+						{__(apply(#files)__}
+							{__(if(@position == 1)__}
+							<img src="/filestorage/mark2/m2_item_files/{__real_name__}" alt=""/>
+							{__if)__}
+						{__apply)__}
+						{__(if(count(#files) == 0)__}
+							<img src="/themes/bluecollar/img/no_photo.png" alt=""/>
+						{__if)__}
+					</div>
+					{__(apply(#prices)__}
+					<div style="float:left;margin-left: 10px;"><h4>{__price_value__} руб.</h4></div>
+					{__apply)__}
+					<a  class="order_btn add_to_cart c-button m-type-2 " style="float:right;margin-right:5px;{__(if(/basket[$item_id])__}display: none; {__else__}{__if)__}" data-id="{__item_id__}" href="#">заказать</a>
+					<a  class="unorder_btn remove_from_cart c-button m-type-2" style="float:right;margin-right:5px;{__(if(/basket[$item_id])__}{__else__} display:none{__if)__}" data-id="{__item_id__}" href="#">отменить</a>
+					<br><br>
+				</div>
+			</li>
+			{__apply)__}
+		</ul>
+{__else__}
+	<h2> Ничего не найдено</h2>
+{__if)__}
+{__(apply($current_node_texts)__}
+	<h5>{__title__}</h5>
+	{__content__}
+{__apply)__}
