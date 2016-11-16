@@ -23,7 +23,6 @@ class di_mf2_catalogue_list extends di_m2_item_indexer
 		$sw = '';
 		$scope = $this->get_args('scope');
 		$this->_flush();
-		$this->push_args($args);
 //		$this->where = " MATCH (`category_list`) AGAINST ('".'"(:135)"'."' IN BOOLEAN MODE)>0 ";
 		$dj = $this->join_with_di('m2_item',array('item_id'=>'id'),array('order'=>'order'));
 		if($search_mode == true)
@@ -39,7 +38,6 @@ class di_mf2_catalogue_list extends di_m2_item_indexer
 			$where[] = ' '.$this->get_alias().".`title` like '%$search%' ";
 			$where[] = ' '.$this->get_alias().".`article` like '%$search%' ";
 			$where[] = ' '.$this->get_alias().".`text_list` like '%$search%' ";
-			$where[] = ' '.$this->get_alias().".`not_available` = '0' ";
 			$sw = implode('OR',$where);
 			if($cat >0)
 			{
@@ -71,9 +69,10 @@ class di_mf2_catalogue_list extends di_m2_item_indexer
 			{
 				$sw .= " AND ".$args['conditions'];
 			}
-			$sw .= ' AND '.$this->get_alias().'.`not_available` = 0 ';
 		}
+		$sw .= ' AND '.$this->get_alias().'.`not_available` = 0 ';
 		$this->where = $sw;
+		$this->push_args($args);
 		$this->set_order($dj->get_alias().'.'.$args['sort'],$args['dir']);
 		$flds = array(
 			'id',
