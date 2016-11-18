@@ -35,7 +35,7 @@ class di_mf2_cart extends data_interface
 	public function get_records($method_of_payment = 0)
 	{
 		$records = array();
-		$ids = array_keys($this->_list());
+		$ids = array_keys($this->get_list());
 		if (!empty($ids))
 		{
 			$records = $ids;
@@ -47,17 +47,13 @@ class di_mf2_cart extends data_interface
 	/**
 	*	Список записей
 	*/
-	public function _list()
+	public function get_list()
 	{
 		//return (array)session::get(null, array(), $this->name);
 		return (array)session::get(null, array(), $this->name);
 	}
 	
-	/**
-	*	Получить данные элемента в виде JSON
-	* @access protected
-	*/
-	public function _get($id)
+	public function get($id)
 	{
 		return session::get($id, 0, $this->name);
 	}
@@ -66,9 +62,9 @@ class di_mf2_cart extends data_interface
 	*	Сохранить данные и вернуть JSON-пакет для ExtJS
 	* @access protected
 	*/
-	public function _set($id, $count = 0)
+	public function set($id, $count = 0)
 	{
-		$count = (!$count) ? $this->_get($id) + 1 : $count;
+		$count = (!$count) ? $this->get($id) + 1 : $count;
 		return session::set($id, $count, $this->name);
 	}
 	
@@ -76,7 +72,7 @@ class di_mf2_cart extends data_interface
 	*	Удалить данные и вернуть JSON-пакет для ExtJS
 	* @access protected
 	*/
-	public function _unset($id)
+	public function do_unset($id)
 	{
 		return session::del($id, $this->name);
 	}
@@ -89,7 +85,7 @@ class di_mf2_cart extends data_interface
 	public function get_cart_data()
 	{
 		$this->get_records();
-		$list = $this->_list();
+		$list = $this->get_list();
 		foreach($this->cart_data as $key=>$value)
 		{
 			foreach($list[$value['item_id']] as $key2=>$value2)

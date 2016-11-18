@@ -174,7 +174,7 @@ class ui_mf2_cart extends user_interface
 
 		foreach ($counts as $id => $count)
 		{
-			$di->_set($id, $count);
+			$di->set($id, $count);
 		}
 		list($count, $summ) = $this->calculate();
 		response::send(array(
@@ -193,7 +193,7 @@ class ui_mf2_cart extends user_interface
 		if ($record['id'] > 0)
 		{
 			$di = data_interface::get_instance('mf2_cart');
-			$di->_set($record['id'], $record);
+			$di->set($record['id'], $record);
 			list($count, $summ) = $this->calculate();
 			response::send(array(
 				'upsale' => $this->upsale($record),
@@ -225,7 +225,7 @@ class ui_mf2_cart extends user_interface
 	{
 		$id = request::get('id');
 		$di = data_interface::get_instance('mf2_cart');
-		$di->_unset($id);
+		$di->do_unset($id);
 		list($count, $summ) = $this->calculate();
 		response::send(array(
 			'success' => true,

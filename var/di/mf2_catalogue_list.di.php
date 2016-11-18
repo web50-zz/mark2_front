@@ -16,15 +16,23 @@ class di_mf2_catalogue_list extends di_m2_item_indexer
 	}
 
 
+/*
+	sort:  поле по которому сортировать  default id
+	dir: направление   default ASC
+	car: Id категории в которой и в одкатегории которой искать
+	price_floor: нижний предел по цене
+	price_ceil: верхний предел по цене
+	price_type: тип цены по которому сортировать или отбирать
+	limit: показывать на странице
+	start: стартовая позиция лимита
 
+*/
 	public function get_list($search_mode = false)
 	{
 		$args = $this->get_args();
 		$sw = '';
 		$scope = $this->get_args('scope');
-		$this->_flush();
 //		$this->where = " MATCH (`category_list`) AGAINST ('".'"(:135)"'."' IN BOOLEAN MODE)>0 ";
-		$dj = $this->join_with_di('m2_item',array('item_id'=>'id'),array('order'=>'order'));
 		if($search_mode == true)
 		{
 			$search = $this->get_args('search');
@@ -71,9 +79,7 @@ class di_mf2_catalogue_list extends di_m2_item_indexer
 			}
 		}
 		$sw .= ' AND '.$this->get_alias().'.`not_available` = 0 ';
-		$this->where = $sw;
-		$this->push_args($args);
-		$this->set_order($dj->get_alias().'.'.$args['sort'],$args['dir']);
+
 		$flds = array(
 			'id',
 			'title',
@@ -89,12 +95,38 @@ class di_mf2_catalogue_list extends di_m2_item_indexer
 			'category_list',
 			'last_changed',
 			'meta_title',
-			array('di'=>$dj,'name'=>'order')
-
 		);
+//		dbg::show($this->args);
+		$this->_flush();
+		$this->push_args(array());// нам не надо чтобы напрямую параметры залетали
+		$this->set_limit($args['start'],$args['limit']);
+		if($args['sort'] == 'order')
+		{
+			$dj = $this->join_with_di('m2_item',array('item_id'=>'id'),array('order'=>'order'));
+			$flds[] = array('di'=>$dj,'name'=>'order');
+			$this->set_order($args['sort'],$args['dir'],$dj);
+		}
+		if($args['sort'] == 'price' || $args['pstart']|| $args['pend'])
+		{
+			$dj2 = $this->join_with_di('m2_item_price',array('item_id'=>'item_id'),array('price_value'=>'price_value','type'=>'price_type'));
+			$flds[] = array('di'=>$dj2,'name'=>'price_value');
+			$flds[] = array('di'=>$dj2,'name'=>'type');
+			$a = $dj2->get_alias();
+			if($args['sort'] == 'price')
+			{
+				$this->set_order('price_value',$args['dir'],$dj2);
+			}
+			$sw .= ' and '.$a.'.`type` = '.$args['price_type'].' ';
+			if($args['pstart'] && $args['pend'])
+			{
+				$sw .= " and $a.`price_value`<".$args['pend']." and $a.`price_value` >".$args['pstart'].' ';
+			}
+		}
+
+		$this->where = $sw;
 		$res = $this->extjs_grid_json($flds,false);
 		$this->pop_args();
-		return $res['records'];
+		return $res;
 	}
 
 
