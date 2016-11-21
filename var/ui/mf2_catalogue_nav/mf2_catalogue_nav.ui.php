@@ -128,7 +128,15 @@ class ui_mf2_catalogue_nav extends user_interface
 				'parent'=>$parent,
 				'hidden'=>$hidden,
 				));
-		$data_r = $di->get_all();
+		if(!$this->data_all)
+		{
+			$data_r = $di->get_all_simple();
+			$this->data_all = $data_r;
+		}
+		else
+		{
+			$data_r = $this->data_all;
+		}
 		$data['records'] = $data_r['childs'];
 		$path = array();
 		foreach($this->trunc as $key=>$value)
