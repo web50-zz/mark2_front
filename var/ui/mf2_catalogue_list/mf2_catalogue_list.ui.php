@@ -79,7 +79,7 @@ class ui_mf2_catalogue_list extends user_interface
 			$query =  implode('&',$par);
 			$data['custom_pager'] = array('page' => $params['page'], 'total' => $res['total'], 'limit' => $params['limit'], 'prefix' => $query);
 		}
-
+		$data['args'] = $args;
 		return $this->parse_tmpl($template,$data);
 	}
 
@@ -164,7 +164,10 @@ class ui_mf2_catalogue_list extends user_interface
 		$scope[$category] = 1;
 		$di = data_interface::get_instance('mf2_catalogue_list');
 		$di->set_args(array('scope'=>$scope,'sort'=>$sort,'dir'=>$dir));
-		$data['records'] = $di->get_list();
+		$res =  $di->get_list();
+		$data['records'] = $res['records'];
+		$data['args'] = $args;
+		$data['basket'] = $_SESSION['mf2_cart'];
 		$di->pop_args();
 		return $this->parse_tmpl($template,$data);
 
