@@ -38,14 +38,29 @@ class ui_mf2_catalogue_list extends user_interface
 		$ui = user_interface::get_instance('mf2_catalogue_nav');
 		$category_id = $ui->category_id;
 		$trunc = $ui->trunc;
-		if(SRCH_URI != '' && !($category_id >0))
+		$scope = $ui->get_scope();
+		$di = data_interface::get_instance('mf2_catalogue_list');
+		$params = $this->prepare_input();
+		if($params['brand_scope'])
+		{
+			$brand_id = $this->search_brand();
+			if($brand_id >0)
+			{
+				$params['brand_scope_ids'][] = $brand_id;
+			}
+			else
+			{
+				$st = user_interface::get_instance('structure');
+				$st->do_404();
+			}
+
+		}
+		if(SRCH_URI != '' && !($category_id >0)&& !$params['brand_scope'])
 		{
 			$st = user_interface::get_instance('structure');
 			$st->do_404();
 		}
-		$scope = $ui->get_scope();
-		$di = data_interface::get_instance('mf2_catalogue_list');
-		$params = $this->prepare_input();
+
 		$params['scope'] = $scope;
 		$di->set_args($params);
 		if($params['search'] != '')
@@ -158,6 +173,12 @@ class ui_mf2_catalogue_list extends user_interface
 		}
 		$params['start'] = ($page - 1) * $params['limit'];
 		$params['page'] = $page;
+		$brand_scope  =  $this->get_args('brand_scope');
+		if($brand_scope != '')
+		{
+			$params['brand_scope'] = $brand_scope;
+		}
+
 		if($search != '')
 		{
 			$params['search'] = $search;
@@ -213,6 +234,21 @@ class ui_mf2_catalogue_list extends user_interface
 		$data = $params['return_to_tmpl'];
 		$template = $this->get_args('template', 'filter.html');
 		return $this->parse_tmpl($template,$data);
+	}
+
+	public function search_brand($params = array())
+	{
+		$name = str_replace('/','',SRCH_URI);
+		$di =  data_interface::get_instance('m2_manufacturers');
+		$res = $di->search_by_name($name);
+		if($res)
+		{
+			return $res->id;
+		}
+		else
+		{
+			return false;
+		}
 	}
 }
 ?>
