@@ -100,6 +100,7 @@ class ui_mf2_catalogue_item extends user_interface
 			}
 		}
 		$template = $this->get_args('template', 'linked.html');
+		$data['args'] =  $this->get_args();
 		return $this->parse_tmpl($template,$data);
 	}
 

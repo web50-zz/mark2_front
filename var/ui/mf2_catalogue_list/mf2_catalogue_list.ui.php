@@ -29,6 +29,7 @@ class ui_mf2_catalogue_list extends user_interface
 
 
 		$data = array();
+		$search_mode = false;
 		$args = $this->get_args();
 
 		$template = $this->get_args('template', 'default.html');
@@ -47,7 +48,11 @@ class ui_mf2_catalogue_list extends user_interface
 		$params = $this->prepare_input();
 		$params['scope'] = $scope;
 		$di->set_args($params);
-		$res = $di->get_list();
+		if($params['search'] != '')
+		{
+			$search_mode = true;
+		}
+		$res = $di->get_list($search_mode);
 		$data['records'] = $res['records'];
 		$data['basket'] = $_SESSION['mf2_cart'];
 		$data['filters'] = $params['return_to_tmpl'];
@@ -102,6 +107,10 @@ class ui_mf2_catalogue_list extends user_interface
 					'3'=>'48',
 			),
 		);
+
+		$search = request::get('search');
+		$cat = request::get('cat');
+
 		$sort_saved = session::get('sort','1',$this->name);
 		$limit_saved = session::get('limit','1',$this->name);
 
@@ -149,6 +158,15 @@ class ui_mf2_catalogue_list extends user_interface
 		}
 		$params['start'] = ($page - 1) * $params['limit'];
 		$params['page'] = $page;
+		if($search != '')
+		{
+			$params['search'] = $search;
+		}
+		if($cat != '')
+		{
+			$params['cat'] = $cat;
+		}
+
 		return $params;
 	}
 	public function pub_parametric()

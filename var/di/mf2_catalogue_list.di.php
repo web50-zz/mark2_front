@@ -46,7 +46,7 @@ class di_mf2_catalogue_list extends di_m2_item_indexer
 			$where[] = ' '.$this->get_alias().".`title` like '%$search%' ";
 			$where[] = ' '.$this->get_alias().".`article` like '%$search%' ";
 			$where[] = ' '.$this->get_alias().".`text_list` like '%$search%' ";
-			$sw = implode('OR',$where);
+			$sw = '('.implode('OR',$where).')';
 			if($cat >0)
 			{
 				$di = data_interface::get_instance('m2_category');
@@ -116,13 +116,13 @@ class di_mf2_catalogue_list extends di_m2_item_indexer
 			{
 				$this->set_order('price_value',$args['dir'],$dj2);
 			}
-			$sw .= ' and '.$a.'.`type` = '.$args['price_type'].' ';
+			$t1 = ' '.$a.'.`type` = '.$args['price_type'].' ';
 			if($args['pstart'] && $args['pend'])
 			{
-				$sw .= " and $a.`price_value`<".$args['pend']." and $a.`price_value` >".$args['pstart'].' ';
+				$t2 .= " and ($a.`price_value`<".$args['pend']." and $a.`price_value` >".$args['pstart'].') ';
 			}
+			$sw .= " and ($t1 $t2) ";
 		}
-
 		$this->where = $sw;
 		$res = $this->extjs_grid_json($flds,false);
 		$this->pop_args();
