@@ -76,7 +76,10 @@ class ui_mf2_catalogue_item extends user_interface
 					$ids = array();
 					foreach($l as $key=>$value)
 					{
-						$ids[] = $value->linked_item_id;
+						if($value -> type == $link_type)
+						{
+							$ids[] = $value->linked_item_id;
+						}
 					}
 					$di = data_interface::get_instance('mf2_catalogue_list');
 					$di->_flush();
