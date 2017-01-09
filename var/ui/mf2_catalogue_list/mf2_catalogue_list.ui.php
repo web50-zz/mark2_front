@@ -71,7 +71,6 @@ class ui_mf2_catalogue_list extends user_interface
 		$data['records'] = $res['records'];
 		$data['basket'] = $_SESSION['mf2_cart'];
 		$data['filters'] = $params['return_to_tmpl'];
-
 		$title =  $trunc[count($trunc) -1]['title'].'  '.$trunc[count($trunc) -1]['meta_title'];
 		$st = user_interface::get_instance('structure');
 		$st->add_title($title);
@@ -134,6 +133,7 @@ class ui_mf2_catalogue_list extends user_interface
 		$page = request::get('page', 1);
 		$pstart = request::get('pstart', 1);
 		$pend = request::get('pend', 70000);
+		$mans = request::get('mans',0);
 		if($pstart == 0)
 		{
 			$pstart = 1;
@@ -161,6 +161,15 @@ class ui_mf2_catalogue_list extends user_interface
 		$params['dir'] = $possible['dir'][$sort];
 		$params['limit'] = $possible['limit'][$limit];
 		$params['return_to_tmpl'] = array('sort'=>$sort,'limit'=>$limit,'pstart'=>$pstart,'pend'=>$pend);
+		if($mans)
+		{
+			$t = json_decode($mans);
+			foreach($t as $key=>$value)
+			{
+				$t[$value] = 1;
+				$params['return_to_tmpl']['mans'][$value] = 1;
+			}
+		}
 		if($params['sort'] == '')
 		{
 			$params['sort'] = 'order';
@@ -187,7 +196,10 @@ class ui_mf2_catalogue_list extends user_interface
 		{
 			$params['cat'] = $cat;
 		}
-
+		if($mans)
+		{
+			$params['mans'] = $mans;
+		}
 		return $params;
 	}
 	public function pub_parametric()
@@ -232,6 +244,10 @@ class ui_mf2_catalogue_list extends user_interface
 		$data = array();
 		$params = $this->prepare_input();
 		$data = $params['return_to_tmpl'];
+		$ui = user_interface::get_instance('mf2_catalogue_nav');
+		$category_id = $ui->category_id;
+		$di = data_interface::get_instance('m2_category_manufacturers');
+		$data['manufacturers'] = $di->get_manufacturers_for_category($category_id);
 		$template = $this->get_args('template', 'filter.html');
 		return $this->parse_tmpl($template,$data);
 	}

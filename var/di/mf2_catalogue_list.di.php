@@ -78,6 +78,18 @@ class di_mf2_catalogue_list extends di_m2_item_indexer
 				$sw .= " AND ".$args['conditions'];
 			}
 		}
+		$mans = $this->get_args('mans');
+		if($mans)
+		{
+			$mans = json_decode($mans);
+			$tmp = array();
+			foreach($mans  as $key=>$value)
+			{
+				$tmp[] =  " `manufacturers_list` like '%\"manufacturer_id\":\"".$value."\"%'";
+
+			}
+			$sw = '('.implode(' OR ',$tmp).')';
+		}
 		$sw .= ' AND '.$this->get_alias().'.`not_available` = 0 ';
 		if(count($args['brand_scope_ids']) >0)
 		{
