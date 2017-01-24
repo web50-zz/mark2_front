@@ -262,8 +262,16 @@ class ui_mf2_catalogue_list extends user_interface
 		$data = $params['return_to_tmpl'];
 		$ui = user_interface::get_instance('mf2_catalogue_nav');
 		$category_id = $ui->category_id;
-		$di = data_interface::get_instance('m2_category_manufacturers');
-		$data['manufacturers'] = $di->get_manufacturers_for_category($category_id);
+		if($category_id>0)
+		{
+			$di = data_interface::get_instance('m2_category_manufacturers');
+			$data['manufacturers'] = $di->get_manufacturers_for_category($category_id);
+		}
+		$brand_id = $ui->brand_id;
+		if($brand_id > 0)
+		{
+			$data['categories'] = $this->get_categories_for_brand($brand_id);
+		}
 		$template = $this->get_args('template', 'filter.html');
 		return $this->parse_tmpl($template,$data);
 	}
@@ -282,6 +290,29 @@ class ui_mf2_catalogue_list extends user_interface
 		{
 			return false;
 		}
+	}
+
+	public function get_categories_for_brand($brand_id = 0)
+	{
+		if($brand_id == 0)
+		{
+			return false;
+		}
+		$sql = "select * from m2_category_manufacturers where manufacturer_id = $brand_id group by category_id";
+		$di = data_interface::get_instance('m2_category_manufacturers');
+		$data = $di->_get($sql)->get_results();
+		foreach($data as $key=>$value)
+		{
+			$ids[] = $value->category_id;
+		}
+		if(count($ids)>0)
+		{
+			$di =  data_interface::get_instance('m2_category');
+			$sql = 'select * from m2_category where id in('.implode(',',$ids).')';
+			$data2 = $di->_get($sql)->get_results();
+			return $data2;
+		}
+		return false;
 	}
 }
 ?>
