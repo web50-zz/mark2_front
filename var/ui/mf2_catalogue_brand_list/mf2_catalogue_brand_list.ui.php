@@ -13,7 +13,7 @@ class ui_mf2_catalogue_brand_list extends user_interface
 		parent::__construct(__CLASS__);
 		$this->files_path = dirname(__FILE__).'/';
 	}
-//9* просто список с автоматическим определением  категории по URL
+
 	public function pub_content()
 	{
 		$data = array();
@@ -31,5 +31,27 @@ class ui_mf2_catalogue_brand_list extends user_interface
 		$data['req'] = request::get();
 		return $this->parse_tmpl($template,$data);
 	}
+
+	public function pub_by_group()
+	{
+		$data = array();
+		// Шаблон
+		$args = $this->get_args();
+		$sort = $this->get_args('sort','title');
+		$dir = $this->get_args('dir','asc');
+		$template = $this->get_args('template', 'default.html');
+		$group = $this->get_args('group',0);
+		if(!($group > 0))
+		{
+			return false;
+		}
+		$di = data_interface::get_instance('m2_manufacturers');
+		$sql = "select m.*,f.real_name,f.file_type from m2_manufacturer_in_groups g left join m2_manufacturers m on g.item_id = m.id left join m2_manufacturer_files f on f.item_id = m.id where g.group_id = $group group by m.id";
+		$data['records'] = $di->_get($sql)->get_results();
+		$data['PAGE_ID'] = PAGE_ID;
+		$data['req'] = request::get();
+		return $this->parse_tmpl($template,$data);
+	}
+
 }
 ?>

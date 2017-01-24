@@ -13,6 +13,7 @@ class ui_mf2_catalogue_nav extends user_interface
 	public $trunc = array();// путь от  корня каталога
 	public $item_data = array();//данные по  найденному предмету каталога промежуточные
 	public $category_data = array();//данные по найденной категории каталога промежуточные
+	public $brand_scope_data = false;//данные бренда если работаем в реджиме  брендапоиска
 	
 	public function __construct ()
 	{
@@ -231,6 +232,15 @@ class ui_mf2_catalogue_nav extends user_interface
 	{
 		$di = data_interface::get_instance('m2_url_indexer');
 		$parts = explode('?',SRCH_URI); //режем куски потому что иногда на некоторых хостингах SRCH_URI содержит GET 
+		if($this->args['brand_scope'])
+		{
+			$brand_id = $this->search_brand();
+			if($brand_id)
+			{
+				$this->brand_id = $this->brand_scope_data->id; 
+			}
+			return;
+		}
 		$res = $di->search_by_uri('/'.SRCH_URI);
 		if($res['item_id']>0)
 		{
@@ -320,8 +330,30 @@ class ui_mf2_catalogue_nav extends user_interface
 			}
 				$data['records'][] = array('title'=>$res[0]->title,'uri'=>'/item/'.$res[0]->uri.'/','hidden'=>0,'id'=>$res[0]->item_id);
 		}
+		if($this->brand_id >0)
+		{
+			$in = $this->brand_scope_data;
+			$in->uri = URI;
+			$data['records'][] = $this->brand_scope_data;
+		}
 		$data['args'] = $this->get_args();
 		return $this->parse_tmpl('trunc_menu.html', $data);
+	}
+
+	public function search_brand($params = array())
+	{
+		$name = str_replace('/','',SRCH_URI);
+		$di =  data_interface::get_instance('m2_manufacturers');
+		$res = $di->search_by_name($name);
+		if($res)
+		{
+			$this->brand_scope_data = $res;
+			return $res->id;
+		}
+		else
+		{
+			return false;
+		}
 	}
 
 	public function get_trunc()

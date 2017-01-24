@@ -1,67 +1,26 @@
-<br>
-	<h3>&nbsp;&nbsp;Брэнды</h3>
-<ul>
-	<li><a href="./">Все</a></li>
-			{__(apply(/records)__}
-			<li>
-				<a href="./?brand={__id__}">{__title__}</a>
-			</li>
-			{__apply)__}
-		</ul>
-<br>
-	<h3>&nbsp;&nbsp;Литраж</h3>
-<ul>
-	<li><a href="./">Все</a></li>
-			<li>
-				<a href="./?litr=0.2">0.2</a>
-				</li>
-				<li>
-				<a href="./?litr=0.25">0.25</a>
-				</li>
-				<li>
-				<a href="./?litr=0.33">0.33</a>
-				</li>
-				<li>
-				<a href="./?litr=0.35">0.35</a>
-				</li>
-				<li>
-				<a href="./?litr=0.45">0.45</a>
-				</li>
-				<li>
-				<a href="./?litr=0.5">0.5</a>
-				</li>
-				<li>
-				<a href="./?litr=0.6">0.6</a>
-				</li>
-				<li>
-				<a href="./?litr=0.9">0.9</a>
-				</li>
-				<li>
-				<a href="./?litr=0.95">0.95</a>
-				</li>
-				<li>
-				<a href="./?litr=1">1</a>
-				</li>
-				<li>
-				<a href="./?litr=1.25">1.25</a>
-				</li>
-				<li>
-				<a href="./?litr=1.5">1.5</a>
-				</li>
-				<li>
-				<a href="./?litr=1.75">1.75</a>
-				</li>
-				<li>
-				<a href="./?litr=1.93">1.93</a>
-				</li>
-				<li>
-				<a href="./?litr=2">2</a>
-				</li>
-				<li>
-				<a href="./?litr=2">2</a>
-				</li>
-				<li>
-				<a href="./?litr=2.25">2.25</a>
-			</li>
-		</ul>
+<h2 class="h2-our-brands">Бренды</h2>
+<div class="row">
+	<div class="col col-xs-12 col-sm-12 col-md-12 col-lg-12">
+		<section class="balloon brands-slider">
+			<div class="row">
+				{__(apply(/records)__}
+				<div class="col col7-xs-7 col7-sm-1 col7-md-1 col7-lg-1">
+				<a href="/catalog/brand/{__name__}/" class="brand-logo">
+				<h3>{__title__}</h3>
+				<img class="img-responsive hidden-xs" alt="" src="/filestorage/mark2/m2_manufacturer_files/{__real_name__}">
+				</a>
+				</div>
+				{__apply)__}
+				{REM}
+				<div class="col col7-lg-1 brand-button-all">
+				<a href="/brands">
+				<span>Все бренды <i class="fa fa-angle-right"></i></span>
+				</a>
+				</div>
+				{MER}
+			</div>
+		</section>
+	</div>
+</div>
+
 

@@ -43,7 +43,14 @@ class ui_mf2_catalogue_list extends user_interface
 		$params = $this->prepare_input();
 		if($params['brand_scope'])
 		{
-			$brand_id = $this->search_brand();
+			if(!($ui->brand_id>0))
+			{
+				$brand_id = $this->search_brand();
+			}
+			else{
+				$brand_id = $ui->brand_id;
+				$this->brand_scope_data = $ui->brand_scope_data;
+			}
 			if($brand_id >0)
 			{
 				$params['brand_scope_ids'][] = $brand_id;
@@ -74,6 +81,10 @@ class ui_mf2_catalogue_list extends user_interface
 		$title =  $trunc[count($trunc) -1]['title'].'  '.$trunc[count($trunc) -1]['meta_title'];
 		$st = user_interface::get_instance('structure');
 		$st->add_title($title);
+		if($params['brand_scope'])
+		{
+			$st->add_title($this->brand_scope_title);
+		}
 
 
 		$di = data_interface::get_instance('m2_category_tabs');
@@ -82,6 +93,11 @@ class ui_mf2_catalogue_list extends user_interface
 			$data['current_node_texts'] = $di->get_text_for($data['current_node']['id']);
 		}
 		$data['current_node'] = $ui->location_data['current_node'];
+		if($params['brand_scope'])
+		{
+			$data['current_node']['title'] = $this->brand_scope_data->title;
+		}
+
 		$data['grid_mode'] = session::get('grid_mode','',$this->name);
 		$enable_pager = true;
 		if($enable_pager == true)
@@ -257,6 +273,7 @@ class ui_mf2_catalogue_list extends user_interface
 		$name = str_replace('/','',SRCH_URI);
 		$di =  data_interface::get_instance('m2_manufacturers');
 		$res = $di->search_by_name($name);
+		$this->brand_scope_title = $res->title;
 		if($res)
 		{
 			return $res->id;
