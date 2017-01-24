@@ -83,7 +83,7 @@ class ui_mf2_catalogue_list extends user_interface
 		$st->add_title($title);
 		if($params['brand_scope'])
 		{
-			$st->add_title($this->brand_scope_title);
+			$st->add_title($this->brand_scope_data->title);
 		}
 
 
