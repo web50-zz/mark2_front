@@ -83,11 +83,31 @@ class ui_mf2_cart extends user_interface
 			->setBody($body);
 		$message->setContentType("text/html");	
 		$numSent = $mailer->batchSend($message);
-
-
+       		$this->send_followup($data);
 		$this->fire_event('onSent', array(request::get()));
 	}
-        
+       
+	private function send_followup($data = array())
+	{
+		$body =  $this->parse_tmpl('followup_mail.html', $data);
+		$rcpt = $data['mail'];
+		$title = 'Ваш Заказ';
+		$core_domain = $_SERVER['HTTP_HOST'];
+		if(!$core_domain)
+		{
+			$core_domain = 'localhost';
+		}
+		$transport = Swift_MailTransport::newInstance();
+		$mailer = Swift_Mailer::newInstance($transport);
+		$message = Swift_Message::newInstance($title)
+			->setFrom(array('no-reply@'.$core_domain => 'no-reply'))
+			->setTo($rcpt)
+			->setBody($body);
+		$message->setContentType("text/html");	
+		$numSent = $mailer->batchSend($message);
+		return;	
+	}
+
         /**
         *       Отрисовка контента для внешней части
         */
