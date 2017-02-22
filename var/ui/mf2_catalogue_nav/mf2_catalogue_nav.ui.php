@@ -360,5 +360,82 @@ class ui_mf2_catalogue_nav extends user_interface
 	{
 		return $this->trunc;
 	}
+
+	public function pub_brothers_menu()
+	{
+		if(!($this->category_id > 0))
+		{
+			return;
+		}
+		$c = $this->trunc[count($this->trunc)-1];
+		if($c['level'] == 4)
+		{
+			$current = $this->trunc[count($this->trunc) - 2]['id'];
+		}
+		else if($c['level'] == 3)
+		{
+			$current = $this->trunc[count($this->trunc)- 2]['id'];
+		}
+		else if($c['level'] == 2)
+		{
+			$current = $this->trunc[count($this->trunc)-1]['id'];
+		}
+		if(!$this->data_all)
+		{
+			$di = data_interface::get_instance('m2_category');
+			$data_r = $di->get_all_simple();
+			$this->data_all = $data_r;
+		}
+		else
+		{
+			$data_r = $this->data_all;
+		}
+		foreach($this->data_all['childs'] as $key=>$value)
+		{
+			if($current == $value['id'])
+			{
+				$finded = $value;
+				break;
+			}
+			else
+			{
+				if(count($value['childs']) > 0)
+				{
+					if($finded = $this->search_node($value['childs'],$current))
+					{
+						break;
+					}
+				}
+			}
+		}
+		if($current == 1)
+		{
+			$finded = $this->data_all;
+		}
+		return $this->parse_tmpl('brothers.html',$finded);
+	}
+
+	public function search_node($c,$id)
+	{
+		foreach($c as $key=>$value)
+		{
+			if($value['id'] == $id)
+			{
+				$finded = $value;
+				break;
+			}
+			else
+			{
+				if(count($value['childs']) > 0)
+				{
+					if($finded = $this->search_node($value['childs'],$id))
+					{
+						break;
+					}
+				}
+			}
+		}
+		return $finded;
+	}
 }
 ?>
