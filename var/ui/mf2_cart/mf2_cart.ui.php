@@ -83,7 +83,10 @@ class ui_mf2_cart extends user_interface
 			->setBody($body);
 		$message->setContentType("text/html");	
 		$numSent = $mailer->batchSend($message);
-       		$this->send_followup($data);
+		if(!empty($data['email']))
+		{
+	       		$this->send_followup($data);
+		}
 		$this->fire_event('onSent', array(request::get()));
 	}
        
@@ -266,7 +269,7 @@ class ui_mf2_cart extends user_interface
 			}
 			if (empty($data['mail']))
 			{
-				$check['email'] = 'Необходимо указать ваш E-Mail';
+			//	$check['email'] = 'Необходимо указать ваш E-Mail';
 			}
 			if(count($check)>0)
 			{
