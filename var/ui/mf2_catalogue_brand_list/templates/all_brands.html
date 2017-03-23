@@ -1,0 +1,21 @@
+<h2 class="h2-our-brands">Бренды</h2>
+<div class="row">
+	<div class="col col-xs-12 col-sm-12 col-md-12 col-lg-12">
+		<section class="balloon brands-slider">
+			<div class="row">
+				{__(apply(/records)__}
+				<div class="col col5-xs-5 col7-sm-1 col5-md-1 col5-lg-1">
+					<a href="/catalog/brand/{__name__}/" class="brand-logo">
+					<h3>{__title__} {__real_name__}</h3>
+					{__(if($real_name)__}
+					<img class="img-responsive hidden-xs" alt="" src="/filestorage/mark2/m2_manufacturer_files/tmb2-{__real_name__}">
+					{__if)__}
+					</a>
+				</div>
+				{__apply)__}
+			</div>
+		</section>
+	</div>
+</div>
+
+

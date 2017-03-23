@@ -57,8 +57,17 @@ class ui_mf2_catalogue_list extends user_interface
 			}
 			else
 			{
-				$st = user_interface::get_instance('structure');
-				$st->do_404();
+				if(SRCH_URI != '')
+				{
+					$st = user_interface::get_instance('structure');
+					$st->do_404();
+				}
+				else
+				{	
+					$uib = user_interface::get_instance('mf2_catalogue_brand_list');
+					$uib->set_args(array('template'=>'all_brands.html'));
+					return $uib -> pub_content();
+				}
 			}
 
 		}

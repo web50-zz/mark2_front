@@ -24,9 +24,8 @@ class ui_mf2_catalogue_brand_list extends user_interface
 		$template = $this->get_args('template', 'default.html');
 		$di = data_interface::get_instance('m2_manufacturers');
 		$di->_flush();
-		$di->push_args(array('scope'=>$scope,'sort'=>$sort,'dir'=>$dir,'not_available'=>0));
-		$data = $di->extjs_grid_json(false,false);
-		$di->pop_args();
+		$sql = "select m.*,f.real_name,f.file_type from m2_manufacturers m left join m2_manufacturer_files f on f.item_id = m.id order by $sort $dir";
+		$data['records'] = $di->_get($sql)->get_results();;
 		$data['PAGE_ID'] = PAGE_ID;
 		$data['req'] = request::get();
 		return $this->parse_tmpl($template,$data);
