@@ -91,6 +91,8 @@ class di_mf2_catalogue_list extends di_m2_item_indexer
 			$sw = '('.implode(' OR ',$tmp).')';
 		}
 		$sw .= ' AND '.$this->get_alias().'.`not_available` = 0 ';
+
+
 		if(count($args['brand_scope_ids']) >0)
 		{
 			$tmp = array();
@@ -101,6 +103,7 @@ class di_mf2_catalogue_list extends di_m2_item_indexer
 			}
 			$sw .= ' AND ('.implode(' OR ',$tmp).')';
 		}
+
 
 		$flds = array(
 			'id',
@@ -118,7 +121,6 @@ class di_mf2_catalogue_list extends di_m2_item_indexer
 			'last_changed',
 			'meta_title',
 		);
-//		dbg::show($this->args);
 		$this->_flush();
 		$this->push_args(array());// нам не надо чтобы напрямую параметры залетали
 		$this->set_limit($args['start'],$args['limit']);
@@ -146,6 +148,7 @@ class di_mf2_catalogue_list extends di_m2_item_indexer
 			$sw .= " and ($t1 $t2) ";
 		}
 		$this->where = $sw;
+		$this->fire_event('conditions_done', array());
 		$res = $this->extjs_grid_json($flds,false);
 		$this->pop_args();
 		return $res;
