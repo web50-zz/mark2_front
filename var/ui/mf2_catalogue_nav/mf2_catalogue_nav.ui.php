@@ -67,7 +67,24 @@ class ui_mf2_catalogue_nav extends user_interface
 			$this->pub_collect_scope_data();
 		}
 		$data = $this->location_data;
-
+		if($this->args['with_manufacturers'])
+		{
+			foreach($data['records'] as $key=>$value)
+			{
+				$ids[] = $value['id'];
+				$index[$value['id']] = $key;
+			}
+			$di = data_interface::get_instance('m2_category_manufacturers');
+			$dt = $di->get_manufacturers_for_category_list($ids);
+			foreach($dt as $key=>$value)
+			{
+				if(!$data['records'][$index[$value->category_id]]['manufacturers'])
+				{
+					$data['records'][$index[$value->category_id]]['manufacturers'] = array();
+				}
+				$data['records'][$index[$value->category_id]]['manufacturers'][] = $value;
+			}
+		}
 		$data['req'] = request::get();
 		return $this->parse_tmpl($template,$data);
 
