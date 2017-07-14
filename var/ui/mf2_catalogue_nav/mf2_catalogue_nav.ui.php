@@ -454,5 +454,20 @@ class ui_mf2_catalogue_nav extends user_interface
 		}
 		return $finded;
 	}
+
+	// Выдает список категорий для заданного id свойства товара которые входят в искомую категорию. То есть тупо найти категории в которых свойсто 123 имеется у входящий туда товаров.
+	public function pub_categories_for_char()
+	{
+		$template = $this->get_args('template', 'cat_for_char.html');
+		$type_id = $this->get_args('type_id',0);
+		if($type_id == 0)
+		{
+			return;
+		}
+		$di = data_interface::get_instance('m2_chars_in_category');
+		$data['records'] = $di->get_cats_for_char($type_id);
+//		dbg::show($data);
+		return $this->parse_tmpl($template,$data);
+	}
 }
 ?>
