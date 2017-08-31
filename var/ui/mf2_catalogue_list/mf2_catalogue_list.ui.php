@@ -87,7 +87,11 @@ class ui_mf2_catalogue_list extends user_interface
 		$data['records'] = $res['records'];
 		$data['basket'] = $_SESSION['mf2_cart'];
 		$data['filters'] = $params['return_to_tmpl'];
-		$title =  $trunc[count($trunc) -1]['title'].'  '.$trunc[count($trunc) -1]['meta_title'];
+		$title =  $trunc[count($trunc) -1]['title'];
+		if($trunc[count($trunc) -1]['meta_title'] != '')
+		{
+			$title =  $trunc[count($trunc) -1]['meta_title'];
+		}
 		$st = user_interface::get_instance('structure');
 		$st->add_title($title);
 		if($params['brand_scope'])
