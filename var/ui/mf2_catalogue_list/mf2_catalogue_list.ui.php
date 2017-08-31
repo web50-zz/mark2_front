@@ -157,7 +157,7 @@ class ui_mf2_catalogue_list extends user_interface
 		$limit = request::get('limit',0);
 		$page = request::get('page', 1);
 		$pstart = request::get('pstart', 1);
-		$pend = request::get('pend', 70000);
+		$pend = request::get('pend', 700000);
 		$mans = request::get('mans',0);
 		if($pstart == 0)
 		{
