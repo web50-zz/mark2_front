@@ -133,6 +133,7 @@ class ui_mf2_catalogue_list extends user_interface
 
 	public function prepare_input()
 	{
+		$possible_limits  = $this->get_args('possible_limits',array( '1'=>'12', '2'=>'24', '3'=>'48',));// это можно задать через аргументы
 		$possible = array(
 			'sort'=>array(
 					'1'=>'order',
@@ -144,13 +145,8 @@ class ui_mf2_catalogue_list extends user_interface
 					'2'=>'asc',
 					'3'=>'desc',
 				),
-			'limit'=>array(
-					'1'=>'12',
-					'2'=>'24',
-					'3'=>'48',
-			),
-		);
-
+			'limit'=>$possible_limits,
+			);
 		$search = request::get('search');
 		$cat = request::get('cat');
 
