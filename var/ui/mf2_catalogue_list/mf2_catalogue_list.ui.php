@@ -37,6 +37,16 @@ class ui_mf2_catalogue_list extends user_interface
 
 		$ui = user_interface::get_instance('mf2_catalogue_nav');
 		$category_id = $ui->category_id;
+		if($ignore_category = $this->get_args('ignore_category'))// входной параметр ignore_category - массив со списком категорий для которых не надо выводить листинг товаров
+		{
+			foreach($ignore_category as $key=>$value)
+			{
+				if($value == $category_id)
+				{
+					return '';
+				}
+			}
+		}
 		$trunc = $ui->trunc;
 		$scope = $ui->get_scope();
 		$di = data_interface::get_instance('mf2_catalogue_list');
