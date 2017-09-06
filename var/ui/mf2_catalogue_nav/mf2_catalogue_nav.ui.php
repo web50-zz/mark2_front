@@ -242,6 +242,27 @@ class ui_mf2_catalogue_nav extends user_interface
 			$data['records'] = $tmp;
 			$data['root_node'] = $res['childs'][0];
 		}
+		if($this->args['with_subdata'] != '')
+		{
+			$ids = array_keys($this->catalogue_scope);
+			$di = data_interface::get_instance('m2_category_file');
+			$r = $di->_flush()->set_args(array('_sm2_category_id'=>$ids))->_get()->get_results();
+			//$res = $di->_flush()->_get()->get_results();
+			foreach($r as $key=>$value){
+				foreach($data['records'] as $key2=>$value2)
+				{
+					if($value2['id'] == $value->m2_category_id)
+					{
+						if(!$data['records'][$key2]['files'])
+						{
+							$data['records'][$key2]['files'] = array();
+						}
+						$data['records'][$key2]['files'][] = $value;
+					}
+				}
+					
+			}
+		}
 		$this->location_data = $data;
 	}
 
