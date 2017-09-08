@@ -149,11 +149,13 @@ class ui_mf2_catalogue_list extends user_interface
 					'1'=>'order',
 					'2'=>'price',
 					'3'=>'price',
+					'4'=>'title',
 				),
 			'dir'=>array(
 					'1'=>'asc',
 					'2'=>'asc',
 					'3'=>'desc',
+					'4'=>'asc',
 				),
 			'limit'=>$possible_limits,
 			);
@@ -284,7 +286,7 @@ class ui_mf2_catalogue_list extends user_interface
 		if($category_id>0)
 		{
 			$di = data_interface::get_instance('m2_category_manufacturers');
-			$data['manufacturers'] = $di->get_manufacturers_for_category($category_id);
+			$data['manufacturers'] = $di->get_manufacturers_for_category();
 		}
 		$brand_id = $ui->brand_id;
 		if($brand_id > 0)

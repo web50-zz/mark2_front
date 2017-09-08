@@ -490,5 +490,6 @@ class ui_mf2_catalogue_nav extends user_interface
 //		dbg::show($data);
 		return $this->parse_tmpl($template,$data);
 	}
+
 }
 ?>

@@ -130,6 +130,11 @@ class di_mf2_catalogue_list extends di_m2_item_indexer
 			$flds[] = array('di'=>$dj,'name'=>'order');
 			$this->set_order($args['sort'],$args['dir'],$dj);
 		}
+		if($args['sort'] == 'title')
+		{
+			$this->set_order($args['sort'],$args['dir'],$dj);
+		}
+
 		if($args['sort'] == 'price' || $args['pstart']|| $args['pend'])
 		{
 			$dj2 = $this->join_with_di('m2_item_price',array('item_id'=>'item_id'),array('price_value'=>'price_value','type'=>'price_type'));
