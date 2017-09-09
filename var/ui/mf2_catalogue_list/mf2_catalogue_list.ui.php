@@ -37,6 +37,14 @@ class ui_mf2_catalogue_list extends user_interface
 
 		$ui = user_interface::get_instance('mf2_catalogue_nav');
 		$category_id = $ui->category_id;
+		$trunc = $ui->trunc;
+		$title =  $trunc[count($trunc) -1]['title'];
+		if($trunc[count($trunc) -1]['meta_title'] != '')
+		{
+			$title =  $trunc[count($trunc) -1]['meta_title'];
+		}
+		$st = user_interface::get_instance('structure');
+		$st->add_title($title);
 		if($ignore_category = $this->get_args('ignore_category'))// входной параметр ignore_category - массив со списком категорий для которых не надо выводить листинг товаров
 		{
 			foreach($ignore_category as $key=>$value)
@@ -47,7 +55,7 @@ class ui_mf2_catalogue_list extends user_interface
 				}
 			}
 		}
-		$trunc = $ui->trunc;
+
 		$scope = $ui->get_scope();
 		$di = data_interface::get_instance('mf2_catalogue_list');
 		$params = $this->prepare_input();
@@ -97,22 +105,15 @@ class ui_mf2_catalogue_list extends user_interface
 		$data['records'] = $res['records'];
 		$data['basket'] = $_SESSION['mf2_cart'];
 		$data['filters'] = $params['return_to_tmpl'];
-		$title =  $trunc[count($trunc) -1]['title'];
-		if($trunc[count($trunc) -1]['meta_title'] != '')
-		{
-			$title =  $trunc[count($trunc) -1]['meta_title'];
-		}
-		$st = user_interface::get_instance('structure');
-		$st->add_title($title);
 		if($params['brand_scope'])
 		{
 			$st->add_title($this->brand_scope_data->title);
 		}
 
 
-		$di = data_interface::get_instance('m2_category_tabs');
 		if($category_texts)
 		{
+			$di = data_interface::get_instance('m2_category_tabs');
 			$data['current_node_texts'] = $di->get_text_for($data['current_node']['id']);
 		}
 		$data['current_node'] = $ui->location_data['current_node'];
