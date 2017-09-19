@@ -38,6 +38,22 @@ class ui_mf2_catalogue_list extends user_interface
 		$ui = user_interface::get_instance('mf2_catalogue_nav');
 		$category_id = $ui->category_id;
 		$trunc = $ui->trunc;
+		$location_type = $ui->location;
+		if($this->args['item_detect'] == 'true')// если это включено  то будет детектится и  айтем по полному URL от категории в которую входит. Хотя обычно это делается через /item/{__name__}
+		{
+			if($location_type == 'item')
+			{
+				$ui = user_interface::get_instance('mf2_catalogue_item');
+				$st = user_interface::get_instance('structure');
+				$st->collect_resources($ui,'mf2_catalogue_item');
+				return $ui->pub_content();
+			}
+		}
+		if($location_type != 'category')
+		{
+			$st = user_interface::get_instance('structure');
+			$st->do_404();
+		}
 		$title =  $trunc[count($trunc) -1]['title'];
 		if($trunc[count($trunc) -1]['meta_title'] != '')
 		{
