@@ -72,10 +72,21 @@ class di_mf2_catalogue_list extends di_m2_item_indexer
 			{
 				$scope_where[] = " `category_list` like '%\"category_id\":\"".$key."\",%' ";
 			}
-			$sw = '('.implode('OR',$scope_where).')';
-			if($args['conditions'] != '')
+			if(count($scope_where)>0)
 			{
-				$sw .= " AND ".$args['conditions'];
+				$sw = '('.implode('OR',$scope_where).')';
+			}
+			$cnd = $this->get_args('conditions',array());
+			if(count($cnd) >0)
+			{
+				if(strlen($sw)>0)
+				{
+					$sw .= " AND ".$args['conditions'];
+				}
+				else
+				{
+					$sw .= " ".$args['conditions'];
+				}
 			}
 		}
 		$mans = $this->get_args('mans');
@@ -90,7 +101,14 @@ class di_mf2_catalogue_list extends di_m2_item_indexer
 			}
 			$sw = '('.implode(' OR ',$tmp).')';
 		}
-		$sw .= ' AND '.$this->get_alias().'.`not_available` = 0 ';
+		if(strlen($sw)>0)
+		{
+			$sw .= ' AND '.$this->get_alias().'.`not_available` = 0 ';
+		}
+		else
+		{
+			$sw .= $this->get_alias().'.`not_available` = 0 ';
+		}
 
 
 		if(count($args['brand_scope_ids']) >0)
@@ -153,6 +171,7 @@ class di_mf2_catalogue_list extends di_m2_item_indexer
 			$sw .= " and ($t1 $t2) ";
 		}
 		$this->where = $sw;
+		dbg::show($sw);
 		$this->fire_event('conditions_done', array());
 		$res = $this->extjs_grid_json($flds,false);
 		$this->pop_args();
