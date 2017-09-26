@@ -171,7 +171,6 @@ class di_mf2_catalogue_list extends di_m2_item_indexer
 			$sw .= " and ($t1 $t2) ";
 		}
 		$this->where = $sw;
-		dbg::show($sw);
 		$this->fire_event('conditions_done', array());
 		$res = $this->extjs_grid_json($flds,false);
 		$this->pop_args();
