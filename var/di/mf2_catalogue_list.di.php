@@ -27,7 +27,7 @@ class di_mf2_catalogue_list extends di_m2_item_indexer
 	start: стартовая позиция лимита
 
 */
-	public function get_list($search_mode = false)
+	public function get_list($search_mode = false,$return_conditions = false)
 	{
 		$args = $this->get_args();
 		$sw = '';
@@ -77,7 +77,7 @@ class di_mf2_catalogue_list extends di_m2_item_indexer
 				$sw = '('.implode('OR',$scope_where).')';
 			}
 			$cnd = $this->get_args('conditions',array());
-			if(count($cnd) >0)
+			if(strlen($cnd) >0)
 			{
 				if(strlen($sw)>0)
 				{
@@ -171,6 +171,10 @@ class di_mf2_catalogue_list extends di_m2_item_indexer
 			$sw .= " and ($t1 $t2) ";
 		}
 		$this->where = $sw;
+		if($return_conditions == true)
+		{
+			return $this->where;
+		}
 		$this->fire_event('conditions_done', array());
 		$res = $this->extjs_grid_json($flds,false);
 		$this->pop_args();
