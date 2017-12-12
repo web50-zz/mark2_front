@@ -127,11 +127,6 @@ class ui_mf2_catalogue_list extends user_interface
 		}
 
 
-		if($category_texts)
-		{
-			$di = data_interface::get_instance('m2_category_tabs');
-			$data['current_node_texts'] = $di->get_text_for($data['current_node']['id']);
-		}
 		$data['current_node'] = $ui->location_data['current_node'];
 		if($params['brand_scope'])
 		{
@@ -155,9 +150,12 @@ class ui_mf2_catalogue_list extends user_interface
 			$data['custom_pager'] = array('page' => $params['page'], 'total' => $res['total'], 'limit' => $params['limit'], 'prefix' => $query);
 		}
 		//СОбираем данные по текущей категории
-		$di = data_interface::get_instance('m2_category_tabs');
-		$sql = 'select * from m2_category_tabs where m2_category_id = '.$data['current_node']['id'];
-		$data['current_node_texts'] = $di->_get($sql)->get_results();
+		if($category_texts)
+		{
+			$di = data_interface::get_instance('m2_category_tabs');
+			$sql = 'select * from m2_category_tabs where m2_category_id = '.$data['current_node']['id'];
+			$data['current_node_texts'] = $di->_get($sql)->get_results();
+		}
 		$data['args'] = $args;
 		return $this->parse_tmpl($template,$data);
 	}
