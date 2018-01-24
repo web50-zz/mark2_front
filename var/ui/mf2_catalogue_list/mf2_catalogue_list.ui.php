@@ -38,6 +38,40 @@ class ui_mf2_catalogue_list extends user_interface
 		$ui = user_interface::get_instance('mf2_catalogue_nav');
 		$category_id = $ui->category_id;
 		$trunc = $ui->trunc;
+		$location_type = $ui->location;
+		if($this->args['item_detect'] == 'true')// если это включено  то будет детектится и  айтем по полному URL от категории в которую входит. Хотя обычно это делается через /item/{__name__}
+		{
+			if($location_type == 'item')
+			{
+				$ui = user_interface::get_instance('mf2_catalogue_item');
+				$st = user_interface::get_instance('structure');
+				$st->collect_resources($ui,'mf2_catalogue_item');
+				return $ui->pub_content();
+			}
+		}
+		if($location_type != 'category')
+		{
+			$st = user_interface::get_instance('structure');
+			$st->do_404();
+		}
+		$title =  $trunc[count($trunc) -1]['title'];
+		if($trunc[count($trunc) -1]['meta_title'] != '')
+		{
+			$title =  $trunc[count($trunc) -1]['meta_title'];
+		}
+		$st = user_interface::get_instance('structure');
+		$st->add_title($title);
+		if($ignore_category = $this->get_args('ignore_category'))// входной параметр ignore_category - массив со списком категорий для которых не надо выводить листинг товаров
+		{
+			foreach($ignore_category as $key=>$value)
+			{
+				if($value == $category_id)
+				{
+					return '';
+				}
+			}
+		}
+
 		$scope = $ui->get_scope();
 		$di = data_interface::get_instance('mf2_catalogue_list');
 		$params = $this->prepare_input();
@@ -87,24 +121,12 @@ class ui_mf2_catalogue_list extends user_interface
 		$data['records'] = $res['records'];
 		$data['basket'] = $_SESSION['mf2_cart'];
 		$data['filters'] = $params['return_to_tmpl'];
-		$title =  $trunc[count($trunc) -1]['title'];
-		if($trunc[count($trunc) -1]['meta_title'] != '')
-		{
-			$title =  $trunc[count($trunc) -1]['meta_title'];
-		}
-		$st = user_interface::get_instance('structure');
-		$st->add_title($title);
 		if($params['brand_scope'])
 		{
 			$st->add_title($this->brand_scope_data->title);
 		}
 
 
-		$di = data_interface::get_instance('m2_category_tabs');
-		if($category_texts)
-		{
-			$data['current_node_texts'] = $di->get_text_for($data['current_node']['id']);
-		}
 		$data['current_node'] = $ui->location_data['current_node'];
 		if($params['brand_scope'])
 		{
@@ -127,6 +149,13 @@ class ui_mf2_catalogue_list extends user_interface
 			$query =  implode('&',$par);
 			$data['custom_pager'] = array('page' => $params['page'], 'total' => $res['total'], 'limit' => $params['limit'], 'prefix' => $query);
 		}
+		//СОбираем данные по текущей категории
+		if($category_texts)
+		{
+			$di = data_interface::get_instance('m2_category_tabs');
+			$sql = 'select * from m2_category_tabs where m2_category_id = '.$data['current_node']['id'];
+			$data['current_node_texts'] = $di->_get($sql)->get_results();
+		}
 		$data['args'] = $args;
 		return $this->parse_tmpl($template,$data);
 	}
@@ -139,11 +168,13 @@ class ui_mf2_catalogue_list extends user_interface
 					'1'=>'order',
 					'2'=>'price',
 					'3'=>'price',
+					'4'=>'title',
 				),
 			'dir'=>array(
 					'1'=>'asc',
 					'2'=>'asc',
 					'3'=>'desc',
+					'4'=>'asc',
 				),
 			'limit'=>$possible_limits,
 			);
@@ -274,7 +305,7 @@ class ui_mf2_catalogue_list extends user_interface
 		if($category_id>0)
 		{
 			$di = data_interface::get_instance('m2_category_manufacturers');
-			$data['manufacturers'] = $di->get_manufacturers_for_category($category_id);
+			$data['manufacturers'] = $di->get_manufacturers_for_category();
 		}
 		$brand_id = $ui->brand_id;
 		if($brand_id > 0)

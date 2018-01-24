@@ -37,7 +37,7 @@ class ui_mf2_catalogue_item extends user_interface
 			$di = data_interface::get_instance('mf2_catalogue_list');
 			$data = $di->get_item($item_id);
 		}
-		if(request::get('gallery') == 'true')
+		if(request::get('gallery') == 'true')// это для отдачи галереей картинок  товара аяксом
 		{
 			$this->gallery($data);
 		}

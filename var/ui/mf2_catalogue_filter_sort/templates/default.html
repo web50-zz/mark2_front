@@ -1,0 +1,13 @@
+                        <li class="icon-nav__item no-settings col-xs-2 col-lg-3 hidden-xs visible-lg" id="filter-sort">
+                            <div class="icon-nav__control">
+                                <div class="sort">
+                                    <div class="sort__text">Сортировка</div>
+                                    <select value="" name="sort" v-cloak>
+					{__(apply(/records)__}
+						<option value="{__id__}" {__(if(/sort[$id] == 1)__}selected{__if)__}>{__title__}</option>
+					{__apply)__}
+                                    </select>
+                                </div>
+                            </div>
+                        </li>
+

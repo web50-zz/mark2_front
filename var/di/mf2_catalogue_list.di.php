@@ -27,7 +27,7 @@ class di_mf2_catalogue_list extends di_m2_item_indexer
 	start: стартовая позиция лимита
 
 */
-	public function get_list($search_mode = false)
+	public function get_list($search_mode = false,$return_conditions = false)
 	{
 		$args = $this->get_args();
 		$sw = '';
@@ -72,10 +72,21 @@ class di_mf2_catalogue_list extends di_m2_item_indexer
 			{
 				$scope_where[] = " `category_list` like '%\"category_id\":\"".$key."\",%' ";
 			}
-			$sw = '('.implode('OR',$scope_where).')';
-			if($args['conditions'] != '')
+			if(count($scope_where)>0)
 			{
-				$sw .= " AND ".$args['conditions'];
+				$sw = '('.implode('OR',$scope_where).')';
+			}
+			$cnd = $this->get_args('conditions',array());
+			if(strlen($cnd) >0)
+			{
+				if(strlen($sw)>0)
+				{
+					$sw .= " AND ".$args['conditions'];
+				}
+				else
+				{
+					$sw .= " ".$args['conditions'];
+				}
 			}
 		}
 		$mans = $this->get_args('mans');
@@ -91,7 +102,14 @@ class di_mf2_catalogue_list extends di_m2_item_indexer
 			}
 			$sw = '('.implode(' OR ',$tmp).')';
 		}
-		$sw .= ' AND '.$this->get_alias().'.`not_available` = 0 ';
+		if(strlen($sw)>0)
+		{
+			$sw .= ' AND '.$this->get_alias().'.`not_available` = 0 ';
+		}
+		else
+		{
+			$sw .= $this->get_alias().'.`not_available` = 0 ';
+		}
 
 
 		if(count($args['brand_scope_ids']) >0)
@@ -131,6 +149,11 @@ class di_mf2_catalogue_list extends di_m2_item_indexer
 			$flds[] = array('di'=>$dj,'name'=>'order');
 			$this->set_order($args['sort'],$args['dir'],$dj);
 		}
+		if($args['sort'] == 'title')
+		{
+			$this->set_order($args['sort'],$args['dir'],$dj);
+		}
+
 		if($args['sort'] == 'price' || $args['pstart']|| $args['pend'])
 		{
 			$dj2 = $this->join_with_di('m2_item_price',array('item_id'=>'item_id'),array('price_value'=>'price_value','type'=>'price_type'));
@@ -149,6 +172,10 @@ class di_mf2_catalogue_list extends di_m2_item_indexer
 			$sw .= " and ($t1 $t2) ";
 		}
 		$this->where = $sw;
+		if($return_conditions == true)
+		{
+			return $this->where;
+		}
 		$this->fire_event('conditions_done', array());
 		$res = $this->extjs_grid_json($flds,false);
 		$this->pop_args();

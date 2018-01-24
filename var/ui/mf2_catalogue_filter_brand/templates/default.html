@@ -1,0 +1,12 @@
+        <div class="type-product-filter filter-color">
+		<h4 class="text-uppercase">Цвет</h4>
+			<ul class="list-unstyled prim">
+					{__(apply(/records)__}
+				    <li class="checkbox text-uppercase">
+					    <input type="checkbox"  id="checkbox-aria_{__title__}" {__(if(/colors[$title] == 1)__}checked{__if)__} class="input-checkbox" value="{__title__}" >
+						    <label for="checkbox-aria_{__title__}"><a href="">{__title__}</a></label>
+				    </li>
+					{__apply)__}
+		    </ul>
+	</div>
+
