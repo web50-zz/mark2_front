@@ -79,6 +79,7 @@ class di_mf2_catalogue_list extends di_m2_item_indexer
 			}
 		}
 		$mans = $this->get_args('mans');
+		$sw .= " AND (`category_list` not like '%\"category_id\":\"331\"%') ";
 		if($mans)
 		{
 			$mans = json_decode($mans);
