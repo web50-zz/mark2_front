@@ -22,5 +22,16 @@ class ui_mf2_catalogue_item_ajax extends user_interface
 		return '';
 	}
 
+	public function pub_item($data,$parsed = '')
+	{
+		$template = $this->get_args('template', 'default.html');
+		if($parsed == '')
+		{
+			$parsed = $this->parse_tmpl($template,$data);
+		}
+		$resp['success'] = 'true';
+		$resp['data'] = $parsed;
+		response::send($resp,'json');
+	}
 }
 ?>

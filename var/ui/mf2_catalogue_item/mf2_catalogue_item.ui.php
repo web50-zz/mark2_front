@@ -45,18 +45,13 @@ class ui_mf2_catalogue_item extends user_interface
 		if($args['mode'] == 'ajax')
 		{
 			$data->show_link = 1;
+			$da = user_interface::get_instance("mf2_catalogue_item_ajax");
+			$da->pub_item($data);
 		}
 		$ret = $this->parse_tmpl($template,$data);
 		$title =  $data->title.'  '.$data->meta_title;
 		$st = user_interface::get_instance('structure');
 		$st->add_title($title);
-		if($args['mode'] == 'ajax')
-		{
-			$resp['success'] = 'true';
-			$resp['data'] = $ret;
-			response::send($resp,'json');
-		}
-
 		return 	$ret;
 	}
 
