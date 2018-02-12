@@ -82,6 +82,7 @@ class ui_mf2_cart extends user_interface
 			->setTo($rcpt)
 			->setBody($body);
 		$message->setContentType("text/html");	
+		$this->fire_event('onMessageReady',array($message,$data));
 		$numSent = $mailer->batchSend($message);
 		if(!empty($data['email']))
 		{
