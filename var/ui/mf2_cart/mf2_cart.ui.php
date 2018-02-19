@@ -37,6 +37,7 @@ class ui_mf2_cart extends user_interface
 	private function prepare_form($check)
 	{
 		$data = $this->get_data();
+		$data['hash'] = md5(time().rand());
 		$data['check'] = $check;
 		return $this->parse_tmpl('default.html', $data);
 	}
@@ -296,7 +297,11 @@ class ui_mf2_cart extends user_interface
 				}
 			}
 			$data['cart'] = $cart;
-			$this->send_order($data);
+			$this->fire_event('onNewOrder',array($data));
+			if(!registry::get('MF2_DISABLE_ORDER_MAILS'))
+			{
+				$this->send_order($data);
+			}
 			$_SESSION['mf2_cart'] = array();//корзину опустошаем
 			response::send(array('success'=>true,'data'=>'ee'),'json');
 		
