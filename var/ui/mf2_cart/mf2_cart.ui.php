@@ -298,9 +298,13 @@ class ui_mf2_cart extends user_interface
 			}
 			$data['cart'] = $cart;
 			$this->fire_event('onNewOrder',array($data));
-			if(!registry::get('MF2_DISABLE_ORDER_MAILS'))
+			if(!registry::get('MF2_DISABLE_ORDER_MAILS') == '1')
 			{
 				$this->send_order($data);
+			}
+			if(registry::get('MF2_EMULATE_NOACCEPT') == '1')
+			{
+				response::send(array('success'=>false,'data'=>'ee'),'json');
 			}
 			$_SESSION['mf2_cart'] = array();//корзину опустошаем
 			response::send(array('success'=>true,'data'=>'ee'),'json');
