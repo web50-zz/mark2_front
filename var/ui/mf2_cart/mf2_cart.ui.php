@@ -104,6 +104,7 @@ class ui_mf2_cart extends user_interface
 		{
 			$core_domain = 'localhost';
 		}
+		require_once LIB_PATH.'Swift/swift_required.php';
 		$transport = Swift_MailTransport::newInstance();
 		$mailer = Swift_Mailer::newInstance($transport);
 		$message = Swift_Message::newInstance($title)
@@ -112,6 +113,7 @@ class ui_mf2_cart extends user_interface
 			->setBody($body);
 		$message->setContentType("text/html");	
 		$numSent = $mailer->batchSend($message);
+
 		return;	
 	}
 
