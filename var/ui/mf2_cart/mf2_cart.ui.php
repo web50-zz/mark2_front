@@ -7,6 +7,7 @@
 class ui_mf2_cart extends user_interface
 {
 	public $title = 'mf2: Заказ';
+	public $cart_data = '';
 	
 	public function __construct ()
 	{
@@ -45,10 +46,11 @@ class ui_mf2_cart extends user_interface
 	private function get_data()
 	{
 		$cart = data_interface::get_instance('mf2_cart');
-		$data = array(
+		$this->cart_data = array(
 			'records' => $cart->get_cart_data(),
 		);
-		return $data;
+		$this->fire_event('onCartDataReady',array($this->cart_data));
+		return $this->cart_data;
 	}
 
 	private function check()
@@ -209,8 +211,28 @@ class ui_mf2_cart extends user_interface
 		), 'json');
 	}
 
+
 	/**
-	*	Добавить элемент в корзину
+	*	Добавить элемент в корзину c формы програмно
+	*/
+	public function add($record = array())
+	{
+		if ($record['id'] > 0)
+		{
+			$di = data_interface::get_instance('mf2_cart');
+			$di->set($record['id'], $record);
+			list($count, $summ) = $this->calculate();
+		}
+		else
+		{
+			throw new Exception('Ошибки в просчете корзины');
+		}
+	}
+
+
+
+	/**
+	*	Добавить элемент в корзину c формы 
 	*/
 	protected function pub_add()
 	{
