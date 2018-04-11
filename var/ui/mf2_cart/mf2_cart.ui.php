@@ -97,7 +97,7 @@ class ui_mf2_cart extends user_interface
 	private function send_followup($data = array())
 	{
 		$body =  $this->parse_tmpl('followup_mail.html', $data);
-		$rcpt = $data['mail'];
+		$rcpt = $data['email'];
 		$title = 'Ваш Заказ';
 		$core_domain = $_SERVER['HTTP_HOST'];
 		if(!$core_domain)
@@ -113,7 +113,6 @@ class ui_mf2_cart extends user_interface
 			->setBody($body);
 		$message->setContentType("text/html");	
 		$numSent = $mailer->batchSend($message);
-
 		return;	
 	}
 
