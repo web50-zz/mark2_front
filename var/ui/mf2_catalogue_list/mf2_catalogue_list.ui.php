@@ -187,13 +187,10 @@ class ui_mf2_catalogue_list extends user_interface
 		$sort = request::get('sort',0);
 		$limit = request::get('limit',0);
 		$page = request::get('page', 1);
-		$pstart = request::get('pstart', 1);
-		$pend = request::get('pend', 700000);
+		$pstart = request::get('pstart', 0);
+		$pend = request::get('pend', 0);
 		$mans = request::get('mans',0);
-		if($pstart == 0)
-		{
-			$pstart = 1;
-		}
+		
 		if($sort_saved != $sort && $sort > 0)
 		{
 			session::set('sort',$sort,$this->name);
@@ -210,8 +207,14 @@ class ui_mf2_catalogue_list extends user_interface
 		{
 			$limit = $limit_saved;
 		}
-		$params['pstart'] = $pstart;
-		$params['pend'] = $pend;
+		if($pstart >0)
+		{
+			$params['pstart'] = $pstart;
+		}
+		if($pend > 0)
+		{
+			$params['pend'] = $pend;
+		}
 		$params['price_type'] = '7';
 		$params['sort'] = $possible['sort'][$sort];
 		$params['dir'] = $possible['dir'][$sort];
