@@ -77,7 +77,7 @@ class di_mf2_catalogue_list extends di_m2_item_indexer
 				$sw = '('.implode('OR',$scope_where).')';
 			}
 			$cnd = $this->get_args('conditions',array());
-			if(strlen($cnd) >0)
+			if(count($cnd) >0)
 			{
 				if(strlen($sw)>0)
 				{
