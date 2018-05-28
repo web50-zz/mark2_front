@@ -37,10 +37,12 @@ class ui_mf2_catalogue_filter_price extends user_interface
 				}
 			}
 		}
-		$data['pstart'] = request::get('pstart',2);
-		$data['pend'] = request::get('pend',80000);
-		$data['min'] = 2;
-		$data['max'] = 85000;
+		$di =  data_interface::get_instance('m2_category_price');
+		$prc = $di->get_price_for_category();
+		$data['min'] = $prc['min'];
+		$data['max'] = $prc['max'];
+		$data['pstart'] = request::get('pstart',$prc['min']);
+		$data['pend'] = request::get('pend',$prc['max']);
 		return 	$this->parse_tmpl('default.html',$data);
 	}
 
