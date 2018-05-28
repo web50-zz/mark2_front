@@ -187,8 +187,6 @@ class ui_mf2_catalogue_list extends user_interface
 		$sort = request::get('sort',0);
 		$limit = request::get('limit',0);
 		$page = request::get('page', 1);
-		$pstart = request::get('pstart', 0);
-		$pend = request::get('pend', 0);
 		$mans = request::get('mans',0);
 		
 		if($sort_saved != $sort && $sort > 0)
@@ -207,15 +205,6 @@ class ui_mf2_catalogue_list extends user_interface
 		{
 			$limit = $limit_saved;
 		}
-		if($pstart >0)
-		{
-			$params['pstart'] = $pstart;
-		}
-		if($pend > 0)
-		{
-			$params['pend'] = $pend;
-		}
-		$params['price_type'] = '7';
 		$params['sort'] = $possible['sort'][$sort];
 		$params['dir'] = $possible['dir'][$sort];
 		$params['limit'] = $possible['limit'][$limit];
@@ -237,7 +226,7 @@ class ui_mf2_catalogue_list extends user_interface
 
 		if($params['sort'] == 'price')
 		{
-			$params['price_type'] = '7';
+			$params['price_type'] = registry::get('MAIN_PRICE_TYPE');
 		}
 		$params['start'] = ($page - 1) * $params['limit'];
 		$params['page'] = $page;
@@ -273,7 +262,7 @@ class ui_mf2_catalogue_list extends user_interface
 		$category = $this->get_args('category', '1');
 		$scope[$category] = 1;
 		$di = data_interface::get_instance('mf2_catalogue_list');
-		$di->set_args(array('scope'=>$scope,'sort'=>$sort,'dir'=>$dir));
+		$di->set_args(array('scope'=>$scope,'sort'=>$sort,'dir'=>$dir,'no_conditions_done' => 1));
 		$res =  $di->get_list();
 		$data['records'] = $res['records'];
 		$data['args'] = $args;

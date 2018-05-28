@@ -14,6 +14,7 @@ $(document).ready(function(){
 	$('#filter-brand select').on('change',function(){
 		flt.get();
 	})
+	 /*
 	 var match = location.search.match(new RegExp("[?&]mans=([^&]+)(&|$)"));
 	 if(match)
 	 {
@@ -23,5 +24,15 @@ $(document).ready(function(){
 			$('#filter-brand select').val(value);
 		});
 	 }
-
+	 var match = location.search.match(new RegExp("[?&]mans=([^&]+)(&|$)"));
+	 if(match)
+	 {
+		 var r = decodeURIComponent(match[1].replace(/\+/g, " "));
+		var mans = $.parseJSON(r);
+		$.each(mans, function(index,value){
+			$('.prim #checkbox-aria_'+value).attr('checked',true);
+			$('.modal-all-brand #checkbox-aria_'+value+'_1').attr('checked',true);
+		});
+	 }
+*/
 })

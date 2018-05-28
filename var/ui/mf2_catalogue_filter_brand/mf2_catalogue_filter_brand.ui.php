@@ -42,17 +42,21 @@ class ui_mf2_catalogue_filter_brand extends user_interface
 
 	public function apply_filter($eObj, $ids = array())
 	{
-		if(request::get('color_nothing_to_get'))
+		$mans = request::get('mans');
+		if($mans)
 		{
-			$colj = request::get('color','[]');
-			$colors = json_decode($colj);
-			$w = array();
-			foreach($colors as $key=>$value)
+			$mans = json_decode($mans);
+			$tmp = array();
+			foreach($mans  as $key=>$value)
 			{
-				$w[] = "m2_item_indexer.chars_list like '%\"str_title\":\"Цвет\",\"variable_value\":\"".$value."\"%'";
+				$tmp[] =  " `manufacturers_list` like '%\"manufacturer_id\":\"".$value."\"%'";
+
 			}
-			$s =  " AND (".implode(' or ',$w).") ";
-			$eObj->where .= $s; 
+			if(count($tmp)>0)
+			{
+				$sw = '('.implode(' OR ',$tmp).')';
+				$eObj->where .= "and ($sw)"; 
+			}
 		}
 	}
 

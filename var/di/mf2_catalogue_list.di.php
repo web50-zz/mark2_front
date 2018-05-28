@@ -9,7 +9,7 @@ class di_mf2_catalogue_list extends di_m2_item_indexer
 	public $title = 'mf2: Item list';
 
 
-
+	public $joins = array();
 	public function __construct () {
 		// Call Base Constructor
 		parent::__construct(__CLASS__);
@@ -89,18 +89,6 @@ class di_mf2_catalogue_list extends di_m2_item_indexer
 				}
 			}
 		}
-		$mans = $this->get_args('mans');
-		if($mans)
-		{
-			$mans = json_decode($mans);
-			$tmp = array();
-			foreach($mans  as $key=>$value)
-			{
-				$tmp[] =  " `manufacturers_list` like '%\"manufacturer_id\":\"".$value."\"%'";
-
-			}
-			$sw = '('.implode(' OR ',$tmp).')';
-		}
 		if(strlen($sw)>0)
 		{
 			$sw .= ' AND '.$this->get_alias().'.`not_available` = 0 ';
@@ -152,10 +140,17 @@ class di_mf2_catalogue_list extends di_m2_item_indexer
 		{
 			$this->set_order($args['sort'],$args['dir'],$dj);
 		}
-
-		if($args['sort'] == 'price' || $args['pstart']|| $args['pend'])
+		if($args['sort'] == 'price')
 		{
-			$dj2 = $this->join_with_di('m2_item_price',array('item_id'=>'item_id'),array('price_value'=>'price_value','type'=>'price_type'));
+			$price_type = registry::get('MAIN_PRICE_TYPE');
+			if($this->is_joined('m2_item_price'))
+			{
+				$dj2 = $this->get_joined('m2_item_price');
+			}
+			else
+			{
+				$dj2 = $this->join_with_di('m2_item_price',array('item_id'=>'item_id'),array('price_value'=>'price_value','type'=>'price_type'));
+			}
 			$flds[] = array('di'=>$dj2,'name'=>'price_value');
 			$flds[] = array('di'=>$dj2,'name'=>'type');
 			$a = $dj2->get_alias();
@@ -163,19 +158,19 @@ class di_mf2_catalogue_list extends di_m2_item_indexer
 			{
 				$this->set_order('price_value',$args['dir'],$dj2);
 			}
-			$t1 = ' '.$a.'.`type` = '.$args['price_type'].' ';
-			if($args['pstart'] && $args['pend'])
-			{
-				$t2 .= " and ($a.`price_value`<".$args['pend']." and $a.`price_value` >".$args['pstart'].') ';
-			}
-			$sw .= " and ($t1 $t2) ";
+			$a = $dj2->get_alias();
+			$t1 = ' '.$a.'.`type` = '.$price_type.' ';
+			$sw .= " and ($t1 ) ";
 		}
 		$this->where = $sw;
 		if($return_conditions == true)
 		{
 			return $this->where;
 		}
-		$this->fire_event('conditions_done', array());
+		if(!$args['no_conditions_done'])
+		{
+			$this->fire_event('conditions_done', array());
+		}
 		$res = $this->extjs_grid_json($flds,false);
 		$this->pop_args();
 		return $res;
@@ -191,7 +186,30 @@ class di_mf2_catalogue_list extends di_m2_item_indexer
 		$res = $this->_get()->get_results(0);
 		$this->pop_args();
 		return $res;
+	}
 
+	public function set_joined($di_name,$di)
+	{
+		$this->joins[$di_name] = $di;
+	}
+
+
+	public function is_joined($di_name)
+	{
+		if(array_key_exists($di_name,$this->joins))
+		{
+			return true;
+		}
+		return false;
+	}
+
+	public function get_joined($di_name)
+	{
+		if($this->is_joined($di_name))
+		{
+			return $this->joins[$di_name];
+		}
+		return false;
 	}
 
 	public function collect_data($eObj, $ids)

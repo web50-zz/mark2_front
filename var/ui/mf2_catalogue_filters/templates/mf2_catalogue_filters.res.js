@@ -26,4 +26,7 @@ var filtrec = function(){
 
 $(document).ready(function(){
 	flt = new filtrec;
+	$('#fltDo').on('click',function(){
+		flt.get();
+	});
 })
