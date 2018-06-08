@@ -20,23 +20,6 @@ class ui_mf2_catalogue_filter_price extends user_interface
 		$data = array();
 		$ui = user_interface::get_instance('mf2_catalogue_nav');
 		$category_id = $ui->category_id;
-		if($category_id > 0)
-		{
-			$di = data_interface::get_instance('m2_category_manufacturers');
-			$data['records'] = $di->get_manufacturers_for_category();
-		}
-		$in = request::get('price','[]');
-		if($in != '[]')
-		{
-			$colors = json_decode($in);
-			if(count($colors)>0)
-			{
-				foreach($colors as $key=>$value)
-				{
-					$data['mans'][$value] = 1;
-				}
-			}
-		}
 		$di =  data_interface::get_instance('m2_category_price');
 		$prc = $di->get_price_for_category();
 		$data['min'] = $prc['min'];
