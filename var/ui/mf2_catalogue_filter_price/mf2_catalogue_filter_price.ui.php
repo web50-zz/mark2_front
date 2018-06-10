@@ -47,7 +47,7 @@ class ui_mf2_catalogue_filter_price extends user_interface
 			$t1 = ' '.$a.'.`type` = '.$price_type.' ';
 			if($pstart && $pend)
 			{
-				$t2 .= " and ($a.`price_value`<".$pend." and $a.`price_value` >".$pstart.') ';
+				$t2 .= " and ($a.`price_value`<=".$pend." and $a.`price_value` >=".$pstart.') ';
 			}
 			$sw .= " and ($t1 $t2) ";
 			$eObj->where .= $sw; 
