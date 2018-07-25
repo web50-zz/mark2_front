@@ -51,8 +51,12 @@ class ui_mf2_catalogue_list extends user_interface
 		}
 		if($location_type != 'category')
 		{
-			$st = user_interface::get_instance('structure');
-			$st->do_404();
+			if(request::get('search','') == '')
+			{
+				//Если нет параметров на вход и приэтом не определена кактегория мы не выводим ничего ибо выборка может быть велика по всему каталогу
+				$st = user_interface::get_instance('structure');
+				$st->do_404();
+			}
 		}
 		$title =  $trunc[count($trunc) -1]['title'];
 		if($trunc[count($trunc) -1]['meta_title'] != '')
