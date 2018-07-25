@@ -118,6 +118,7 @@ class ui_mf2_catalogue_list extends user_interface
 			$search_mode = true;
 		}
 		$res = $di->get_list($search_mode);
+		$this->fire_event('data_ready', array($di));
 		$data['records'] = $res['records'];
 		$data['basket'] = $_SESSION['mf2_cart'];
 		$data['filters'] = $params['return_to_tmpl'];

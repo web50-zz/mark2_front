@@ -7,7 +7,7 @@
 class di_mf2_catalogue_list extends di_m2_item_indexer
 {
 	public $title = 'mf2: Item list';
-
+	private $where_raw = array();
 
 	public $joins = array();
 	public function __construct () {
@@ -163,6 +163,7 @@ class di_mf2_catalogue_list extends di_m2_item_indexer
 			$sw .= " and ($t1 ) ";
 		}
 		$this->where = $sw;
+		$this->where_raw = $sw;
 		if($return_conditions == true)
 		{
 			return $this->where;
@@ -211,6 +212,19 @@ class di_mf2_catalogue_list extends di_m2_item_indexer
 		}
 		return false;
 	}
+
+	public function get_where($raw = true)
+	{
+		if($raw == true)
+		{
+			return $this->where_raw;
+		}
+		else
+		{
+			return $this->where;
+		}
+	}
+
 
 	public function collect_data($eObj, $ids)
 	{

@@ -30,7 +30,7 @@ class ui_mf2_basket extends user_interface
 	{
 		$data = array();
 		$data = array(
-			'records' => $this->records,
+			'records' => $this->cart_data,
 		);
 		return $this->parse_tmpl('basket_body.html',$data);
 	}

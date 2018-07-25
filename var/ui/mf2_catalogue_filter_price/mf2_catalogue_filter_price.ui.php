@@ -51,6 +51,8 @@ class ui_mf2_catalogue_filter_price extends user_interface
 			}
 			$sw .= " and ($t1 $t2) ";
 			$eObj->where .= $sw; 
+			$ui = user_interface::get_instance('mf2_catalogue_filters');
+			$ui->set_condition('mf2_catalogue_filter_price',$sw,true);
 	}
 
 	public function _listeners()
