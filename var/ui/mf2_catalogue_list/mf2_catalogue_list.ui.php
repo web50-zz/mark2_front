@@ -11,6 +11,7 @@ class ui_mf2_catalogue_list extends user_interface
 	public $location = false;
 	public $location_data = false;
 	public $catalogue_scope = array();// тут все ид разделов  каталога по которым  мы  работаем в текущем запросе
+	public $params = array(); //тут параметры запроса по prepare_params  
 	
 	public function __construct ()
 	{
@@ -20,6 +21,17 @@ class ui_mf2_catalogue_list extends user_interface
 //9* просто список с автоматическим определением  категории по URL
 	public function pub_content()
 	{
+		$uri_parts = explode('/',substr(URI,1));
+		if(count($uri_parts == 3))
+		{
+			if($uri_parts[1] == 'brand')
+			{
+				// если в URI  предпоследний элемент - brand то автоматически включаем brand_scope и считаем что работаем с определенным брендом назвагние котрого задано последним элементов  URI
+				$this->args['brand_scope'] = 1;
+				$brand_name = $uri_parts[2];
+			}
+
+		}
 		$grid_mode_changed = request::get('gridMode',false);
 		if($grid_mode_changed)
 		{
@@ -49,13 +61,16 @@ class ui_mf2_catalogue_list extends user_interface
 				return $ui->pub_content();
 			}
 		}
-		if($location_type != 'category')
+		if(!$this->args['brand_scope'])
 		{
-			if(request::get('search','') == '')
+			if($location_type != 'category' && $this->args['lock_global_list'] == 'true')
 			{
-				//Если нет параметров на вход и приэтом не определена кактегория мы не выводим ничего ибо выборка может быть велика по всему каталогу
-				$st = user_interface::get_instance('structure');
-				$st->do_404();
+				if(request::get('search','') == '')
+				{
+					//Если нет параметров на вход и приэтом не определена кактегория мы не выводим ничего ибо выборка может быть велика по всему каталогу
+		//			$st = user_interface::get_instance('structure');
+		//			$st->do_404();//пока не ясно что с этим делать
+				}
 			}
 		}
 		$title =  $trunc[count($trunc) -1]['title'];
@@ -75,15 +90,15 @@ class ui_mf2_catalogue_list extends user_interface
 				}
 			}
 		}
-
 		$scope = $ui->get_scope();
 		$di = data_interface::get_instance('mf2_catalogue_list');
 		$params = $this->prepare_input();
+
 		if($params['brand_scope'])
 		{
 			if(!($ui->brand_id>0))
 			{
-				$brand_id = $this->search_brand();
+				$brand_id = $this->search_brand(array('name'=>$brand_name));
 			}
 			else{
 				$brand_id = $ui->brand_id;
@@ -167,7 +182,8 @@ class ui_mf2_catalogue_list extends user_interface
 
 	public function prepare_input()
 	{
-		$possible_limits  = $this->get_args('possible_limits',array( '1'=>'12', '2'=>'24', '3'=>'48',));// это можно задать через аргументы
+		$possible_limits  = $this->get_args('possible_limits',array( '1'=>'12', '2'=>'24', '3'=>'48',));// это можно задать через аргументы   "possible_limits":[0,50,100]
+		$default_sort = $this->get_args('default_sort',0);  // чeрез аргументы "default_sort":"4" 
 		$possible = array(
 			'sort'=>array(
 					'1'=>'order',
@@ -189,7 +205,7 @@ class ui_mf2_catalogue_list extends user_interface
 		$sort_saved = session::get('sort','1',$this->name);
 		$limit_saved = session::get('limit','1',$this->name);
 
-		$sort = request::get('sort',0);
+		$sort = request::get('sort',$default_sort);
 		$limit = request::get('limit',0);
 		$page = request::get('page', 1);
 		$mans = request::get('mans',0);
@@ -198,7 +214,7 @@ class ui_mf2_catalogue_list extends user_interface
 		{
 			session::set('sort',$sort,$this->name);
 		}
-		if($limit_saved != $limit && $limit > 0)
+		if($limit_saved != $limit)
 		{
 			session::set('limit',$limit,$this->name);
 		}
@@ -253,6 +269,8 @@ class ui_mf2_catalogue_list extends user_interface
 		{
 			$params['mans'] = $mans;
 		}
+		$this->params = $params;
+		$this->fire_event('params_ready', array($params));
 		return $params;
 	}
 	public function pub_parametric()

@@ -273,9 +273,21 @@ class ui_mf2_catalogue_nav extends user_interface
 	{
 		$di = data_interface::get_instance('m2_url_indexer');
 		$parts = explode('?',SRCH_URI); //режем куски потому что иногда на некоторых хостингах SRCH_URI содержит GET 
+
+		$uri_parts = explode('/',substr(URI,1));
+		if(count($uri_parts == 3))
+		{
+			if($uri_parts[1] == 'brand')
+			{
+				// если в URI  предпоследний элемент - brand то автоматически включаем brand_scope и считаем что работаем с определенным брендом назвагние котрого задано последним элементов  URI
+				$this->args['brand_scope'] = 1;	
+				$brand_name = $uri_parts[2];
+			}
+
+		}
 		if($this->args['brand_scope'])
 		{
-			$brand_id = $this->search_brand();
+			$brand_id = $this->search_brand(array('name'=>$brand_name));
 			if($brand_id)
 			{
 				$this->brand_id = $this->brand_scope_data->id; 
@@ -330,8 +342,11 @@ class ui_mf2_catalogue_nav extends user_interface
 		$site_root = $data['records'][0];
 		if($this->category_id > 0 || $this->item_id > 0)
 		{
-			$data['records'] = array();
-			$data['records'][0] = $site_root;
+			if($this->item_id>0)
+			{
+				$data['records'] = array();
+				$data['records'][0] = $site_root;
+			}
 			foreach($this->trunc as $key=>$value)
 			{
 				if($value['id'] >1)
@@ -383,7 +398,8 @@ class ui_mf2_catalogue_nav extends user_interface
 
 	public function search_brand($params = array())
 	{
-		$name = str_replace('/','',SRCH_URI);
+//		$name = str_replace('/','',SRCH_URI);
+		$name = $params['name'];
 		$di =  data_interface::get_instance('m2_manufacturers');
 		$res = $di->search_by_name($name);
 		if($res)

@@ -1,0 +1,53 @@
+<div class="category-header">
+		<h1 class="list-unstyled list-inline text-uppercase">{__(if(/current/title != '')__}{__/current/title__}{__else__}Категории{__if)__}
+							</h1>
+							</div>
+
+<div class="thumbnail-list {__(if(!$grid_mode || $grid_mode == 'grid-3')__}grid-3{__else__}{__if)__}" style="margin-top:40px">
+{__(if(/records)__}
+			{__(apply(/records)__}
+								{__set(#photo_exists = 0)__}
+			<section class="product-thumbnail">
+				<div class="product-caption2">
+					<div class="product-header">
+						<h3 class="">
+							{__(if($childs)__}
+							<a href="/catalog/category_list{__uri__}">{__title__}</a>
+							{__else__}
+							<a href="/catalog{__uri__}">{__title__}</a>
+							{__if)__}
+						</h3>
+					</div>
+				</div>
+				<div class="product-pictures" data-url="/catalog/category_list{__uri__}" data-id="{__item_id__}" >
+					{__(if($childs)__}
+							<a href="/catalog/category_list{__uri__}">
+							{__else__}
+							<a href="/catalog{__uri__}">
+							{__if)__}
+	
+						{__(apply($files)__}
+							{__(if($file_type == 8)__}
+								{__set(#photo_exists = 1)__}
+						<img class="img-responsive" title="{__php::str_replace('"','',#title)__}" alt="{__php::str_replace('"','',#title)__}" src="/filestorage/mark2/m2_category_files/tcat-{__real_name__}"/>
+							{__if)__}
+						{__apply)__}
+						{__(if(#photo_exists == 0)__}
+						<img  class="img-responsive" title="{__php::str_replace('"','',#title)__}" alt="{__php::str_replace('"','',#title)__}" src="/themes/termt/img/nophoto.png"/>
+						{__if)__}
+					</a>
+				</div>
+			</section>
+
+			{__apply)__}
+{__else__}
+	<h2> Ничего не найдено</h2>
+{__if)__}
+{__(apply($current_node_texts)__}
+	<h5>{__title__}</h5>
+	{__content__}
+{__apply)__}
+
+</div>
+
+
