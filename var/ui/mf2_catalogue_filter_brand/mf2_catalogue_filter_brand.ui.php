@@ -62,13 +62,17 @@ class ui_mf2_catalogue_filter_brand extends user_interface
 		*/
 			$cat_ids = implode(',',array_keys($scope));
 			$i_ids = implode(',',$others);
+			if($i_ids == '')
+			{
+				$i_ids = "''";
+			}
 			$sql = "SELECT m.title,im.manufacturer_id,COUNT(im.item_id) as cnt 
 					FROM m2_item_manufacturer im 
 					LEFT JOIN m2_item_category ic ON im.item_id = ic.item_id 
 					LEFT JOIN m2_manufacturers m ON im.manufacturer_id = m.id 
 					WHERE ic.category_id IN($cat_ids) and im.item_id in ($i_ids)
 					GROUP BY manufacturer_id 
-					order by m.title ASC";
+					order by m.title ASC ";
 			$counts = $di->_get($sql)->get_results();
 			foreach($data['records'] as $key2=>$value2)
 			{
