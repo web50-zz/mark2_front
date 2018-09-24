@@ -16,15 +16,80 @@ class ui_mf2_catalogue_filter_brand extends user_interface
 	}
 
 	public function pub_content()
-	{	
+	{
+
 		$data = array();
 		$ui = user_interface::get_instance('mf2_catalogue_nav');
 		$category_id = $ui->category_id;
+		$scope = $ui->get_scope();
+		$di = data_interface::get_instance('m2_category_manufacturers');
 		if($category_id > 0)
 		{
-			$di = data_interface::get_instance('m2_category_manufacturers');
 			$data['records'] = $di->get_manufacturers_for_category();
 		}
+		else	
+		{
+			$cat_in = request::get('category');
+			if(is_array($cat_in) && count($cat_in)>0)
+			{
+				$scope = array();
+				foreach($cat_in as $key=>$value)
+				{
+					$scope[$value] = 1;
+				}
+				$data['records'] = $di->get_manufacturers_for_category_list(array_keys($scope));
+			}
+			else
+			{
+				$ui = user_interface::get_instance('mf2_catalogue_nav');
+			}
+		}
+
+		$di2 = data_interface::get_instance('mf2_catalogue_filters');
+		$ids = $di2->get_parts();
+		$others = $di2->get_others_ids('mf2_catalogue_filter_brand');
+		/*
+		$current = $di2->get_current_ids();
+		$possible  = array();
+		foreach($current as $key=>$value)
+		{
+			$possible[] = $value;
+		}
+		foreach($others as $key=>$value)
+		{
+			$possible[] = $value;
+		}
+		*/
+			$cat_ids = implode(',',array_keys($scope));
+			$i_ids = implode(',',$others);
+			if($i_ids == '')
+			{
+				$i_ids = "''";
+			}
+			$sql = "SELECT m.title,im.manufacturer_id,COUNT(im.item_id) as cnt 
+					FROM m2_item_manufacturer im 
+					LEFT JOIN m2_item_category ic ON im.item_id = ic.item_id 
+					LEFT JOIN m2_manufacturers m ON im.manufacturer_id = m.id 
+					WHERE ic.category_id IN($cat_ids) and im.item_id in ($i_ids)
+					GROUP BY manufacturer_id 
+					order by m.title ASC ";
+			$counts = $di->_get($sql)->get_results();
+			foreach($data['records'] as $key2=>$value2)
+			{
+				$cnt  = 0;
+				foreach($counts as $key=>$value)
+				{
+					$id = $value->manufacturer_id;
+					if($value2->manufacturer_id == $id)
+					{
+						$cnt = $value->cnt;
+					}
+				}
+						$data['records'][$key2]->cnt = $cnt;
+			}
+
+
+
 		$in = request::get('mans','[]');
 		if($in != '[]')
 		{
@@ -56,6 +121,8 @@ class ui_mf2_catalogue_filter_brand extends user_interface
 			{
 				$sw = '('.implode(' OR ',$tmp).')';
 				$eObj->where .= "and ($sw)"; 
+				$ui = user_interface::get_instance('mf2_catalogue_filters');
+				$ui->set_condition('mf2_catalogue_filter_brand',$sw);
 			}
 		}
 	}
