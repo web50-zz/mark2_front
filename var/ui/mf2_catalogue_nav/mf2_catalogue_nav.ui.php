@@ -204,17 +204,23 @@ class ui_mf2_catalogue_nav extends user_interface
 		else{
 			$root_node = $this->category_id;
 		}
-		$res = $di->get_level_down($root_node);
-		$scope = $di->get_level_down($this->category_id,100);
-		if($this->category_id > 0)
+		if($this->category_id == 0)
 		{
-			if($trunc_assoc[$this->category_id]['link_id'] > 0)
+			$cat = 1;
+		}else{
+			$cat = $this->category_id;
+		}
+		$res = $di->get_level_down($root_node);
+		$scope = $di->get_level_down($cat,100);
+		if($cat > 0)
+		{
+			if($trunc_assoc[$cat]['link_id'] > 0)
 			{
-				$this->catalogue_scope[$trunc_assoc[$this->category_id]['link_id']] = 1;
+				$this->catalogue_scope[$trunc_assoc[$cat]['link_id']] = 1;
 			}
 			else
 			{
-				$this->catalogue_scope[$this->category_id] = 1;
+				$this->catalogue_scope[$cat] = 1;
 			}
 		}
 		foreach($scope['childs'] as $key =>$value)
