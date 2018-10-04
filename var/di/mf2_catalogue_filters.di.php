@@ -101,8 +101,14 @@ class di_mf2_catalogue_filters extends data_interface
 				$opp[$k] = $v['condition'];
 			}
 		}
-		$cond = implode('and',$opp);
-		$cond2 = implode('and',$inc);
+		if($opp)
+		{
+			$cond = implode('and',$opp);
+		}
+		if($inc)
+		{
+			$cond2 = implode('and',$inc);
+		}
 		if(strlen($cond)>0)
 		{
 			$cond = " and $cond ";
