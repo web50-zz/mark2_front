@@ -12,7 +12,8 @@ class ui_mf2_catalogue_list extends user_interface
 	public $location_data = false;
 	public $catalogue_scope = array();// тут все ид разделов  каталога по которым  мы  работаем в текущем запросе
 	public $params = array(); //тут параметры запроса по prepare_params  
-	
+	public $data_buffer = array(); //сюда складываем чтото из внешних уи ди для парсинга в шаблон
+
 	public function __construct ()
 	{
 		parent::__construct(__CLASS__);
@@ -177,6 +178,8 @@ class ui_mf2_catalogue_list extends user_interface
 			$data['current_node_texts'] = $di->_get($sql)->get_results();
 		}
 		$data['args'] = $args;
+		$this->fire_event('before_parse', array($this));
+		$data = array_merge($data,$this->data_buffer);
 		return $this->parse_tmpl($template,$data);
 	}
 
