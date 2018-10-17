@@ -44,6 +44,10 @@ class ui_mf2_catalogue_filter_price extends user_interface
 			$eObj->set_joined('m2_item_price',$dj2);
 			}
 			$a = $dj2->get_alias();
+			if($pend == $pstart && $end == 0)
+			{
+				$pend = '2000000';
+			}
 			$t1 = ' '.$a.'.`type` = '.$price_type.' ';
 			if($pstart && $pend)
 			{
