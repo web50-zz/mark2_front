@@ -74,18 +74,21 @@ class ui_mf2_catalogue_filter_brand extends user_interface
 					GROUP BY manufacturer_id 
 					order by m.title ASC ";
 			$counts = $di->_get($sql)->get_results();
-			foreach($data['records'] as $key2=>$value2)
+			if(count($data['records'])>0)
 			{
-				$cnt  = 0;
-				foreach($counts as $key=>$value)
+				foreach($data['records'] as $key2=>$value2)
 				{
-					$id = $value->manufacturer_id;
-					if($value2->manufacturer_id == $id)
+					$cnt  = 0;
+					foreach($counts as $key=>$value)
 					{
-						$cnt = $value->cnt;
+						$id = $value->manufacturer_id;
+						if($value2->manufacturer_id == $id)
+						{
+							$cnt = $value->cnt;
+						}
 					}
+							$data['records'][$key2]->cnt = $cnt;
 				}
-						$data['records'][$key2]->cnt = $cnt;
 			}
 
 
