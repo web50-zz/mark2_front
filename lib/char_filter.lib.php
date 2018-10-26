@@ -67,6 +67,10 @@ class char_filter extends user_interface
 			}
 			$d = $di->get_chars_for($scope,$this->char_id);
 		}
+		if(!count($d) > 0)
+		{
+			return ;
+		}
 		foreach($d as $k=>$v)
 		{
 			$data['records'][] = array('title'=>$k,'id'=>$v);
@@ -95,7 +99,14 @@ class char_filter extends user_interface
 					$cnt = $value->cnt;
 				}
 			}
-			$data['records'][$key2]['cnt'] = $cnt;
+			if($cnt == 0)
+			{
+				unset($data['records'][$key2]);
+			}else
+			{
+				$data['records'][$key2]['cnt'] = $cnt;
+			}
+
 		}
 		$data['req'] = request::get();
 		$in = request::get($this->request_param,'[]');

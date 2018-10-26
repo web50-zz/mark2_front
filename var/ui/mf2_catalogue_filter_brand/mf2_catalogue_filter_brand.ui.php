@@ -44,6 +44,10 @@ class ui_mf2_catalogue_filter_brand extends user_interface
 				$ui = user_interface::get_instance('mf2_catalogue_nav');
 			}
 		}
+		if(!count($data['records']) > 0)
+		{
+			return ;
+		}
 
 		$di2 = data_interface::get_instance('mf2_catalogue_filters');
 		$ids = $di2->get_parts();
@@ -87,10 +91,16 @@ class ui_mf2_catalogue_filter_brand extends user_interface
 							$cnt = $value->cnt;
 						}
 					}
+						if($cnt == 0)
+						{
+							unset($data['records'][$key2]);
+						}else
+						{
 							$data['records'][$key2]->cnt = $cnt;
+						}
 				}
 			}
-
+	
 
 
 		$in = request::get('mans','[]');
