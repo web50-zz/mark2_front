@@ -86,6 +86,7 @@ class ui_mf2_catalogue_nav extends user_interface
 			}
 		}
 		$data['req'] = request::get();
+		$data['records'] = $this->set_tree($data['records']);
 		return $this->parse_tmpl($template,$data);
 
 	}
@@ -243,7 +244,8 @@ class ui_mf2_catalogue_nav extends user_interface
 			$tmp = array();
 			foreach($res['childs'] as $key=>$value)
 			{
-				if($value['level'] == 2 && $value['visible'] == 1)
+				//if($value['level'] == 2 && $value['visible'] == 1) //было до 22112018
+				if($value['level'] > 1 && $value['visible'] == 1)
 				{
 					$tmp[] = $value;
 				}
@@ -514,6 +516,24 @@ class ui_mf2_catalogue_nav extends user_interface
 		$data['records'] = $di->get_cats_for_char($type_id);
 //		dbg::show($data);
 		return $this->parse_tmpl($template,$data);
+	}
+
+	// Сканирует линейную выборку нод из дерева разделов запихивая чайлдов к парентам
+	public function set_tree($data)
+	{
+		foreach($data as $k=>$v)
+		{
+			$tmp = array();
+			foreach($data as $k2=>$v2)
+			{
+				if($v2['left']>$v['left'] && $v2['right'] < $v['right'] && $v2['level'] == ($v['level'] + 1))
+				{
+					$tmp[] = $v2;
+				}
+			}
+			$data[$k]['childs'] = $tmp;
+		}
+		return $data;
 	}
 
 }
