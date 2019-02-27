@@ -54,10 +54,11 @@ class ui_mf2_catalogue_item extends user_interface
 			$da = user_interface::get_instance("mf2_catalogue_item_ajax");
 			$da->pub_item($data);
 		}
-		$ret = $this->parse_tmpl($template,$data);
 		$title =  $data->title.'  '.$data->meta_title;
 		$st = user_interface::get_instance('structure');
 		$st->add_title($title);
+
+		$ret = $this->parse_tmpl($template,$data);
 		return 	$ret;
 	}
 
