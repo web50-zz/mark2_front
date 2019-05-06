@@ -142,7 +142,7 @@ class di_mf2_catalogue_list extends di_m2_item_indexer
 		}
 		if($args['sort'] == 'price')
 		{
-			$price_type = registry::get('SORT_PRICE_TYPE');
+			$price_type = registry::get('SORT_PRICE_TYPE',6);
 			if($this->is_joined('m2_item_price'))
 			{
 				$dj2 = $this->get_joined('m2_item_price');
