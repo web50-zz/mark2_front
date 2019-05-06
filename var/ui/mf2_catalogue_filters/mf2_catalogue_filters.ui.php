@@ -33,12 +33,6 @@ class ui_mf2_catalogue_filters extends user_interface
 		$di->prepare_current_ids($in);
 	}
 
-	public function _listeners()
-	{
-		return array(
-			array('ui' => 'mf2_catalogue_list', 'event' => 'data_ready', 'handler' => 'prepare_filters'),
-		);
-	}
 
 	public function set_condition($filter,$condition,$add_condition = false)
 	{
@@ -54,5 +48,14 @@ class ui_mf2_catalogue_filters extends user_interface
 		unset($a[$filter]);
 		return $a;
 	}
+
+	public function _listeners()
+	{
+		return array(
+			array('ui' => 'mf2_catalogue_list', 'event' => 'data_ready', 'handler' => 'prepare_filters'),
+		);
+	}
+
+
 }
 ?>

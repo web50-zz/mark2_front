@@ -14,7 +14,7 @@ class di_mf2_catalogue_list extends di_m2_item_indexer
 		// Call Base Constructor
 		parent::__construct(__CLASS__);
 	}
-
+	public $flds = array();
 
 /*
 	sort:  поле по которому сортировать  default id
@@ -142,7 +142,7 @@ class di_mf2_catalogue_list extends di_m2_item_indexer
 		}
 		if($args['sort'] == 'price')
 		{
-			$price_type = registry::get('MAIN_PRICE_TYPE');
+			$price_type = registry::get('SORT_PRICE_TYPE');
 			if($this->is_joined('m2_item_price'))
 			{
 				$dj2 = $this->get_joined('m2_item_price');
@@ -168,11 +168,12 @@ class di_mf2_catalogue_list extends di_m2_item_indexer
 		{
 			return $this->where;
 		}
+		$this->flds = $flds;
 		if(!$args['no_conditions_done'])
 		{
 			$this->fire_event('conditions_done', array());
 		}
-		$res = $this->extjs_grid_json($flds,false);
+		$res = $this->extjs_grid_json($this->flds,false);
 		$this->pop_args();
 		return $res;
 	}

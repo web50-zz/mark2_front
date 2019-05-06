@@ -24,6 +24,9 @@ $(document).ready(function(){
 */
 $(document).ready(function(){
 //	$("#ex2").slider({tooltip:'hide',tooltip_position:'bottom'});
+	var pfilter = new price_filter;
+	pfilter.init(flt);
+
 	var pSlider = new Slider('#ex2',{tooltip:'hide',tooltip_position:'bottom'});
 	$("#ex2").on("slide", function(slideEvt) {
 		$('#sprice').val(slideEvt.value[0]);

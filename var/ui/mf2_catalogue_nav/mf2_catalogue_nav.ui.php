@@ -75,7 +75,7 @@ class ui_mf2_catalogue_nav extends user_interface
 				$index[$value['id']] = $key;
 			}
 			$di = data_interface::get_instance('m2_category_manufacturers');
-			$dt = $di->get_manufacturers_for_category_list($ids);
+			$dt = $di->get_manufacturers_for_category_list_simple($ids);
 			foreach($dt as $key=>$value)
 			{
 				if(!$data['records'][$index[$value->category_id]]['manufacturers'])
@@ -139,6 +139,7 @@ class ui_mf2_catalogue_nav extends user_interface
 	public function pub_all()
 	{
 		$data =  array();
+		$params = array();
 		$di = data_interface::get_instance('m2_category');
 		$parent = $this->get_args('parent','1');
 		$hidden = $this->get_args('hidden',0);
@@ -147,16 +148,16 @@ class ui_mf2_catalogue_nav extends user_interface
 				'parent'=>$parent,
 				'hidden'=>$hidden,
 				));
+		$with_manufacturers = $this->get_args('with_manufacturers','false');
+		if($with_manufacturers == 'true')
+		{
+			$params['with_manufacturers'] = true;
+		}
 		if(!$this->data_all)
 		{
-			$data_r = $di->get_all_simple();
-			$this->data_all = $data_r;
+			$this->data_all = $di->get_all_simple($params);
 		}
-		else
-		{
-			$data_r = $this->data_all;
-		}
-		$data['records'] = $data_r['childs'];
+		$data['records'] = $this->data_all['childs'];
 		$path = array();
 		foreach($this->trunc as $key=>$value)
 		{

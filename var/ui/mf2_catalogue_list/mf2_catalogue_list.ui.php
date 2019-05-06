@@ -12,7 +12,8 @@ class ui_mf2_catalogue_list extends user_interface
 	public $location_data = false;
 	public $catalogue_scope = array();// тут все ид разделов  каталога по которым  мы  работаем в текущем запросе
 	public $params = array(); //тут параметры запроса по prepare_params  
-	
+	public $data_buffer = array(); //сюда складываем чтото из внешних уи ди для парсинга в шаблон
+
 	public function __construct ()
 	{
 		parent::__construct(__CLASS__);
@@ -177,6 +178,8 @@ class ui_mf2_catalogue_list extends user_interface
 			$data['current_node_texts'] = $di->_get($sql)->get_results();
 		}
 		$data['args'] = $args;
+		$this->fire_event('before_parse', array($this));
+		$data = array_merge($data,$this->data_buffer);
 		return $this->parse_tmpl($template,$data);
 	}
 
@@ -205,22 +208,26 @@ class ui_mf2_catalogue_list extends user_interface
 		$sort_saved = session::get('sort','1',$this->name);
 		$limit_saved = session::get('limit','1',$this->name);
 
-		$sort = request::get('sort',$default_sort);
+		$sort = request::get('sort',0);
 		$limit = request::get('limit',0);
 		$page = request::get('page', 1);
 		$mans = request::get('mans',0);
-		
+		if($sort_saved != '' && $sort == 0)
+		{
+			$sort = $sort_saved;
+		}
 		if($sort_saved != $sort && $sort > 0)
 		{
 			session::set('sort',$sort,$this->name);
 		}
+		if($sort_saved == '' && $sort == 0)
+		{
+			$sort = $default_sort;
+			session::set('sort',$default_sort,$this->name);
+		}
 		if($limit_saved != $limit)
 		{
 			session::set('limit',$limit,$this->name);
-		}
-		if($sort_saved != '' && $sort == 0)
-		{
-			$sort = $sort_saved;
 		}
 		if($limit_saved != '' && $limit == 0)
 		{

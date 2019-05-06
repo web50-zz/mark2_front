@@ -31,7 +31,7 @@ class ui_mf2_catalogue_filter_price extends user_interface
 
 	public function apply_filter($eObj, $ids = array())
 	{
-			$price_type = registry::get('MAIN_PRICE_TYPE');
+			$price_type = registry::get('SORT_PRICE_TYPE');
 			$pend  = request::get('pend',80000);
 			$pstart  = request::get('pstart',1);
 			if($eObj->is_joined('m2_item_price'))
@@ -44,6 +44,10 @@ class ui_mf2_catalogue_filter_price extends user_interface
 			$eObj->set_joined('m2_item_price',$dj2);
 			}
 			$a = $dj2->get_alias();
+			if($pend == $pstart && $end == 0)
+			{
+				$pend = '2000000';
+			}
 			$t1 = ' '.$a.'.`type` = '.$price_type.' ';
 			if($pstart && $pend)
 			{

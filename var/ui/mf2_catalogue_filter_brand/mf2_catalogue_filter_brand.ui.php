@@ -44,6 +44,10 @@ class ui_mf2_catalogue_filter_brand extends user_interface
 				$ui = user_interface::get_instance('mf2_catalogue_nav');
 			}
 		}
+		if(!count($data['records']) > 0)
+		{
+			return ;
+		}
 
 		$di2 = data_interface::get_instance('mf2_catalogue_filters');
 		$ids = $di2->get_parts();
@@ -74,20 +78,29 @@ class ui_mf2_catalogue_filter_brand extends user_interface
 					GROUP BY manufacturer_id 
 					order by m.title ASC ";
 			$counts = $di->_get($sql)->get_results();
-			foreach($data['records'] as $key2=>$value2)
+			if(count($data['records'])>0)
 			{
-				$cnt  = 0;
-				foreach($counts as $key=>$value)
+				foreach($data['records'] as $key2=>$value2)
 				{
-					$id = $value->manufacturer_id;
-					if($value2->manufacturer_id == $id)
+					$cnt  = 0;
+					foreach($counts as $key=>$value)
 					{
-						$cnt = $value->cnt;
+						$id = $value->manufacturer_id;
+						if($value2->manufacturer_id == $id)
+						{
+							$cnt = $value->cnt;
+						}
 					}
+						if($cnt == 0)
+						{
+							unset($data['records'][$key2]);
+						}else
+						{
+							$data['records'][$key2]->cnt = $cnt;
+						}
 				}
-						$data['records'][$key2]->cnt = $cnt;
 			}
-
+	
 
 
 		$in = request::get('mans','[]');
