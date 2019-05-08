@@ -8,9 +8,19 @@ class ui_mf2_catalogue_filter_price extends user_interface
 {
 	public $title = 'mf2: Маркет фильтр по цене';
 	public $item_data = array();
+	protected $cfg_path = 'mark2_front/etc/filters_config.php';
+	public $conf = array();
 
 	public function __construct ()
 	{
+		if(!glob::get('filters_conf'))
+		{
+			if(file_exists(INSTANCES_PATH.$this->cfg_path))
+			{
+				require_once(INSTANCES_PATH.$this->cfg_path);
+				glob::set('filters_conf',$filters_conf);
+			}
+		}
 		parent::__construct(__CLASS__);
 		$this->files_path = dirname(__FILE__).'/';
 	}
@@ -61,6 +71,16 @@ class ui_mf2_catalogue_filter_price extends user_interface
 
 	public function _listeners()
 	{
+		if($conf = glob::get('filters_conf'))
+		{
+			if(array_key_exists('ignored',$conf))
+			{
+				if(array_key_exists('mf2_catalogue_filter_price',$conf['ignored']))
+				{
+					return array();
+				}
+			}
+		}
 		return array(
 			array('di' => 'mf2_catalogue_list', 'event' => 'conditions_done', 'handler' => 'apply_filter'),
 		);
