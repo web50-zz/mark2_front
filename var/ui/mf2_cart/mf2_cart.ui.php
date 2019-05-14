@@ -7,7 +7,8 @@
 class ui_mf2_cart extends user_interface
 {
 	public $title = 'mf2: Заказ';
-	public $cart_data = '';
+	public $cart_data = array();
+	public $mail_data = array();
 	
 	public function __construct ()
 	{
@@ -67,8 +68,9 @@ class ui_mf2_cart extends user_interface
 		return (!empty($check)) ? $check : FALSE;
 	}
 
-	private function send_order($data = array())
+	private function send_order()
 	{
+		$data = $this->mail_data;
 		$body =  $this->parse_tmpl('order_mail.html', $data);
 		$rcpt = registry::get('ORDER_MAIL_TO');
 		$title = 'Заказ на сайте';
@@ -320,10 +322,11 @@ class ui_mf2_cart extends user_interface
 				}
 			}
 			$data['cart'] = $cart;
+			$this->mail_data = $data;
 			$this->fire_event('onNewOrder',array($data));
 			if(!registry::get('MF2_DISABLE_ORDER_MAILS') == '1')
 			{
-				$this->send_order($data);
+				$this->send_order();
 			}
 			if(registry::get('MF2_EMULATE_NOACCEPT') == '1')
 			{
