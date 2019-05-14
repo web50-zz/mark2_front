@@ -70,37 +70,40 @@ class ui_mf2_cart extends user_interface
 
 	private function send_order()
 	{
-		$data = $this->mail_data;
-		$body =  $this->parse_tmpl('order_mail.html', $data);
 		$rcpt = registry::get('ORDER_MAIL_TO');
-		$title = 'Заказ на сайте';
 		$core_domain = $_SERVER['HTTP_HOST'];
 		if(!$core_domain)
 		{
 			$core_domain = 'localhost';
 		}
+		$data_subject = $this->mail_data;
+		$data_subject['d_type'] = 'subject';
+		$subject =  $this->parse_tmpl('order_mail.html', $data_subject);
 		require_once LIB_PATH.'Swift/swift_required.php';
 		$transport = Swift_MailTransport::newInstance();
 		$mailer = Swift_Mailer::newInstance($transport);
-		$message = Swift_Message::newInstance($title)
-			->setFrom(array('no-reply@'.$core_domain => 'no-reply'))
+		$message = Swift_Message::newInstance($subject);
+		$this->fire_event('BeforeParseMessage',array($message,$this->mail_data));// если надо заатачить файлы и ресурсы в тело письма это делаем по этому событию
+		$body =  $this->parse_tmpl('order_mail.html', $this->mail_data);
+		$message->setFrom(array('no-reply@'.$core_domain => 'no-reply'))
 			->setTo($rcpt)
 			->setBody($body);
 		$message->setContentType("text/html");	
-		$this->fire_event('onMessageReady',array($message,$data));
+		$this->fire_event('onMessageReady',array($message,$data));// это если надо еще файлов приделать
 		$numSent = $mailer->batchSend($message);
-		if(!empty($data['email']))
+		if(!empty($this->mail_data['email']))
 		{
-	       		$this->send_followup($data);
+	       		$this->send_followup();
 		}
 		$this->fire_event('onSent', array(request::get()));
 	}
        
-	private function send_followup($data = array())
+	private function send_followup()
 	{
-		$body =  $this->parse_tmpl('followup_mail.html', $data);
-		$rcpt = $data['email'];
-		$title = 'Ваш Заказ';
+		$rcpt = $this->mail_data['email'];
+		$data_subject = $this->mail_data;
+		$data_subject['d_type'] = 'subject';
+		$subject =  $this->parse_tmpl('followup_mail.html', $data_subject);
 		$core_domain = $_SERVER['HTTP_HOST'];
 		if(!$core_domain)
 		{
@@ -109,8 +112,10 @@ class ui_mf2_cart extends user_interface
 		require_once LIB_PATH.'Swift/swift_required.php';
 		$transport = Swift_MailTransport::newInstance();
 		$mailer = Swift_Mailer::newInstance($transport);
-		$message = Swift_Message::newInstance($title)
-			->setFrom(array('no-reply@'.$core_domain => 'no-reply'))
+		$message = Swift_Message::newInstance($subject);
+		$this->fire_event('BeforeParseFollowUpMessage',array($message,$this->mail_data));// если надо заатачить файлы и ресурсы в тело письма это делаем по этому событию
+		$body =  $this->parse_tmpl('followup_mail.html', $this->mail_data);
+		$message->setFrom(array('no-reply@'.$core_domain => 'no-reply'))
 			->setTo($rcpt)
 			->setBody($body);
 		$message->setContentType("text/html");	
