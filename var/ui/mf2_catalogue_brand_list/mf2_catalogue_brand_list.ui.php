@@ -18,13 +18,34 @@ class ui_mf2_catalogue_brand_list extends user_interface
 	{
 		$data = array();
 		// Шаблон
+		$template = $this->get_args('template', 'default.html');
+		if($this->get_args('no_data') == true)
+		{
+			return $this->parse_tmpl($template,$data);
+		}
 		$args = $this->get_args();
 		$sort = $this->get_args('sort','title');
 		$dir = $this->get_args('dir','asc');
-		$template = $this->get_args('template', 'default.html');
-		$di = data_interface::get_instance('m2_manufacturers');
+		// выбираем только тех производителей по которым есть товары и они не not_available
+		$di = data_interface::get_instance('m2_item_manufacturer');
 		$di->_flush();
-		$sql = "select m.*,f.real_name,f.file_type from m2_manufacturers m left join m2_manufacturer_files f on f.item_id = m.id order by $sort $dir";
+		$sql = 'select manufacturer_id as id from m2_item_manufacturer m  left join m2_item i on m.item_id = i.id where i.not_available = 0 group by manufacturer_id';
+		$di = data_interface::get_instance('m2_manufacturers');
+		$res = $di->_get($sql)->get_results();
+		if(is_array($res))
+		{
+			$ids = array();
+			foreach($res as $k=>$v)
+			{
+				$ids[]=$v->id;
+			}
+			if(count($ids)>0)
+			{
+				$where  = ' where m.id in('.implode(',',$ids).') ';
+			}
+		}
+		$di->_flush();
+		$sql = "select m.*,f.real_name,f.file_type from m2_manufacturers m left join m2_manufacturer_files f on f.item_id = m.id $where order by $sort $dir";
 		$data['records'] = $di->_get($sql)->get_results();;
 		$data['PAGE_ID'] = PAGE_ID;
 		$data['req'] = request::get();
