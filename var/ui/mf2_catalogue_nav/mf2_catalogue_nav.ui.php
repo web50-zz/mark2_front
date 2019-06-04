@@ -13,7 +13,7 @@ class ui_mf2_catalogue_nav extends user_interface
 	public $trunc = array();// путь от  корня каталога
 	public $item_data = array();//данные по  найденному предмету каталога промежуточные
 	public $category_data = array();//данные по найденной категории каталога промежуточные
-	public $brand_scope_data = false;//данные бренда если работаем в реджиме  брендапоиска
+	public $brand_scope_data = false;//данные бренда если работаем в режиме  брендапоиска
 	
 	public function __construct ()
 	{
@@ -288,12 +288,24 @@ class ui_mf2_catalogue_nav extends user_interface
 		{
 			if($uri_parts[1] == 'brand')
 			{
-				// если в URI  предпоследний элемент - brand то автоматически включаем brand_scope и считаем что работаем с определенным брендом назвагние котрого задано последним элементов  URI
+				// если в URI  предпоследний элемент - brand то автоматически включаем brand_scope и считаем что работаем с определенным брендом назвагние котрого задано последним элементом  URI
 				$this->args['brand_scope'] = 1;	
 				$brand_name = $uri_parts[2];
 			}
 
 		}
+		// Тоже что и выше но для заданной категории
+		if(count($uri_parts == 4))
+		{
+			if($uri_parts[2] == 'brand')
+			{
+				// если в URI  предпоследний элемент - brand то автоматически включаем brand_scope и считаем что работаем с определенным брендом название котрого задано последним элементом  URI
+				$this->args['brand_scope'] = 1;
+				$brand_name = $uri_parts[3];
+			}
+
+		}
+
 		if($this->args['brand_scope'])
 		{
 			$brand_id = $this->search_brand(array('name'=>$brand_name));
@@ -301,9 +313,19 @@ class ui_mf2_catalogue_nav extends user_interface
 			{
 				$this->brand_id = $this->brand_scope_data->id; 
 			}
-			return;
+			//return; // закомменчено потому, что брэнд может быть и в категории потому продолжаем копать что за категория например
 		}
-		$res = $di->search_by_uri('/'.SRCH_URI);
+		// тут отрежем то что касается бренда от всего остального и по нему будем пытаться установить категорию или айтем
+		if($this->args['brand_scope'])
+		{
+			$srch_uri_parts = explode("/brand/",SRCH_URI);
+			$srch_uri = $srch_uri_parts[0].'/';
+		}
+		else
+		{
+			$srch_uri = SRCH_URI;
+		}	
+		$res = $di->search_by_uri('/'.$srch_uri);
 		if($res['item_id']>0)
 		{
 			$this->location = 'item';
