@@ -14,6 +14,8 @@ class ui_mf2_catalogue_nav extends user_interface
 	public $item_data = array();//данные по  найденному предмету каталога промежуточные
 	public $category_data = array();//данные по найденной категории каталога промежуточные
 	public $brand_scope_data = false;//данные бренда если работаем в режиме  брендапоиска
+	public $other_scopes_found = false ;//если литенеры налли в SRCH_URI что-то свое то они сюда выставят true
+	public $cleaned_srch_uri = '';//сюда листенеры пропишут очищеный от своих кусков srch_uri по которым искать категорию
 	
 	public function __construct ()
 	{
@@ -284,28 +286,25 @@ class ui_mf2_catalogue_nav extends user_interface
 		$parts = explode('?',SRCH_URI); //режем куски потому что иногда на некоторых хостингах SRCH_URI содержит GET 
 
 		$uri_parts = explode('/',substr(URI,1));
-		if(count($uri_parts == 3))
+		// если в uri содержится стопворд /brand/ пытаепся установить какой брэн имелся ввиду
+		if(strpos(SRCH_URI, 'brand/') !== false)
 		{
-			if($uri_parts[1] == 'brand')
+			$stop_word_found = 0;
+			foreach($uri_parts as $k=>$v)
 			{
-				// если в URI  предпоследний элемент - brand то автоматически включаем brand_scope и считаем что работаем с определенным брендом назвагние котрого задано последним элементом  URI
-				$this->args['brand_scope'] = 1;	
-				$brand_name = $uri_parts[2];
+				if($stop_word_found == 1)
+				{
+					$this->args['brand_scope'] = 1;	
+					$brand_name = $v;
+					break;
+				}
+				if($v == 'brand')
+				{
+					$stop_word_found = 1;
+				}
 			}
 
 		}
-		// Тоже что и выше но для заданной категории
-		if(count($uri_parts == 4))
-		{
-			if($uri_parts[2] == 'brand')
-			{
-				// если в URI  предпоследний элемент - brand то автоматически включаем brand_scope и считаем что работаем с определенным брендом название котрого задано последним элементом  URI
-				$this->args['brand_scope'] = 1;
-				$brand_name = $uri_parts[3];
-			}
-
-		}
-
 		if($this->args['brand_scope'])
 		{
 			$brand_id = $this->search_brand(array('name'=>$brand_name));
@@ -323,7 +322,16 @@ class ui_mf2_catalogue_nav extends user_interface
 		}
 		else
 		{
-			$srch_uri = SRCH_URI;
+			// тут если помимо бренда чтото еще по урлу мы скопим
+			$this->fire_event('check_scopes', array());
+			if($this->other_scopes_found == true)
+			{
+				$srch_uri = $this->cleaned_srch_uri;
+			}
+			else
+			{
+				$srch_uri = SRCH_URI;
+			}
 		}	
 		$res = $di->search_by_uri('/'.$srch_uri);
 		if($res['item_id']>0)
