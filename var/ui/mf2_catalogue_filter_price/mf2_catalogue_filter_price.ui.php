@@ -44,6 +44,10 @@ class ui_mf2_catalogue_filter_price extends user_interface
 			$price_type = registry::get('SORT_PRICE_TYPE',6);
 			$pend  = request::get('pend',80000);
 			$pstart  = request::get('pstart',1);
+			if($pstart == '0')
+			{
+				$pstart = 1;
+			}
 			if($eObj->is_joined('m2_item_price'))
 			{
 				$dj2 = $eObj->get_joined('m2_item_price');

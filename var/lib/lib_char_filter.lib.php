@@ -4,7 +4,7 @@
 * @author	FedotB Pozdnyakov 9@u9.ru 2018-10-04
 * @package	SBIN Diesel
 */
-class char_filter extends user_interface
+class lib_char_filter extends user_interface
 {
 	public $title = '';
 	public $char_id = 114;
