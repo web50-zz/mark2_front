@@ -89,7 +89,7 @@ class ui_mf2_cart extends user_interface
 			->setTo($rcpt)
 			->setBody($body);
 		$message->setContentType("text/html");	
-		$this->fire_event('onMessageReady',array($message,$data));// это если надо еще файлов приделать
+		$this->fire_event('onMessageReady',array($message,$this->mail_data));// это если надо еще файлов приделать
 		$numSent = $mailer->batchSend($message);
 		if(!empty($this->mail_data['email']))
 		{
