@@ -16,7 +16,6 @@ class ui_mf2_catalogue_filter_brand extends user_interface
 	{
 		if(!glob::get('filters_conf'))
 		{
-			dbg::write('read_conf band');
 			if(file_exists(INSTANCES_PATH.$this->cfg_path))
 			{
 				require_once(INSTANCES_PATH.$this->cfg_path);
