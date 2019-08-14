@@ -45,7 +45,14 @@ class ui_mf2_catalogue_item extends user_interface
 
 		if(request::get('gallery') == 'true')// это для отдачи галереей картинок  товара аяксом
 		{
-			$this->gallery($data);
+			$headers = getallheaders();
+			if($headers['x-requested-with'] == 'XMLHttpRequest' ||$headers['X-Requested-With'] == 'XMLHttpRequest')
+			{
+				$this->gallery($data);
+			}
+			$st = user_interface::get_instance('structure');
+			$st->do_404();
+			return false;
 		}
 		$data->basket = $_SESSION['mf2_cart'];
 		if($args['mode'] == 'ajax')
