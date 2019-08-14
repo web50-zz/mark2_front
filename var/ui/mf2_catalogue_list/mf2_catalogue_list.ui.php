@@ -23,16 +23,26 @@ class ui_mf2_catalogue_list extends user_interface
 	public function pub_content()
 	{
 		$uri_parts = explode('/',substr(URI,1));
-		if(count($uri_parts == 3))
+		// если в uri содержится стопворд /brand/ пытаепся установить какой брэн имелся ввиду
+		if(strpos(SRCH_URI, 'brand/') !== false)
 		{
-			if($uri_parts[1] == 'brand')
+			$stop_word_found = 0;
+			foreach($uri_parts as $k=>$v)
 			{
-				// если в URI  предпоследний элемент - brand то автоматически включаем brand_scope и считаем что работаем с определенным брендом назвагние котрого задано последним элементов  URI
-				$this->args['brand_scope'] = 1;
-				$brand_name = $uri_parts[2];
+				if($stop_word_found == 1)
+				{
+					$this->args['brand_scope'] = 1;	
+					$brand_name = $v;
+					break;
+				}
+				if($v == 'brand')
+				{
+					$stop_word_found = 1;
+				}
 			}
 
 		}
+
 		$grid_mode_changed = request::get('gridMode',false);
 		if($grid_mode_changed)
 		{
