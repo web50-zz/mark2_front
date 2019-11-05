@@ -8,6 +8,7 @@ class ui_mf2_catalogue_item extends user_interface
 {
 	public $title = 'mf2: Маркет 2  Фронт -  карточка товара';
 	public $item_data = array();
+	public $data_buffer = array(); //сюда складываем чтото из внешних уи ди для парсинга в шаблон
 
 	public function __construct ()
 	{
@@ -64,7 +65,9 @@ class ui_mf2_catalogue_item extends user_interface
 		$title =  $data->title.'  '.$data->meta_title;
 		$st = user_interface::get_instance('structure');
 		$st->add_title($title);
-
+		$this->data_buffer = array();
+		$this->fire_event('before_parse', array($this));
+		$data = array_merge((array)$data,$this->data_buffer);
 		$ret = $this->parse_tmpl($template,$data);
 		return 	$ret;
 	}
@@ -110,6 +113,9 @@ class ui_mf2_catalogue_item extends user_interface
 		}
 		$template = $this->get_args('template', 'linked.html');
 		$data['args'] =  $this->get_args();
+		$this->data_buffer = array();
+		$this->fire_event('before_parse', array($this));
+		$data = array_merge($data,$this->data_buffer);
 		return $this->parse_tmpl($template,$data);
 	}
 
