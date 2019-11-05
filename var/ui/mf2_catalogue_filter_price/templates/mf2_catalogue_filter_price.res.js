@@ -5,7 +5,7 @@ var price_filter = function(){
 	this.getParams = function(){
 		var pstart = $('.filter-price').find('[name=start_price]').val();
 		var pend = $('.filter-price').find('[name=end_price]').val();
-		return '&pstart='+pstart+'&pend='+pend;
+		return 'pstart='+pstart+'&pend='+pend;
 	}
 }
 
