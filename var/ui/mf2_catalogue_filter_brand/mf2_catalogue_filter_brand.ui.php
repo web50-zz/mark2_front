@@ -54,6 +54,7 @@ class ui_mf2_catalogue_filter_brand extends user_interface
 			else
 			{
 				$ui = user_interface::get_instance('mf2_catalogue_nav');
+				$data['records'] = $di->get_manufacturers_for_category_list(array_keys($scope));
 			}
 		}
 		if(!count($data['records']) > 0)

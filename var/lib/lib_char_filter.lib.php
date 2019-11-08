@@ -57,9 +57,9 @@ class lib_char_filter extends user_interface
 		else	
 		{
 			$cat_in = request::get('category');
-			$scope = array();
 			if(is_array($cat_in) && count($cat_in)>0)
 			{
+				$scope = array();
 				foreach($cat_in as $key=>$value)
 				{
 					$scope[$value] = 1;
@@ -67,7 +67,7 @@ class lib_char_filter extends user_interface
 			}
 			$d = $di->get_chars_for($scope,$this->char_id);
 		}
-		if(!count($d) > 0)
+		if(!(count($d) > 0))
 		{
 			return ;
 		}
