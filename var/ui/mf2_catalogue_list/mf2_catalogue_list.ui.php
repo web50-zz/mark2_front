@@ -188,6 +188,7 @@ class ui_mf2_catalogue_list extends user_interface
 			$data['current_node_texts'] = $di->_get($sql)->get_results();
 		}
 		$data['args'] = $args;
+		$data['req'] = request::get();
 		$this->fire_event('before_parse', array($this));
 		$data = array_merge($data,$this->data_buffer);
 		return $this->parse_tmpl($template,$data);
