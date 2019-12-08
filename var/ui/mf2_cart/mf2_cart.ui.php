@@ -338,7 +338,7 @@ class ui_mf2_cart extends user_interface
 				response::send(array('success'=>false,'data'=>'ee'),'json');
 			}
 			$_SESSION['mf2_cart'] = array();//корзину опустошаем
-			response::send(array('success'=>true,'data'=>'ee'),'json');
+			response::send(array('success'=>true,'data'=>array('order'=>$this->mail_data['order_id'])),'json');
 		
 		}catch(Exception $e)
 		{
