@@ -216,7 +216,7 @@ class ui_mf2_catalogue_list extends user_interface
 		$search = request::get('search');
 		$cat = request::get('cat');
 
-		$sort_saved = session::get('sort','1',$this->name);
+		$sort_saved = session::get('sort','',$this->name);
 		$limit_saved = session::get('limit','1',$this->name);
 
 		$sort = request::get('sort',0);
