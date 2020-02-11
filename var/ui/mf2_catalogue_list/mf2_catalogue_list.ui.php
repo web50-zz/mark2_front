@@ -217,10 +217,9 @@ class ui_mf2_catalogue_list extends user_interface
 		$cat = request::get('cat');
 
 		$sort_saved = session::get('sort','',$this->name);
-		$limit_saved = session::get('limit','1',$this->name);
-
+		$limit_saved = session::get('limit','2',$this->name);
 		$sort = request::get('sort',0);
-		$limit = request::get('limit',0);
+		$limit = request::get('limit');
 		$page = request::get('page', 1);
 		$mans = request::get('mans',0);
 		if($sort_saved != '' && $sort == 0)
@@ -236,11 +235,11 @@ class ui_mf2_catalogue_list extends user_interface
 			$sort = $default_sort;
 			session::set('sort',$default_sort,$this->name);
 		}
-		if($limit_saved != $limit)
+		if(($limit>0) && $limit_saved != $limit) // если что-то пришло на вход и это не похоже на ранее сохраненное то сохраняем это в сессию
 		{
 			session::set('limit',$limit,$this->name);
 		}
-		if($limit_saved != '' && $limit == 0)
+		if($limit_saved != '' && $limit == '')// если на вход ничего нет но было что-то сохранено то выставляем сохраненное
 		{
 			$limit = $limit_saved;
 		}
