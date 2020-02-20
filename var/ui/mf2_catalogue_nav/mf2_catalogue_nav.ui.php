@@ -87,6 +87,11 @@ class ui_mf2_catalogue_nav extends user_interface
 				$data['records'][$index[$value->category_id]]['manufacturers'][] = $value;
 			}
 		}
+		if(preg_match('/brand.+/',SRCH_URI))// если у нас страница брендов на корню каталога отметим этот момент
+		{
+			$data['root_brand_page'] = 1;
+		}
+
 		$data['req'] = request::get();
 		$data['records'] = $this->set_tree($data['records']);
 		return $this->parse_tmpl($template,$data);
