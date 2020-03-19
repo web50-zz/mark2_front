@@ -429,7 +429,7 @@ class ui_mf2_catalogue_nav extends user_interface
 					}
 				}
 			}
-				$data['records'][] = array('title'=>$res[0]->title,'uri'=>'/item/'.$res[0]->uri.'/','hidden'=>0,'id'=>$res[0]->item_id);
+				$data['records'][] = array('title'=>$res[0]->title,'uri'=>'/catalog/items/'.$res[0]->uri.'/','hidden'=>0,'id'=>$res[0]->item_id);
 		}
 		if($this->brand_id >0)
 		{

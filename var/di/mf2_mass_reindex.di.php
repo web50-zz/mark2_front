@@ -33,7 +33,8 @@ class di_mf2_mass_reindex extends data_interface
 	
 	public function reindex()
 	{
-		$sql = 'select * from m2_item_indexer';
+		$where = "where manufacturers_list != '[]' && category_list != '[]' and not_available = 0";
+		$sql = "select * from m2_item_indexer $where";
 		$res = $this->_get($sql)->get_results();
 		$di = data_interface::get_instance('m2_chars_in_category');
 		$di->recache($res);
